@@ -1,0 +1,25 @@
+{
+  "name": "simple-boot-front",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "start:dev": "webpack serve --open "
+  },
+  "devDependencies": {
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^5.1.0",
+    "localized-strings": "^0.2.4",
+    "npm": "^7.5.4",
+    "rxjs": "^6.5.5",
+    "ts-loader": "^7.0.5",
+    "webpack": "^5.22.0"
+  }
+}
