@@ -6,9 +6,16 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "start:dev": "webpack serve --open "
+    "start:dev": "webpack serve --open ",
+    "start-noopen:dev": "webpack serve"
   },
   "devDependencies": {
+    "extract-loader": "^5.1.0",
+    "file-loader": "^6.2.0",
+    "handlebars": "^4.7.7",
+    "handlebars-loader": "^1.7.1",
+    "html-loader": "^2.0.0",
+    "reflect-metadata": "^0.1.13",
     "tslint": "^6.1.1",
     "typescript": "^3.8.3",
     "webpack-cli": "^4.5.0",

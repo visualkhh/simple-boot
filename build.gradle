@@ -1,6 +1,25 @@
 plugins {
     id 'base'
+//    id 'java'
 }
 
 
+allprojects {
+//    apply plugin: 'java'
+}
+subprojects {
+//    apply plugin: 'idea'
 
+//    idea {
+//        module {
+//            testSourceDirs += file('test-mains')
+//        }
+//    }
+}
+
+project(":server") {
+//    apply plugin: 'java'
+//    plugins {
+//        id 'java'
+//    }
+}

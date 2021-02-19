@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
     entry: './src/index.ts',
     devtool: 'inline-source-map',
+    mode: 'development',
     watch: true,
     module: {
         rules: [
@@ -14,6 +15,28 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+            { test: /\.hbs$/, loader: 'handlebars-loader' },
+            // { test: /\.handlebars$/, loader: "handlebars-loader" },
+            {
+                test: /\.html$/i,
+                loader: 'html-loader'
+                // ,
+                // options: {
+                //     minimize: true
+                // }
+            },
+
+            {
+                test: /\.(png|svg|jpe?g|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            esModule: false
+                        }
+                    }
+                ]
+            }
         ],
     },
     plugins: [
@@ -23,7 +46,8 @@ module.exports = {
         alias: {
             '@src': path.resolve(__dirname, 'src'),
         },
-        extensions: [ '.tsx', '.ts', '.js' ],
+        extensions: ['.tsx', '.ts', '.js'],
+        // extensions: ['.tsx', '.ts', '.js', 'webpack.js', '.web.js', '.html'],
     },
     output: {
         filename: 'bundle.js',
@@ -31,7 +55,7 @@ module.exports = {
     },
     devServer: {
         inline: true,
-        hot:true,
+        hot: true,
         contentBase: __dirname + "/dist/",
         host: "localhost",
         port: 5500

@@ -9,13 +9,25 @@ gradle
 
 link
 ===
+  - webpack
+    - 공식
+      -  loader
+         - https://webpack.js.org/loaders/html-loader/
+         - https://webpack.js.org/loaders/
   - typescript
     - decorator
       - https://haeguri.github.io/2019/08/25/typescript-decorator/
+      - https://www.typescriptlang.org/docs/handbook/decorators.html
     - reflection
       - http://blog.wolksoftware.com/decorators-metadata-reflection-in-typescript-from-novice-to-expert-part-4
       - metadata
         - https://typescript-kr.github.io/pages/decorators.html
+      - 전반적인
+        - https://nehalist.io/dependency-injection-in-typescript/#theinjector
+        
+    - TypeScript로 DI 구현해보기
+      - https://blog.shovelman.dev/964
+        - https://github.com/nehalist/di-ts
     - lib
       - di,ioc: https://www.npmjs.com/package/typescript-ioc
   - gradle
