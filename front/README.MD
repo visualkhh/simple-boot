@@ -12,8 +12,11 @@ link
   - webpack
     - 공식
       -  loader
-         - https://webpack.js.org/loaders/html-loader/
-         - https://webpack.js.org/loaders/
+        - https://webpack.js.org/loaders/html-loader/
+        - https://webpack.js.org/loaders/
+      - setting
+        - https://medium.com/@jonas_duri/build-a-landing-page-with-webpack-4-6efe83deb7fe
+        - https://kdydesign.github.io/2020/10/06/spa-route-tutorial/
   - typescript
     - decorator
       - https://haeguri.github.io/2019/08/25/typescript-decorator/
@@ -24,10 +27,10 @@ link
         - https://typescript-kr.github.io/pages/decorators.html
       - 전반적인
         - https://nehalist.io/dependency-injection-in-typescript/#theinjector
-        
+      
     - TypeScript로 DI 구현해보기
       - https://blog.shovelman.dev/964
-        - https://github.com/nehalist/di-ts
+      - https://github.com/nehalist/di-ts
     - lib
       - di,ioc: https://www.npmjs.com/package/typescript-ioc
   - gradle

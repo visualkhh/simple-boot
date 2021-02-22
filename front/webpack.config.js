@@ -1,5 +1,5 @@
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 // var HtmlWebpackPlugin = require('html-webpack-plugin'); // https://github.com/jantimon/html-webpack-plugin
 // var ExtractTextPlugin = require('extract-text-webpack-plugin'); // https://webpack.js.org/plugins/extract-text-webpack-plugin/
 
@@ -15,8 +15,6 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
-            { test: /\.hbs$/, loader: 'handlebars-loader' },
-            // { test: /\.handlebars$/, loader: "handlebars-loader" },
             {
                 test: /\.html$/i,
                 loader: 'html-loader'
@@ -25,22 +23,29 @@ module.exports = {
                 //     minimize: true
                 // }
             },
-
             {
-                test: /\.(png|svg|jpe?g|gif)$/,
+                test: /\.css$/i,
                 use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            esModule: false
-                        }
-                    }
-                ]
-            }
+                    "handlebars-loader", // handlebars loader expects raw resource string
+                    "extract-loader",
+                    "css-loader",
+                ],
+            },
+            {
+                test: /\.hbs$/i,
+                use: [
+                    "handlebars-loader", // handlebars loader expects raw resource string
+                    // "extract-loader",
+                    // "html-loader",
+                ],
+            },
         ],
     },
     plugins: [
-        new HtmlWebpackPlugin()
+        new HtmlWebPackPlugin({
+            template: './src/index.html', // public/index.html 파일을 읽는다.
+            filename: 'index.html' // output으로 출력할 파일은 index.html 이다.
+        })
     ],
     resolve: {
         alias: {

@@ -43,18 +43,16 @@ foo.tag ='aaa'
 let foo2 = Injector.resolve<Baz>(Baz);
 console.log(foo,'----------', foo2)
 
-var template = require("./home.hbs")
-// import template from 'handlebars-loader!./home.hbs';
-let numbers = [1,2,3,4,5,6];
-
-console.log(template({numbers}));
+// var template = require("./home.hbs")
+// // // import template from 'handlebars-loader!./home.hbs';
+// let numbers = [1,2,3,4,5,6,7];
+// console.log(template({numbers}));
 // const {range, fromEvent, interval, Observable, of, Subscription, timer} = require('rxjs');
 // const {ajax}  = require('rxjs/ajax')
 // ajax.get("http://localhost:8080/hello").subscribe((it: any) => {
 //     console.log('ajaxd--> ',it);
 // })
 // const {map, filter, catchError} = require('rxjs/operators');
-import html from "home.html";
 
 // var a = require('html-loader!./home.html');
 // console.log('---', a.content);
@@ -67,3 +65,17 @@ import html from "home.html";
 // var module = require('index.html')
 // import html from 'home.html'
 // console.log(html);
+
+// import styles from './home.css';
+// import styles from 'css-loader?./home.css';
+// console.log(styles)
+
+
+import home from './home.html';
+console.log(home)
+
+// var template = require("./home.hbs")
+// // // import template from 'handlebars-loader!./home.hbs';
+// let numbers = [1,2,3,4,5,6,7];
+// console.log(template({numbers}));
+// import hbs from "handlebars-inline-precompile";

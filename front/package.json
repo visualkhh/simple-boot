@@ -10,6 +10,7 @@
     "start-noopen:dev": "webpack serve"
   },
   "devDependencies": {
+    "css-loader": "^5.0.2",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
     "handlebars": "^4.7.7",
