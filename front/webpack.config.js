@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // var HtmlWebpackPlugin = require('html-webpack-plugin'); // https://github.com/jantimon/html-webpack-plugin
 // var ExtractTextPlugin = require('extract-text-webpack-plugin'); // https://webpack.js.org/plugins/extract-text-webpack-plugin/
 
@@ -8,6 +9,11 @@ module.exports = {
     devtool: 'inline-source-map',
     mode: 'development',
     watch: true,
+    // resolve: {
+    //     alias: {
+    //         handlebars: 'handlebars/dist/handlebars.min.js'
+    //     }
+    // },
     module: {
         rules: [
             {
@@ -26,22 +32,44 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: [
-                    "handlebars-loader", // handlebars loader expects raw resource string
+                    // "handlebars-loader", // handlebars loader expects raw resource string
+                    // "style-loader",
                     "extract-loader",
                     "css-loader",
                 ],
             },
+            // {
+            //     test: /\.(png|svg|jpe?g|gif)$/,
+            //     use: [
+            //         {
+            //             loader: 'file-loader',
+            //             options: {
+            //                 esModule: false
+            //             }
+            //         }
+            //     ]
+            // }
             {
                 test: /\.hbs$/i,
                 use: [
-                    "handlebars-loader", // handlebars loader expects raw resource string
+
+                    {
+                        loader: "handlebars-loader",
+                    },
+                    // {
+                    //     loader: 'extract-loader'
+                    // },
+                    {
+                        loader: 'html-loader',
+
+                    },
                     // "extract-loader",
-                    // "html-loader",
                 ],
             },
         ],
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebPackPlugin({
             template: './src/index.html', // public/index.html 파일을 읽는다.
             filename: 'index.html' // output으로 출력할 파일은 index.html 이다.
@@ -49,6 +77,8 @@ module.exports = {
     ],
     resolve: {
         alias: {
+            handlebars: __dirname + '/node_modules/handlebars/dist/handlebars.min.js',
+            "fs": false,
             '@src': path.resolve(__dirname, 'src'),
         },
         extensions: ['.tsx', '.ts', '.js'],

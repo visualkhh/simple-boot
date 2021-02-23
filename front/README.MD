@@ -14,6 +14,7 @@ link
       -  loader
         - https://webpack.js.org/loaders/html-loader/
         - https://webpack.js.org/loaders/
+        - https://webpack-v3.jsx.app/loaders/
       - setting
         - https://medium.com/@jonas_duri/build-a-landing-page-with-webpack-4-6efe83deb7fe
         - https://kdydesign.github.io/2020/10/06/spa-route-tutorial/
