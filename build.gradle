@@ -1,10 +1,12 @@
 plugins {
+    id 'idea'
     id 'base'
 //    id 'java'
 }
 
 
 allprojects {
+//    apply plugin: 'idea'
 //    apply plugin: 'java'
 }
 subprojects {
@@ -17,9 +19,14 @@ subprojects {
 //    }
 }
 
-project(":server") {
-//    apply plugin: 'java'
-//    plugins {
-//        id 'java'
-//    }
+
+project(':simple') {
+
+}
+
+project(':todo') {
+    apply plugin: 'java'
+    dependencies {
+        implementation project(':simple')
+    }
 }

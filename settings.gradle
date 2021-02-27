@@ -1,6 +1,7 @@
 rootProject.name = 'simple-boot'
-String[] servers = ['server']
+String[] servers = ['simple']
 String[] fronts = ['front']
+String[] projects = ['todo']
 
 servers.each {
     include it
@@ -10,6 +11,13 @@ servers.each {
     }
 }
 fronts.each {
+    include it
+    def projectDir = new File(rootDir, it)
+    if (!projectDir.exists()) {
+        projectDir.mkdirs()
+    }
+}
+projects.each {
     include it
     def projectDir = new File(rootDir, it)
     if (!projectDir.exists()) {
