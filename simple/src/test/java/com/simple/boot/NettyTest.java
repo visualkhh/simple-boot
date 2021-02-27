@@ -76,14 +76,14 @@ class NettyTest {
 //                                };
 //                            });
                         })
-                        .doOnConnection(conn ->
-                                conn.addHandler(new ReadTimeoutHandler(10, TimeUnit.SECONDS)))
-                        .doOnChannelInit((observer, channel, remoteAddress) ->
-                                channel.pipeline()
-                                        .addFirst(new LoggingHandler("reactor.netty.examples")))
-                        .doOnUnbound((d) -> {
-                            log.debug("{}", d);
-                        })
+//                        .doOnConnection(conn ->
+//                                conn.addHandler(new ReadTimeoutHandler(10, TimeUnit.SECONDS)))
+//                        .doOnChannelInit((observer, channel, remoteAddress) ->
+//                                channel.pipeline()
+//                                        .addFirst(new LoggingHandler("reactor.netty.examples")))
+//                        .doOnUnbound((d) -> {
+//                            log.debug("{}", d);
+//                        })
 //                        .handle((request, response) -> {
 //                            return response.sendString(Mono.just("hello"));
 ////                            response.responseHeaders().add("Access-Control-Allow-Origin", "*");

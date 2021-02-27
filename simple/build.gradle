@@ -18,6 +18,13 @@ dependencies {
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
 
+
+    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+// https://mvnrepository.com/artifact/org.reflections/reflections
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
+
+
     // import a BOM
     implementation platform('io.projectreactor:reactor-bom:Dysprosium-SR10')
 
