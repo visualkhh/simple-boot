@@ -11,7 +11,7 @@ link
       - https://www.baeldung.com/java-netty-http-server
   - reactive netty
       - https://godekdls.github.io/Reactor%20Netty/httpserver/#51-starting-and-stopping
-    - https://projectreactor.io/docs/netty/release/reference/index.html
+      - 공식: https://projectreactor.io/docs/netty/release/reference/index.html
   - java nio
       - http://eincs.com/2009/08/java-nio-bytebuffer-channel/
   - java reflection

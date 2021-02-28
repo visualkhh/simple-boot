@@ -1,4 +1,4 @@
-package com.simple.boot.test;
+package com.simple.boot.test.controller;
 
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Service;

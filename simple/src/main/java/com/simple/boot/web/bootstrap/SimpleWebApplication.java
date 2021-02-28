@@ -5,6 +5,7 @@ import com.simple.boot.bootstrap.SimpleApplication;
 import com.simple.boot.bootstrap.SimpleBoot;
 import com.simple.boot.web.anno.GetMapping;
 import com.simple.boot.web.connection.NettyConnection;
+import com.simple.boot.web.dispatch.NettyDispatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.reflections.Reflections;
@@ -24,31 +25,19 @@ public class SimpleWebApplication extends SimpleApplication implements SimpleBoo
     public void run(Class start) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super.run(start);
 
-        HttpServer httpServer = new NettyConnection().create();
 
         Map<String, Object> configs = this.getYamlConfigLoader().getConfigs();
         Map<String, Object> webConfigs = (Map<String, Object>) configs.get("web");
         String host = (String) webConfigs.get("host");
         Integer port = (Integer) webConfigs.get("port");
+        HttpServer httpServer = new NettyConnection().create().host(host).port(port.intValue());
         // TODO: dispatch
-        DisposableServer server = httpServer.host(host).port(port.intValue()).route(routes -> {
-            getSimstanceManager().getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class)).forEach(controllerEntry -> {
-                Class controllerClass = controllerEntry.getKey();
-                Object controller = controllerEntry.getValue();
-                Reflections reflections = new Reflections(getSimstanceManager().getStartClass().getPackage().getName(), new MethodAnnotationsScanner());
-                Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(GetMapping.class);
-                methodsAnnotatedWith.stream().forEach(method -> {
-                    log.debug("value {}", method);
-                    routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> {
-                        try {
-                            return (Publisher<Void>) method.invoke(controller, request, response);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return response.sendString(Mono.just("Error"));
-                    });
-                });
-            });
+        DisposableServer server = httpServer.route(routes -> {
+            try {
+                new NettyDispatcher(routes).mapping();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }).wiretap(true).bindNow();
         server.onDispose().block();
         //-----------

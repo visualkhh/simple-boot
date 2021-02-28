@@ -32,6 +32,13 @@ public class SimstanceManager {
         init(this.startClass);
     }
 
+    public static SimstanceManager getInstance() throws NullPointerException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        if(null != SimstanceManager.instance){
+            return SimstanceManager.instance;
+        } else {
+            throw new NullPointerException();
+        }
+    }
     public static SimstanceManager getInstance(Class startClass) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         if(null == SimstanceManager.instance){
             SimstanceManager.instance = new SimstanceManager(startClass);

@@ -1,0 +1,73 @@
+package com.simple.boot.web.dispatch;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simple.boot.anno.Controller;
+import com.simple.boot.simstance.SimstanceManager;
+import com.simple.boot.web.anno.GetMapping;
+import com.simple.boot.web.anno.PostMapping;
+import com.simple.boot.web.communication.NettyRequest;
+import com.simple.boot.web.communication.NettyResponse;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import reactor.core.publisher.Mono;
+import reactor.netty.http.server.HttpServerRequest;
+import reactor.netty.http.server.HttpServerResponse;
+import reactor.netty.http.server.HttpServerRoutes;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.stream.Stream;
+
+@Slf4j
+public class NettyDispatcher {
+
+    private final HttpServerRoutes routes;
+    private final ObjectMapper mapper;
+
+    public NettyDispatcher(HttpServerRoutes routes) {
+        this.routes = routes;
+        mapper = new ObjectMapper();
+    }
+
+    public void mapping() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Stream<Map.Entry<Class, Object>> controllers = SimstanceManager.getInstance().getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
+        controllers.forEach(controllerEntry -> {
+            Class controllerClass = controllerEntry.getKey();
+            Object controller = controllerEntry.getValue();
+            Reflections reflections = new Reflections(controllerClass.getName(), new MethodAnnotationsScanner());
+
+            //get
+            reflections.getMethodsAnnotatedWith(GetMapping.class).stream().forEach(method -> {
+                routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            });
+            //post
+            reflections.getMethodsAnnotatedWith(PostMapping.class).stream().forEach(method -> {
+                routes.get(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            });
+        });
+    }
+
+
+    public Publisher<Void> mappingDetail(Object controller, Method method, HttpServerRequest request, HttpServerResponse response) {
+        try {
+            NettyRequest nettyRequest = new NettyRequest(request);
+            NettyResponse nettyResponse = new NettyResponse(response);
+            Object rtn = method.invoke(controller, nettyRequest, nettyResponse);
+            if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
+                return response.sendString(Mono.just((String)rtn));
+            } else if(null != rtn) {
+                response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+                return response.sendString(Mono.just(mapper.writeValueAsString(rtn)));
+            } else {
+                return response.send();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
