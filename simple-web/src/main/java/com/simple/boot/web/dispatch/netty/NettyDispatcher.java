@@ -45,7 +45,7 @@ public class NettyDispatcher implements Dispatcher {
         controllers.forEach(controllerEntry -> {
             Class controllerClass = controllerEntry.getKey();
             Object controller = controllerEntry.getValue();
-            Reflections reflections = new Reflections(controllerClass.getName(), new MethodAnnotationsScanner());
+            Reflections reflections = new Reflections(controllerClass, new MethodAnnotationsScanner());
 
             reflections.getMethodsAnnotatedWith(GetMapping.class).stream().forEach(method -> {
                 routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));

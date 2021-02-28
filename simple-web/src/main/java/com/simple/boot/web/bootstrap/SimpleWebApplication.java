@@ -16,7 +16,7 @@ public class SimpleWebApplication extends SimpleApplication implements SimpleBoo
     @Override
     public void run(Class start) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super.run(start);
-        WebConfig webConfig = this.getYamlConfigLoader().load(WebConfig.class);
+        WebConfig webConfig = this.getConfigLoader().load(WebConfig.class);
         HttpServer httpServer = new NettyConnection().create().host(webConfig.getWeb().getHost()).port(webConfig.getWeb().getPort());
         DisposableServer server = httpServer.route(routes -> {
             try {

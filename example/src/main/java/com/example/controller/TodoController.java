@@ -1,6 +1,6 @@
-package com.exemple.controller;
+package com.example.controller;
 
-import com.exemple.model.User;
+import com.example.model.User;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.web.anno.GetMapping;
 import com.simple.boot.web.communication.Request;

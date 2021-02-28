@@ -1,4 +1,4 @@
-package com.exemple;
+package com.example;
 
 import com.simple.boot.web.bootstrap.SimpleWebApplication;
 
