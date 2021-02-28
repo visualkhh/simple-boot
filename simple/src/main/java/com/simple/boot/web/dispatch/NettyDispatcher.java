@@ -1,18 +1,23 @@
 package com.simple.boot.web.dispatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.web.anno.GetMapping;
 import com.simple.boot.web.anno.PostMapping;
 import com.simple.boot.web.communication.NettyRequest;
 import com.simple.boot.web.communication.NettyResponse;
+import com.simple.boot.web.controller.rtn.View;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
@@ -20,6 +25,9 @@ import reactor.netty.http.server.HttpServerRoutes;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -60,6 +68,17 @@ public class NettyDispatcher {
             Object rtn = method.invoke(controller, nettyRequest, nettyResponse);
             if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
                 return response.sendString(Mono.just((String)rtn));
+            } else if(null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
+                final TemplateEngine templateEngine = new TemplateEngine();
+                Context context = new Context();
+                View rtnView = (View)rtn;
+
+                context.setVariables(rtnView);
+
+                response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_HTML);
+                String viewString = Resources.toString(Resources.getResource(rtnView.getView()), Charsets.UTF_8);
+                final String result = templateEngine.process(viewString, context);
+                return response.sendString(Mono.just(result));
             } else if(null != rtn) {
                 response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
                 return response.sendString(Mono.just(mapper.writeValueAsString(rtn)));
