@@ -2,23 +2,21 @@ package com.project.controller;
 
 import com.simple.boot.anno.Controller;
 import com.simple.boot.web.anno.GetMapping;
+import com.simple.boot.web.communication.Request;
+import com.simple.boot.web.communication.Response;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
-import reactor.netty.NettyOutbound;
-import reactor.netty.http.server.HttpServerRequest;
-import reactor.netty.http.server.HttpServerResponse;
 
 @Controller
 @Slf4j
 public class TodoController {
 
     @GetMapping("/hello")
-    public NettyOutbound hello(HttpServerRequest request, HttpServerResponse response){
+    public String hello(Request request, Response response){
         log.debug("==========");
-        return response.sendString(Mono.just("Hello World!"));
+        return "Hello World!";
     }
     @GetMapping("/wow")
-    public NettyOutbound wow(HttpServerRequest request, HttpServerResponse response){
-        return response.sendString(Mono.just("wow"));
+    public String wow(Request request, Response response){
+        return "wow";
     }
 }
