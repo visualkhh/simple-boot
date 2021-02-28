@@ -33,7 +33,7 @@ public class HibernateStarter {
         HibernaterConfig config = this.configLoader.get("hibernate", HibernaterConfig.class);
         Class startClass = simstanceManager.getStartClass();
 
-        Configuration configuration_pp = getHibernateConfigByCode();
+//        Configuration configuration_pp = getHibernateConfigByCode();
 //        Configuration configuration = new Configuration();
 //        configuration.configure("hibernate.cfg.xml");
 //        configuration.addPackage(startClass.getPackage().getName());
@@ -55,24 +55,23 @@ public class HibernateStarter {
     }
 
 
-
-    public Configuration getHibernateConfigByCode() {
-        Configuration configuration = new Configuration();
-        configuration.setProperty(Environment.DIALECT, 							"org.hibernate.dialect.H2Dialect");
-        configuration.setProperty(Environment.DRIVER, 							"org.h2.Driver");
-//        configuration.setProperty(Environment.URL, 								"jdbc:h2:mem:test");
-        configuration.setProperty(Environment.URL, 								"jdbc:h2:tcp://localhost:9092/mem:asd");
-        configuration.setProperty(Environment.USER, 							"sa");
-        configuration.setProperty(Environment.PASS, 							"");
-        configuration.setProperty(Environment.POOL_SIZE, 						"55");
-        configuration.setProperty(Environment.STATEMENT_BATCH_SIZE, 			"30");
-        configuration.setProperty(Environment.AUTOCOMMIT, 						"true");
-        configuration.setProperty(Environment.SHOW_SQL, 						"true");
-        configuration.setProperty(Environment.FORMAT_SQL, 						"true");
-        configuration.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS, 	"thread");
-        configuration.setProperty(Environment.HBM2DDL_AUTO, 					"create-drop");
-        return configuration;
-    }
+//    public Configuration getHibernateConfigByCode() {
+//        Configuration configuration = new Configuration();
+//        configuration.setProperty(Environment.DIALECT, 							"org.hibernate.dialect.H2Dialect");
+//        configuration.setProperty(Environment.DRIVER, 							"org.h2.Driver");
+////        configuration.setProperty(Environment.URL, 								"jdbc:h2:mem:test");
+//        configuration.setProperty(Environment.URL, 								"jdbc:h2:tcp://localhost:9092/mem:asd");
+//        configuration.setProperty(Environment.USER, 							"sa");
+//        configuration.setProperty(Environment.PASS, 							"");
+//        configuration.setProperty(Environment.POOL_SIZE, 						"55");
+//        configuration.setProperty(Environment.STATEMENT_BATCH_SIZE, 			"30");
+//        configuration.setProperty(Environment.AUTOCOMMIT, 						"true");
+//        configuration.setProperty(Environment.SHOW_SQL, 						"true");
+//        configuration.setProperty(Environment.FORMAT_SQL, 						"true");
+//        configuration.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS, 	"thread");
+//        configuration.setProperty(Environment.HBM2DDL_AUTO, 					"create-drop");
+//        return configuration;
+//    }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;

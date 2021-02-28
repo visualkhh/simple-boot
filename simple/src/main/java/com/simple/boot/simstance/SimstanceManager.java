@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 public class SimstanceManager {
 
     private final String SIMPLE_BASE_PACKAGE = "com.simple.boot";
-
     public static SimstanceManager instance;
     private final Class startClass;
     public Map<Class, Object> sims;
@@ -62,9 +61,6 @@ public class SimstanceManager {
             reflections.getTypesAnnotatedWith(Sim.class, true).stream().forEach(it -> sims.put(it, null));
         }
 
-//        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
-//            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
-//        }).collect(Collectors.toList());
         List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
             return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
         }).collect(Collectors.toList());
@@ -83,11 +79,8 @@ public class SimstanceManager {
         if (null != obj) {
             return obj;
         }
-
         Object value = null;
-
         Optional<Constructor> injectionCunstructors = Stream.of(klass.getConstructors()).filter(it -> it.isAnnotationPresent(Injection.class)).findAny();
-
         if (injectionCunstructors.isPresent()) {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = new Object[parameterTypes.length];
@@ -102,7 +95,6 @@ public class SimstanceManager {
         } else {
             value = klass.getDeclaredConstructor().newInstance();
         }
-
         sims.put(klass, value);
         return value;
 
