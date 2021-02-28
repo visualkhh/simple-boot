@@ -5,8 +5,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.simstance.SimstanceManager;
-import com.simple.boot.web.anno.GetMapping;
-import com.simple.boot.web.anno.PostMapping;
+import com.simple.boot.web.anno.*;
 import com.simple.boot.web.communication.NettyRequest;
 import com.simple.boot.web.communication.NettyResponse;
 import com.simple.boot.web.controller.rtn.View;
@@ -49,13 +48,20 @@ public class NettyDispatcher {
             Object controller = controllerEntry.getValue();
             Reflections reflections = new Reflections(controllerClass.getName(), new MethodAnnotationsScanner());
 
-            //get
             reflections.getMethodsAnnotatedWith(GetMapping.class).stream().forEach(method -> {
                 routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
             });
-            //post
             reflections.getMethodsAnnotatedWith(PostMapping.class).stream().forEach(method -> {
-                routes.get(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            });
+            reflections.getMethodsAnnotatedWith(DeleteMapping.class).stream().forEach(method -> {
+                routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            });
+            reflections.getMethodsAnnotatedWith(PutMapping.class).stream().forEach(method -> {
+                routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            });
+            reflections.getMethodsAnnotatedWith(OptionsMapping.class).stream().forEach(method -> {
+                routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
             });
         });
     }

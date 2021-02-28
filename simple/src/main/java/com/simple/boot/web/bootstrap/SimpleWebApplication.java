@@ -4,6 +4,7 @@ import com.simple.boot.anno.Controller;
 import com.simple.boot.bootstrap.SimpleApplication;
 import com.simple.boot.bootstrap.SimpleBoot;
 import com.simple.boot.web.anno.GetMapping;
+import com.simple.boot.web.config.WebConfig;
 import com.simple.boot.web.connection.NettyConnection;
 import com.simple.boot.web.dispatch.NettyDispatcher;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,8 @@ public class SimpleWebApplication extends SimpleApplication implements SimpleBoo
     @Override
     public void run(Class start) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super.run(start);
-
-
-        Map<String, Object> configs = this.getYamlConfigLoader().getConfigs();
-        Map<String, Object> webConfigs = (Map<String, Object>) configs.get("web");
-        String host = (String) webConfigs.get("host");
-        Integer port = (Integer) webConfigs.get("port");
-        HttpServer httpServer = new NettyConnection().create().host(host).port(port.intValue());
-        // TODO: dispatch
+        WebConfig webConfig = this.getYamlConfigLoader().load(WebConfig.class);
+        HttpServer httpServer = new NettyConnection().create().host(webConfig.getWeb().getHost()).port(webConfig.getWeb().getPort());
         DisposableServer server = httpServer.route(routes -> {
             try {
                 new NettyDispatcher(routes).mapping();
@@ -40,6 +35,5 @@ public class SimpleWebApplication extends SimpleApplication implements SimpleBoo
             }
         }).wiretap(true).bindNow();
         server.onDispose().block();
-        //-----------
     }
 }

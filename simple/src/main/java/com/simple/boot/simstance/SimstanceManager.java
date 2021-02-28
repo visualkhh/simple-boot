@@ -62,9 +62,6 @@ public class SimstanceManager {
             sims.put(it, null);
         });
 
-
-
-
         // TODO: DI
         for (Map.Entry<Class, Object> e: sims.entrySet()) {
             sims.put(e.getKey(), e.getKey().getDeclaredConstructor().newInstance());
