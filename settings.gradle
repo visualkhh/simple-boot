@@ -1,5 +1,5 @@
 rootProject.name = 'simple-boot'
-String[] simples = ['simple', 'simple-h2', 'simple-web']
+String[] simples = ['simple', 'simple-h2', 'simple-web', 'simple-hibernate']
 String[] fronts = ['simple-front']
 String[] projects = ['example']
 

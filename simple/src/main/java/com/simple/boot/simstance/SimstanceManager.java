@@ -33,6 +33,7 @@ public class SimstanceManager {
         this.startClass = startClass;
         sims = new LinkedHashMap<>();
         sims.putAll(definedSims);
+        sims.put(this.getClass(), this);
         init(this.startClass);
     }
 

@@ -13,12 +13,12 @@ import java.util.Map;
 
 @Slf4j
 @Config
-public class H2Server {
+public class H2Starter {
 
     private final ConfigLoader configLoader;
 
     @Injection
-    public H2Server(ConfigLoader configLoader) throws SQLException {
+    public H2Starter(ConfigLoader configLoader) throws SQLException {
         this.configLoader = configLoader;
         init();
     }
