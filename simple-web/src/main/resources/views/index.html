@@ -1,14 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ghhh</title>
+    <title>index.html</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <body>
-hhhhhhhhh
-<h1>aaaa</h1>
-<div>aaaaaaaaaaaaaaaa</div>
-<hr>
-<a th:text="${name}"></a>
+<h1>hello</h1>
+<div id="container">
+</div>
+
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url:'/users',
+            success:function(data){
+                console.log(data);
+                $.each(data,function(index, item){
+                    $('#container').append("<div>"+item.name+"</div>");
+                });
+            }
+        })
+    });
+</script>
 </body>
 </html>

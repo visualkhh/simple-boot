@@ -5,7 +5,6 @@ web:
 h2:
   port: 9092
 
-
 hibernate:
   property:
     "hibernate.dialect": org.hibernate.dialect.H2Dialect

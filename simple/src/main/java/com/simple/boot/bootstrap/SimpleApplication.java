@@ -33,4 +33,9 @@ public class SimpleApplication implements SimpleBoot {
 
 
     }
+
+    @Override
+    public <T> T getSim(Class<T> klass) {
+        return (T)simstanceManager.getSims().get(klass);
+    }
 }

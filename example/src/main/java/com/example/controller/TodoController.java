@@ -33,23 +33,23 @@ public class TodoController {
         session.flush();
         session.clear();
         session.getTransaction().commit();
-        return "Hello World!";
+        return "good";
     }
+
     @GetMapping("/admins")
     public Admin admins(Request request, Response response){
         Session session = hibernateStarter.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-
         Admin admin = session.find(Admin.class, 1);
-
-
         session.getTransaction().commit();
         return admin;
     }
+
     @GetMapping("/hello")
     public String hello(Request request, Response response){
         return "Hello World!";
     }
+
     @GetMapping("/user")
     public User user(Request request, Response response){
         User user = new User();
@@ -57,6 +57,7 @@ public class TodoController {
         user.setName("name");
         return user;
     }
+
     @GetMapping("/index")
     public View index(Request request, Response response){
         View view = new View("views/index.html");
