@@ -10,14 +10,15 @@ import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 @Slf4j
 public class SimpleWebApplication extends SimpleApplication implements SimpleBoot {
     @Override
     public void run(Class start) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super.run(start);
-        WebConfig webConfig = this.getConfigLoader().load(WebConfig.class);
-        HttpServer httpServer = new NettyConnection().create().host(webConfig.getWeb().getHost()).port(webConfig.getWeb().getPort());
+        WebConfig web = this.getConfigLoader().get("web", WebConfig.class);
+        HttpServer httpServer = new NettyConnection().create().host(web.getHost()).port(web.getPort());
         DisposableServer server = httpServer.route(routes -> {
             try {
                 new NettyDispatcher(routes).mapping();

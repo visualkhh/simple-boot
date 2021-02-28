@@ -14,6 +14,8 @@ import org.reflections.util.FilterBuilder;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -69,12 +71,10 @@ public class SimstanceManager {
             return obj;
         }
 
-
         Object value = null;
-//        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(klass.getPackage().getName())).setScanners(new MethodAnnotationsScanner()));
-//        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forClass(klass)), new MethodAnnotationsScanner());
-        Reflections reflections = new Reflections(klass.getPackage().getName(), new MethodAnnotationsScanner());
-        Optional<Constructor> injectionCunstructors = reflections.getConstructorsAnnotatedWith(Injection.class).stream().filter(it -> klass == it.getDeclaringClass()).findAny();
+
+        Optional<Constructor> injectionCunstructors = Stream.of(klass.getConstructors()).filter(it -> it.isAnnotationPresent(Injection.class)).findAny();
+
         if (injectionCunstructors.isPresent()) {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = new Object[parameterTypes.length];

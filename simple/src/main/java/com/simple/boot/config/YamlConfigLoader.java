@@ -3,6 +3,8 @@ package com.simple.boot.config;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -33,11 +35,19 @@ public class YamlConfigLoader implements ConfigLoader {
     }
 
     @Override
-    public <T> T load(Class<T> loadClass) {
-        Yaml yaml = new Yaml(new Constructor(loadClass));
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(name);
-        return yaml.load(inputStream);
+    public <T> T get(String key, Class<T> klass) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper.map(configs.get(key), klass);
     }
+
+//
+//    @Override
+//    public <T> T load(Class<T> loadClass) {
+//        Yaml yaml = new Yaml(new Constructor(loadClass));
+//        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(name);
+//        return yaml.load(inputStream);
+//    }
 
 
 }

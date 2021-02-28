@@ -18,6 +18,7 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
     implementation project(':simple')
+    implementation project(':simple-h2')
     implementation project(':simple-web')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'

@@ -14,8 +14,6 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import reactor.core.publisher.Mono;
@@ -45,22 +43,18 @@ public class NettyDispatcher implements Dispatcher {
         controllers.forEach(controllerEntry -> {
             Class controllerClass = controllerEntry.getKey();
             Object controller = controllerEntry.getValue();
-            Reflections reflections = new Reflections(controllerClass, new MethodAnnotationsScanner());
-
-            reflections.getMethodsAnnotatedWith(GetMapping.class).stream().forEach(method -> {
-                routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-            });
-            reflections.getMethodsAnnotatedWith(PostMapping.class).stream().forEach(method -> {
-                routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-            });
-            reflections.getMethodsAnnotatedWith(DeleteMapping.class).stream().forEach(method -> {
-                routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-            });
-            reflections.getMethodsAnnotatedWith(PutMapping.class).stream().forEach(method -> {
-                routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-            });
-            reflections.getMethodsAnnotatedWith(OptionsMapping.class).stream().forEach(method -> {
-                routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+            Stream.of(controllerClass.getDeclaredMethods()).forEach(method -> {
+                if(method.isAnnotationPresent(GetMapping.class)) {
+                    routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                } else if(method.isAnnotationPresent(PostMapping.class)) {
+                    routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                } else if(method.isAnnotationPresent(DeleteMapping.class)) {
+                    routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                } else if(method.isAnnotationPresent(PutMapping.class)) {
+                    routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                } else if(method.isAnnotationPresent(OptionsMapping.class)) {
+                    routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+                }
             });
         });
     }

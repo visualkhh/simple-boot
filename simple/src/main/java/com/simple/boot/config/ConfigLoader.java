@@ -4,5 +4,5 @@ public interface ConfigLoader {
 
     public void load();
 
-    public <T> T load(Class<T> loadClass);
+    public <T> T get(String key, Class<T> klass);
 }
