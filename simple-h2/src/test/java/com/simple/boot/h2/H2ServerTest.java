@@ -14,7 +14,7 @@ class H2ServerTest {
     public void test() throws SQLException, InterruptedException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         new SimpleApplication().run(H2ServerTest.class);
 //        Server server = Server.createTcpServer("-web","-tcpPort" ,"9092", "-tcpAllowOthers", "-baseDir", "~/temp").start();
-//        Thread.sleep(999999999l);
+        Thread.sleep(999999999l);
     }
 
 }

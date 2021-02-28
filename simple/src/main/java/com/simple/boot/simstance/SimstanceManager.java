@@ -11,6 +11,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -59,6 +60,17 @@ public class SimstanceManager {
             reflections.getTypesAnnotatedWith(Controller.class, true).stream().forEach(it -> sims.put(it, null));
             reflections.getTypesAnnotatedWith(Service.class, true).stream().forEach(it -> sims.put(it, null));
             reflections.getTypesAnnotatedWith(Sim.class, true).stream().forEach(it -> sims.put(it, null));
+        }
+
+//        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
+//            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
+//        }).collect(Collectors.toList());
+        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
+            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
+        }).collect(Collectors.toList());
+        Collections.reverse(collect);
+        for (Class aClass : collect) {
+            create(aClass);
         }
 
         for (Class klass : sims.keySet()) {

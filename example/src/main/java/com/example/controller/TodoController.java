@@ -22,9 +22,9 @@ public class TodoController {
         this.hibernateStarter = hibernateStarter;
     }
 
-    @GetMapping("/a")
-    public String a(Request request, Response response){
-        Session session = hibernateStarter.buildSessionFactory().getCurrentSession();
+    @GetMapping("/admin")
+    public String admin(Request request, Response response){
+        Session session = hibernateStarter.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Admin admin = new Admin();
         admin.setSeq(1);
@@ -34,6 +34,17 @@ public class TodoController {
         session.clear();
         session.getTransaction().commit();
         return "Hello World!";
+    }
+    @GetMapping("/admins")
+    public Admin admins(Request request, Response response){
+        Session session = hibernateStarter.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        Admin admin = session.find(Admin.class, 1);
+
+
+        session.getTransaction().commit();
+        return admin;
     }
     @GetMapping("/hello")
     public String hello(Request request, Response response){
