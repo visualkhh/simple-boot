@@ -19,14 +19,20 @@ subprojects {
 //    }
 }
 
-
-project(':simple') {
-
-}
-
-project(':todo') {
-    apply plugin: 'java'
-    dependencies {
-        implementation project(':simple')
-    }
-}
+//
+//project(':simple') {
+//
+//}
+//project(':simple-web') {
+//    apply plugin: 'java'
+//    dependencies {
+//        implementation project(':simple')
+//    }
+//}
+//
+//project(':exemple') {
+//    apply plugin: 'java'
+//    dependencies {
+//        implementation project(':simple-web')
+//    }
+//}

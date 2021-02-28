@@ -1,12 +1,10 @@
 plugins {
     id 'java'
 }
-//group 'com.simple.boot'
+group 'com.exemple'
 version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
-    google()
-    jcenter()
 }
 
 dependencies {
@@ -15,17 +13,13 @@ dependencies {
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
-
-
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
-
-
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation project(':simple')
+    implementation project(':simple-web')
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
@@ -33,4 +27,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-

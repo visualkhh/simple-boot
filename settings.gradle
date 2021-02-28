@@ -1,9 +1,9 @@
 rootProject.name = 'simple-boot'
-String[] servers = ['simple']
-String[] fronts = ['front']
-String[] projects = ['todo']
+String[] simples = ['simple', 'simple-web']
+String[] fronts = ['simple-front']
+String[] projects = ['exemple']
 
-servers.each {
+simples.each {
     include it
     def projectDir = new File(rootDir, it)
     if (!projectDir.exists()) {
