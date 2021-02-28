@@ -19,6 +19,8 @@ dependencies {
 
     implementation project(':simple')
     implementation project(':simple-h2')
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
+    implementation project(':simple-hibernate')
     implementation project(':simple-web')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
