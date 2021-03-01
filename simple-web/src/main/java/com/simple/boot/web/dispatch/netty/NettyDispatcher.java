@@ -19,11 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.netty.ByteBufFlux;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
 import reactor.netty.http.server.HttpServerRoutes;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -87,34 +90,81 @@ public class NettyDispatcher implements Dispatcher {
             for (Map.Entry<Method, Object> it : filterAfterHandlers.entrySet()) {
                 it.getKey().invoke(it.getValue(), nettyRequest, nettyResponse);
             }
-
-            if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
-                return response.sendString(Mono.just((String)rtn));
-            } else if(null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
-                final TemplateEngine templateEngine = new TemplateEngine();
-                Context context = new Context();
-                View rtnView = (View)rtn;
-                context.setVariables(rtnView);
-                response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_HTML);
-                String viewString = Resources.toString(Resources.getResource(rtnView.getView()), Charsets.UTF_8);
-                final String result = templateEngine.process(viewString, context);
-                return response.sendString(Mono.just(result));
-            } else if(null != rtn) {
-                response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
-                return response.sendString(Mono.just(mapper.writeValueAsString(rtn)));
-            } else {
-                return response.send();
-            }
+            return finalReturnProcessing(response, rtn);
         } catch (Throwable e) {
-            exceptionHandlers.entrySet().stream().filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(e.getClass())).forEach(it -> {
+            Optional<Map.Entry<Method, Object>> first = exceptionHandlers.entrySet().stream().filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(e.getClass())).findFirst();
+            if(first.isPresent()) {
                 try {
-                    it.getKey().invoke(it.getValue(), nettyRequest, nettyResponse);
+                    Map.Entry<Method, Object> methodObjectEntry = first.get();
+                    Object rtn = methodObjectEntry.getKey().invoke(methodObjectEntry.getValue(), nettyRequest, nettyResponse);
+                    finalReturnProcessing(response, rtn);
                 } catch (Exception se) {
                     log.error("exceptionHandler Exception", se);
                 }
-            });
+            }
+
             //exception
             throw new RuntimeException(e);
         }
     }
+
+    private Publisher<Void> finalReturnProcessing(HttpServerResponse response, Object rtn) throws IOException {
+        if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
+            return response.sendString(Mono.just((String) rtn));
+
+        } else if(null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
+            final TemplateEngine templateEngine = new TemplateEngine();
+            Context context = new Context();
+            View rtnView = (View) rtn;
+            context.setVariables(rtnView);
+            response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_HTML);
+            String viewString = Resources.toString(Resources.getResource(rtnView.getView()), Charsets.UTF_8);
+            final String result = templateEngine.process(viewString, context);
+            return response.sendString(Mono.just(result));
+
+        }  else if(null != rtn && Publisher.class.isAssignableFrom(rtn.getClass())) {
+            // https://awesomeopensource.com/project/reactor/reactor-netty
+            ByteBufFlux.fromString(Flux.just("Hello"));
+            return response.sendString((Publisher<? extends String>) rtn);
+//            return response.sendObject(rtn);
+
+        } else if(null != rtn) {
+            response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+            return response.sendString(Mono.just(mapper.writeValueAsString(rtn)));
+        } else {
+            return response.send();
+        }
+    }
+
+
+//    private boolean isRunTlogAdviceToRun(Throwable e, Tlo tlo) {
+//        boolean sw = false;
+//        Map<String, Object> apioperationAdvices = applicationContext.getBeansWithAnnotation(TlogAdvice.class);
+//        for (Object ot : apioperationAdvices.values()) {
+//            Map<Method, Class<? extends Throwable>> unsortMap = new LinkedHashMap<>();
+//            for (Method mt : ReflectionUtils.getAllDeclaredMethods(ot.getClass())) {
+//                TlogExceptionHandler exceptionHandler = mt.getAnnotation(TlogExceptionHandler.class);
+//                if (null != exceptionHandler && null != exceptionHandler.value() && Arrays.asList(exceptionHandler.value()).stream().filter(it -> it.isAssignableFrom(e.getClass())).findFirst().isPresent()) {
+//                    unsortMap.put(mt, exceptionHandler.value());
+//                }
+//            }
+//
+//
+//            // value 내림차순으로 정렬하고, value가 같으면 key 오름차순으로 정렬
+//            /*  여기에는 3가지 규칙이 있다.
+//                기준이 되는 데이터가 비교하는 데이터보다 큰 경우 양수를 리턴
+//                기준이 되는 데이터가 비교하는 데이터와 같은 경우 0을 리턴
+//                기준이 되는 데이터가 비교하는 데이터보다 작은 경우 음수를 리턴
+//             */
+//            List<Map.Entry<Method, Class<? extends Throwable>>> list = new LinkedList<>(unsortMap.entrySet());
+//            Optional<Map.Entry<Method, Class<? extends Throwable>>> first = list.stream().sorted((a, b) -> superClassSize(b.getValue()) - superClassSize(a.getValue())).findFirst();
+//            if (first.isPresent()) {
+//                Map.Entry<Method, Class<? extends Throwable>> f = first.get();
+//                ReflectionUtils.invokeMethod(f.getKey(), ot, e, tlo);
+//                sw = true;
+//            }
+//        }
+//        return sw;
+//    }
 }
+

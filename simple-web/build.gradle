@@ -27,6 +27,7 @@ dependencies {
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
     implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
+//    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
     // reactor netty
     implementation platform('io.projectreactor:reactor-bom:Dysprosium-SR10')

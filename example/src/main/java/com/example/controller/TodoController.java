@@ -8,8 +8,10 @@ import com.simple.boot.hibernate.HibernateStarter;
 import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
+import com.simple.boot.web.controller.anno.PostMapping;
 import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Controller
@@ -54,5 +56,15 @@ public class TodoController {
         View view = new View("views/index.html");
         view.put("name", "name");
         return view;
+    }
+
+    @PostMapping("/post")
+    public Flux<String> post(Request request, Response response) {
+//        request.body(String.class);
+//        request.body( )
+        return request.bodyFlux(String.class).map(it -> {
+            return it + "----";
+        });
+//       return Flux.just("Hello");
     }
 }

@@ -19,10 +19,10 @@ dependencies {
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
 
 
+    implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.3'
+    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     implementation project(':simple')
     implementation project(':simple-h2')
-    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
-//    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
     implementation project(':simple-hibernate')
     implementation project(':simple-web')
 

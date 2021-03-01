@@ -24,7 +24,7 @@ public class ExceptionController {
     public void ii(Request request, Response response) {
         log.info("InvocationTargetException {}, {}", request, response);
     }
-    @ExceptionHandler
+    @ExceptionHandler(order = -100)
     public void ee(Request request, Response response) {
         log.info("eee {}, {}", request, response);
     }
