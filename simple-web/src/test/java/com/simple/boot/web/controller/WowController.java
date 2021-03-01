@@ -10,6 +10,7 @@ import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -25,6 +26,13 @@ public class WowController {
     @GetMapping("/users")
     public List<User> users(Request request, Response response) {
         return wowService.createUsers();
+    }
+    @GetMapping("/test")
+    public String test(Request request, Response response) {
+        Map<String, List<String>> stringListMap = request.queryParameters();
+        int ii = Integer.parseInt(stringListMap.get("d").get(0));
+        int a = 5 / ii;
+        return "test " + a;
     }
 
     @GetMapping("/")

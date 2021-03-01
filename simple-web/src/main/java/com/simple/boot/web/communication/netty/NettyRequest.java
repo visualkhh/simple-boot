@@ -1,8 +1,10 @@
 package com.simple.boot.web.communication.netty;
 
 import com.simple.boot.web.communication.Request;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import reactor.netty.http.server.HttpServerRequest;
 
+import java.util.List;
 import java.util.Map;
 
 public class NettyRequest implements Request {
@@ -26,5 +28,16 @@ public class NettyRequest implements Request {
     @Override
     public String path() {
         return request.path();
+    }
+
+    @Override
+    public String uri() {
+        return request.uri();
+    }
+
+    @Override
+    public Map<String, List<String>> queryParameters() {
+        QueryStringDecoder query = new QueryStringDecoder(uri());
+        return query.parameters();
     }
 }

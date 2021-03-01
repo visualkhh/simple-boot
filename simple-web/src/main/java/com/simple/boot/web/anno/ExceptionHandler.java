@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ExceptionHandler {
     public int order() default 0;
-    public Class<Throwable> value() default Throwable.class;
+    public Class<? extends Throwable> value() default Throwable.class;
 }
