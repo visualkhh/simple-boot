@@ -6,6 +6,7 @@ import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.hibernate.config.HibernaterConfig;
 import com.simple.boot.simstance.SimstanceManager;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -13,9 +14,10 @@ import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @Slf4j
-@Config(order = -999)
+@Config(order = -1_010_000)
 public class HibernateStarter {
     private final SimstanceManager simstanceManager;
     private final ConfigLoader configLoader;
@@ -74,6 +76,24 @@ public class HibernateStarter {
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public Serializable save(Object data) {
+        Session session = getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Serializable save = session.save(data);
+        session.flush();
+        session.clear();
+        session.getTransaction().commit();
+        return save;
+    }
+
+    public <T> T find(Class<T> data, Serializable key) {
+        Session session = getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        T t = session.find(data, key);
+        session.getTransaction().commit();
+        return t;
     }
 
 }

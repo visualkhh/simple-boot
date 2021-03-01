@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 @Slf4j
-@Config
+@Config(order = -1_020_000)
 public class H2Starter {
 
     private final ConfigLoader configLoader;

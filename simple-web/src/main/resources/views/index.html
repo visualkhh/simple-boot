@@ -14,8 +14,7 @@
     $(document).ready(function(){
         $.ajax({
             url:'/users',
-            success:function(data){
-                console.log(data);
+            success: function(data){
                 $.each(data,function(index, item){
                     $('#container').append("<div>"+item.name+"</div>");
                 });

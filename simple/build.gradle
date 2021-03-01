@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+    }
+}
+
+
 plugins {
     id 'java'
 }

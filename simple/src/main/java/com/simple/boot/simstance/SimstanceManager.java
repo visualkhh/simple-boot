@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
-import org.reflections.scanners.*;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -61,10 +58,10 @@ public class SimstanceManager {
             reflections.getTypesAnnotatedWith(Sim.class, true).stream().forEach(it -> sims.put(it, null));
         }
 
-        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
-            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
-        }).collect(Collectors.toList());
-        Collections.reverse(collect);
+//        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
+//            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
+//        }).collect(Collectors.toList());
+        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted(Comparator.comparingInt(it -> ((Config) it.getAnnotation(Config.class)).order())).collect(Collectors.toList());
         for (Class aClass : collect) {
             create(aClass);
         }
@@ -72,6 +69,29 @@ public class SimstanceManager {
         for (Class klass : sims.keySet()) {
             create(klass);
         }
+    }
+//    public <T extends Annotation> Map<Class, Object> addScanSim(Class<T> annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//    }
+    public <T extends Annotation> List<Object> addScanSim(Class<T> annotation, Comparator<T> comparator) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Map<Class, Object> rsims = new LinkedHashMap<>();
+        for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
+            Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());
+            reflections.getTypesAnnotatedWith(annotation, true).stream().forEach(it -> {
+//                sims.put(it, null);
+                rsims.put(it, null);
+            });
+        }
+
+        List<Class> collect = rsims.keySet().stream().sorted((s1, s2) -> {
+            return comparator.compare((T)s1.getAnnotation(annotation), (T)s2.getAnnotation(annotation));
+        }).collect(Collectors.toList());
+
+
+        List<Object> rtn = new ArrayList<>();
+        for (Class klass : collect) {
+            rtn.add(create(klass));
+        }
+        return rtn;
     }
 
     public Object create(Class klass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {

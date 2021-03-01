@@ -1,7 +1,8 @@
-//buildscript {
-//    dependencies {
-//    }
-//}
+buildscript {
+    dependencies {
+        project(':simple')
+    }
+}
 
 
 plugins {
@@ -16,29 +17,26 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    // lombok
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
 
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
     implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
-    // import a BOM
+
+    // reactor netty
     implementation platform('io.projectreactor:reactor-bom:Dysprosium-SR10')
     implementation group: 'io.projectreactor.netty', name: 'reactor-netty-core', version: '1.0.4'
     implementation group: 'io.projectreactor.netty', name: 'reactor-netty-http', version: '1.0.4'
 
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-
-
     implementation project(':simple')
 
-
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

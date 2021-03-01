@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface PostMapping {
-
-    public String value() default "";
+public @interface FilterAfterHandler {
+    public int order() default 0;
 }

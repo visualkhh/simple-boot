@@ -5,12 +5,11 @@ import com.example.model.User;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.hibernate.HibernateStarter;
-import com.simple.boot.web.anno.GetMapping;
+import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
 import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
 
 @Slf4j
 @Controller
@@ -24,24 +23,16 @@ public class TodoController {
 
     @GetMapping("/admin")
     public String admin(Request request, Response response){
-        Session session = hibernateStarter.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
         Admin admin = new Admin();
         admin.setSeq(1);
         admin.setName("av");
-        session.save(admin);
-        session.flush();
-        session.clear();
-        session.getTransaction().commit();
+        hibernateStarter.save(admin);
         return "good";
     }
 
     @GetMapping("/admins")
     public Admin admins(Request request, Response response){
-        Session session = hibernateStarter.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        Admin admin = session.find(Admin.class, 1);
-        session.getTransaction().commit();
+        Admin admin = hibernateStarter.find(Admin.class, 1);
         return admin;
     }
 

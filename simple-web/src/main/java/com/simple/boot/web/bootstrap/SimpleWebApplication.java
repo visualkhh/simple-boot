@@ -21,7 +21,7 @@ public class SimpleWebApplication extends SimpleApplication implements SimpleBoo
         HttpServer httpServer = new NettyConnection().create().host(web.getHost()).port(web.getPort());
         DisposableServer server = httpServer.route(routes -> {
             try {
-                new NettyDispatcher(routes).mapping();
+                new NettyDispatcher(this.getSimstanceManager(), routes).mapping();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
