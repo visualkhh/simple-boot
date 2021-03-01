@@ -26,9 +26,7 @@ import reactor.netty.http.server.HttpServerRoutes;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -37,25 +35,21 @@ public class NettyDispatcher implements Dispatcher {
     private final HttpServerRoutes routes;
     private final ObjectMapper mapper;
     private final SimstanceManager simstanceManager;
-    private final List<Object> exceptionHandlers;
-    private final List<Object> filterBeforeHandlers;
-    private final List<Object> filterAfterHandlers;
+    private final LinkedHashMap<Method, Object> exceptionHandlers;
+    private final LinkedHashMap<Method, Object> filterBeforeHandlers;
+    private final LinkedHashMap<Method, Object> filterAfterHandlers;
 
     public NettyDispatcher(SimstanceManager simstanceManager, HttpServerRoutes routes) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         this.simstanceManager = simstanceManager;
         this.routes = routes;
-        exceptionHandlers = this.simstanceManager.addScanSim(ExceptionHandler.class, Comparator.comparingInt(ExceptionHandler::order));
-        filterBeforeHandlers = this.simstanceManager.addScanSim(FilterBeforeHandler.class, Comparator.comparingInt(FilterBeforeHandler::order));
-        filterAfterHandlers = this.simstanceManager.addScanSim(FilterAfterHandler.class, Comparator.comparingInt(FilterAfterHandler::order));
+        exceptionHandlers = this.simstanceManager.getMethodAnnotation(ExceptionHandler.class, Comparator.comparingInt(ExceptionHandler::order));
+        filterBeforeHandlers = this.simstanceManager.getMethodAnnotation(FilterBeforeHandler.class, Comparator.comparingInt(FilterBeforeHandler::order));
+        filterAfterHandlers = this.simstanceManager.getMethodAnnotation(FilterAfterHandler.class, Comparator.comparingInt(FilterAfterHandler::order));
         mapper = new ObjectMapper();
     }
 
     @Override
     public void mapping() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-
-
-
-
         Stream<Map.Entry<Class, Object>> controllers = SimstanceManager.getInstance().getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
         controllers.forEach(controllerEntry -> {
             Class controllerClass = controllerEntry.getKey();
@@ -78,15 +72,22 @@ public class NettyDispatcher implements Dispatcher {
 
 
     public Publisher<Void> mappingDetail(Object controller, Method method, HttpServerRequest request, HttpServerResponse response) {
+        NettyRequest nettyRequest = new NettyRequest(request);
+        NettyResponse nettyResponse = new NettyResponse(response);
         try {
-            NettyRequest nettyRequest = new NettyRequest(request);
-            NettyResponse nettyResponse = new NettyResponse(response);
 
             //before
+            for (Map.Entry<Method, Object> it : filterBeforeHandlers.entrySet()) {
+                it.getKey().invoke(it.getValue(), nettyRequest, nettyResponse);
+            }
 
             Object rtn = method.invoke(controller, nettyRequest, nettyResponse);
 
             //after
+            for (Map.Entry<Method, Object> it : filterAfterHandlers.entrySet()) {
+                it.getKey().invoke(it.getValue(), nettyRequest, nettyResponse);
+            }
+
             if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
                 return response.sendString(Mono.just((String)rtn));
             } else if(null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
@@ -105,8 +106,12 @@ public class NettyDispatcher implements Dispatcher {
                 return response.send();
             }
         } catch (Throwable e) {
-            exceptionHandlers.forEach(it -> {
-
+            exceptionHandlers.entrySet().stream().filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(e.getClass())).forEach(it -> {
+                try {
+                    it.getKey().invoke(it.getValue(), nettyRequest, nettyResponse);
+                } catch (Exception se) {
+                    log.error("exceptionHandler Exception", se);
+                }
             });
             //exception
             throw new RuntimeException(e);

@@ -11,6 +11,7 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,7 +71,8 @@ public class SimstanceManager {
             create(klass);
         }
     }
-//    public <T extends Annotation> Map<Class, Object> addScanSim(Class<T> annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+    //    public <T extends Annotation> Map<Class, Object> addScanSim(Class<T> annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 //    }
     public <T extends Annotation> List<Object> addScanSim(Class<T> annotation, Comparator<T> comparator) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Map<Class, Object> rsims = new LinkedHashMap<>();
@@ -83,7 +85,7 @@ public class SimstanceManager {
         }
 
         List<Class> collect = rsims.keySet().stream().sorted((s1, s2) -> {
-            return comparator.compare((T)s1.getAnnotation(annotation), (T)s2.getAnnotation(annotation));
+            return comparator.compare((T) s1.getAnnotation(annotation), (T) s2.getAnnotation(annotation));
         }).collect(Collectors.toList());
 
 
@@ -118,5 +120,19 @@ public class SimstanceManager {
         sims.put(klass, value);
         return value;
 
+    }
+
+    public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> exceptionHandlerClass, Comparator<T> comparator) {
+        LinkedHashMap<Method, Object> rtn = new LinkedHashMap<>();
+        getSims().entrySet().stream()
+                .forEach(it -> {
+                    Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(exceptionHandlerClass)).forEach(sit -> rtn.put(sit, it.getValue()));
+                });
+
+
+        return rtn.entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue((v1,v2)->v2.compareTo(v1)))
+                .sorted((s1, s2) -> comparator.compare(s1.getKey().getAnnotation(exceptionHandlerClass), s2.getKey().getAnnotation(exceptionHandlerClass)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2)->v1, LinkedHashMap::new));
     }
 }
