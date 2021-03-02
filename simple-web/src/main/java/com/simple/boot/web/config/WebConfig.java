@@ -9,4 +9,5 @@ public class WebConfig {
     public static final String prefix = "web";
     String host;
     Integer port;
+    Boolean ssl;
 }

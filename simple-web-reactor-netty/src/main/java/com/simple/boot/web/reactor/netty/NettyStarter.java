@@ -26,8 +26,8 @@ public class NettyStarter extends Starter {
 
     public void init() {
         WebConfig config = configLoader.get(WebConfig.prefix, WebConfig.class);
-        HttpServer httpServer = HttpServer.create().host(config.getHost()).port(config.getPort());
-        DisposableServer server = httpServer.route(routes -> new NettyDispatcher(simstanceManager, routes).mapping()).wiretap(true).bindNow();
-        server.onDispose().block();
+//        HttpServer httpServer = HttpServer.create().host(config.getHost()).port(config.getPort());
+//        DisposableServer server = httpServer.route(routes -> new NettyDispatcher(simstanceManager, routes).mapping()).wiretap(true).bindNow();
+//        server.onDispose().block();
     }
 }

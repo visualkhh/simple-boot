@@ -1,11 +1,14 @@
 package com.simple.boot.web.communication;
 
 
+import com.simple.boot.web.http.HttpMethod;
+
 import java.util.List;
 import java.util.Map;
 
 public interface Request {
     public String param(String key);
+    public HttpMethod method();
     public Map<String, String> params();
     public String path();
     public String uri();

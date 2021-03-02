@@ -1,33 +1,17 @@
 package com.simple.boot.web.netty.dispatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.simple.boot.anno.Controller;
 import com.simple.boot.simstance.SimstanceManager;
-import com.simple.boot.web.anno.ExceptionHandler;
-import com.simple.boot.web.controller.anno.*;
-import com.simple.boot.web.controller.returns.View;
+import com.simple.boot.web.communication.Request;
+import com.simple.boot.web.communication.Response;
+import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.dispatch.Dispatcher;
-import com.simple.boot.web.reactor.netty.communication.NettyRequest;
-import com.simple.boot.web.reactor.netty.communication.NettyResponse;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaderValues;
-import io.netty.handler.codec.http.HttpResponseStatus;
+import com.simple.boot.web.model.MethodObjectSet;
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import reactor.netty.http.server.HttpServerRequest;
-import reactor.netty.http.server.HttpServerResponse;
-import reactor.netty.http.server.HttpServerRoutes;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Slf4j
 public class NettyDispatcher extends Dispatcher {
@@ -42,24 +26,37 @@ public class NettyDispatcher extends Dispatcher {
     }
 
     @Override
-    public void mapping() {
-//        Stream<Map.Entry<Class, Object>> controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
-        getControllers().forEach((controllerClass, controller) -> {
-            Stream.of(controllerClass.getDeclaredMethods()).forEach(method -> {
-                if (method.isAnnotationPresent(GetMapping.class)) {
-                    routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if (method.isAnnotationPresent(PostMapping.class)) {
-                    routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if (method.isAnnotationPresent(DeleteMapping.class)) {
-                    routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if (method.isAnnotationPresent(PutMapping.class)) {
-                    routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if (method.isAnnotationPresent(OptionsMapping.class)) {
-                    routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                }
-            });
-        });
+    public void executeMapping(Request request, Response response) {
+        Optional<MethodObjectSet> method = getControllerMappingAnnotaion(GetMapping.class, (a) -> a.value().equals(request.path()));
+        if(method.isPresent()) {
+            try {
+                String rtn = (String)method.get().invoke(request, response);
+                response.body(rtn.getBytes(StandardCharsets.UTF_8));
+                log.info("method invoke result: {}", rtn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+//    public void mapping() {
+////        Stream<Map.Entry<Class, Object>> controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
+//        getControllers().forEach((controllerClass, controller) -> {
+//            Stream.of(controllerClass.getDeclaredMethods()).forEach(method -> {
+//                GetMapping annotation = method.getAnnotation(GetMapping.class);
+//                if (method.isAnnotationPresent(GetMapping.class)) {
+//                    routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+//                } else if (method.isAnnotationPresent(PostMapping.class)) {
+//                    routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+//                } else if (method.isAnnotationPresent(DeleteMapping.class)) {
+//                    routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+//                } else if (method.isAnnotationPresent(PutMapping.class)) {
+//                    routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+//                } else if (method.isAnnotationPresent(OptionsMapping.class)) {
+//                    routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
+//                }
+//            });
+//        });
+//    }
 
 
 //    public Publisher<Void> mappingDetail(Object controller, Method method, HttpServerRequest request, HttpServerResponse response) {

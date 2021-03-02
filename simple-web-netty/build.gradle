@@ -29,6 +29,9 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
 
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.58.Final'
+
     implementation project(':simple')
     implementation project(':simple-web')
 

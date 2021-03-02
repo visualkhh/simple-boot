@@ -1,13 +1,15 @@
-package com.simple.boot.web.reactor.netty.communication;
+package com.simple.boot.web.netty.communication;
 
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.http.HttpMethod;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import reactor.netty.http.server.HttpServerRequest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,17 +19,18 @@ import java.util.stream.Collectors;
 @Setter
 public class NettyRequest implements Request {
 
-    private final HttpServerRequest request;
 
+    private final FullHttpRequest request;
     String body;
 
-    public NettyRequest(HttpServerRequest request) {
+    public NettyRequest(FullHttpRequest request) {
         this.request = request;
     }
 
     @Override
     public String param(String key) {
-        return request.param(key);
+        return "";
+//        return request.param(key);
     }
 
     @Override
@@ -37,12 +40,20 @@ public class NettyRequest implements Request {
 
     @Override
     public Map<String, String> params() {
-        return request.params();
+        return null;
+//        return request.params();
     }
 
     @Override
     public String path() {
-        return request.path();
+        try {
+            URI uri = new URI(request.uri());
+            return uri.getPath();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return "";
+//        return request.path();
     }
 
     @Override

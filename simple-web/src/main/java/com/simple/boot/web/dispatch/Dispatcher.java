@@ -5,16 +5,19 @@ import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.web.anno.ExceptionHandler;
 import com.simple.boot.web.anno.FilterAfterHandler;
 import com.simple.boot.web.anno.FilterBeforeHandler;
+import com.simple.boot.web.communication.Request;
+import com.simple.boot.web.communication.Response;
+import com.simple.boot.web.model.MethodObjectSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -34,9 +37,20 @@ public abstract class Dispatcher {
         controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
     }
 
-    public void met(){
-
+    public <T extends Annotation> Optional<MethodObjectSet> getControllerMappingAnnotaion(Class<T> annotations, Predicate<T> test){
+        for (Map.Entry<Class, Object> it : controllers.entrySet()) {
+            Optional<Method> first = Stream.of(it.getKey().getDeclaredMethods()).filter(sit -> test.test(sit.getAnnotation(annotations))).findFirst();
+            if(first.isPresent()){
+                return Optional.of(MethodObjectSet.builder().method(first.get()).klass(it.getKey()).object(it.getValue()).build());
+            }
+        }
+        return Optional.empty();
+//        return controllers.entrySet().stream().filter(it -> {
+//            return Stream.of(it.getClass().getDeclaredMethods()).map(sit -> sit.getAnnotation(annotations.getClass())).filter(sit -> test.test((T) sit)).findFirst().isPresent();
+//        }).map(it -> {
+//            return new MethodSet(it.getKey(), it.getValue(), it.getKey());
+//        }).findFirst();
     }
 
-    protected abstract void mapping() throws Exception;
+    public abstract void executeMapping(Request request, Response response);
 }
