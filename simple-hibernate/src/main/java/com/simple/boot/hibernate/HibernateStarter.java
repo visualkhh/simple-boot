@@ -32,7 +32,7 @@ public class HibernateStarter extends Starter {
     }
 
     private void init() {
-        HibernaterConfig config = this.configLoader.get("hibernate", HibernaterConfig.class);
+        HibernaterConfig config = this.configLoader.get(HibernaterConfig.prefix, HibernaterConfig.class);
         Class startClass = simstanceManager.getStartClass();
 
 //        Configuration configuration_pp = getHibernateConfigByCode();

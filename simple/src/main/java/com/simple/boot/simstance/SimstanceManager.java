@@ -53,19 +53,22 @@ public class SimstanceManager {
     private void init(Class startClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
             Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());
-            reflections.getTypesAnnotatedWith(Config.class, true).stream().forEach(it -> sims.put(it, null));
-            reflections.getTypesAnnotatedWith(Controller.class, true).stream().forEach(it -> sims.put(it, null));
-            reflections.getTypesAnnotatedWith(Service.class, true).stream().forEach(it -> sims.put(it, null));
             reflections.getTypesAnnotatedWith(Sim.class, true).stream().forEach(it -> sims.put(it, null));
+            reflections.getTypesAnnotatedWith(Service.class, true).stream().forEach(it -> sims.put(it, null));
+            reflections.getTypesAnnotatedWith(Controller.class, true).stream().forEach(it -> sims.put(it, null));
+
+            List<Class<?>> configs = reflections.getTypesAnnotatedWith(Config.class, true).stream().sorted(Comparator.comparingInt(s -> s.getAnnotation(Config.class).order())).collect(Collectors.toList());
+            configs.stream().forEach(it -> sims.put(it, null));
+
         }
 
 //        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted((it, sit) -> {
 //            return Integer.compare(((Config) it.getAnnotation(Config.class)).order(), ((Config) sit.getAnnotation(Config.class)).order());
 //        }).collect(Collectors.toList());
-        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted(Comparator.comparingInt(it -> ((Config) it.getAnnotation(Config.class)).order())).collect(Collectors.toList());
-        for (Class aClass : collect) {
-            create(aClass);
-        }
+//        List<Class> collect = sims.keySet().stream().filter(it -> it.isAnnotationPresent(Config.class)).sorted(Comparator.comparingInt(it -> ((Config) it.getAnnotation(Config.class)).order())).collect(Collectors.toList());
+//        for (Class aClass : collect) {
+//            create(aClass);
+//        }
 
         for (Class klass : sims.keySet()) {
             create(klass);

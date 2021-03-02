@@ -53,7 +53,7 @@ public class NettyDispatcher implements Dispatcher {
 
     @Override
     public void mapping() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Stream<Map.Entry<Class, Object>> controllers = SimstanceManager.getInstance().getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
+        Stream<Map.Entry<Class, Object>> controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
         controllers.forEach(controllerEntry -> {
             Class controllerClass = controllerEntry.getKey();
             Object controller = controllerEntry.getValue();

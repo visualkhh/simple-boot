@@ -1,13 +1,10 @@
 package com.simple.boot.h2;
 
-import com.simple.boot.bootstrap.SimpleApplication;
-import org.h2.tools.Server;
+import com.simple.boot.SimpleApplication;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class H2ServerTest {
     @Test

@@ -6,5 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class H2Config {
+    public static final String prefix = "h2";
     Integer port;
 }

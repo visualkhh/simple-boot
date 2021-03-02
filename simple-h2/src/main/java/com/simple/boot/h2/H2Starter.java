@@ -27,7 +27,7 @@ public class H2Starter extends Starter {
     private void init() throws SQLException {
 //        Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
 //        Server server =  Server.createTcpServer("-tcpAllowOthers").start();
-        H2Config h2 = configLoader.get("h2", H2Config.class);
+        H2Config h2 = configLoader.get(H2Config.prefix, H2Config.class);
         Server server = Server.createTcpServer("-web","-tcpPort" , String.valueOf(h2.getPort()), "-tcpAllowOthers").start();
 //        int port = 5555;
 //        Server.createTcpServer(

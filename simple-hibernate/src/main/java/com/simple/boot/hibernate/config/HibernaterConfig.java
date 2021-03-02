@@ -8,5 +8,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class HibernaterConfig {
+    public static final String prefix = "hibernate";
     public Map<String, Object> property;
 }

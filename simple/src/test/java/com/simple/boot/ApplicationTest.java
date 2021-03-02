@@ -1,7 +1,5 @@
 package com.simple.boot;
 
-import com.simple.boot.bootstrap.SimpleApplication;
-import com.simple.boot.bootstrap.SimpleBoot;
 import com.simple.boot.controller.UserController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

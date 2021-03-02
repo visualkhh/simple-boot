@@ -1,4 +1,4 @@
-package com.simple.boot.bootstrap;
+package com.simple.boot;
 
 import java.lang.reflect.InvocationTargetException;
 
