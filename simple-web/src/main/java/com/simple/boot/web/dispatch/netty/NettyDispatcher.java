@@ -11,10 +11,11 @@ import com.simple.boot.web.anno.FilterBeforeHandler;
 import com.simple.boot.web.communication.netty.NettyRequest;
 import com.simple.boot.web.communication.netty.NettyResponse;
 import com.simple.boot.web.controller.anno.*;
-import com.simple.boot.web.dispatch.Dispatcher;
 import com.simple.boot.web.controller.returns.View;
+import com.simple.boot.web.dispatch.Dispatcher;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.thymeleaf.TemplateEngine;
@@ -29,7 +30,10 @@ import reactor.netty.http.server.HttpServerRoutes;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -58,15 +62,15 @@ public class NettyDispatcher implements Dispatcher {
             Class controllerClass = controllerEntry.getKey();
             Object controller = controllerEntry.getValue();
             Stream.of(controllerClass.getDeclaredMethods()).forEach(method -> {
-                if(method.isAnnotationPresent(GetMapping.class)) {
+                if (method.isAnnotationPresent(GetMapping.class)) {
                     routes.get(method.getAnnotation(GetMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if(method.isAnnotationPresent(PostMapping.class)) {
+                } else if (method.isAnnotationPresent(PostMapping.class)) {
                     routes.post(method.getAnnotation(PostMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if(method.isAnnotationPresent(DeleteMapping.class)) {
+                } else if (method.isAnnotationPresent(DeleteMapping.class)) {
                     routes.delete(method.getAnnotation(DeleteMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if(method.isAnnotationPresent(PutMapping.class)) {
+                } else if (method.isAnnotationPresent(PutMapping.class)) {
                     routes.put(method.getAnnotation(PutMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
-                } else if(method.isAnnotationPresent(OptionsMapping.class)) {
+                } else if (method.isAnnotationPresent(OptionsMapping.class)) {
                     routes.options(method.getAnnotation(OptionsMapping.class).value(), (request, response) -> mappingDetail(controller, method, request, response));
                 }
             });
@@ -93,26 +97,27 @@ public class NettyDispatcher implements Dispatcher {
             return finalReturnProcessing(response, rtn);
         } catch (Throwable e) {
             Optional<Map.Entry<Method, Object>> first = exceptionHandlers.entrySet().stream().filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(e.getClass())).findFirst();
-            if(first.isPresent()) {
+            if (first.isPresent()) {
                 try {
                     Map.Entry<Method, Object> methodObjectEntry = first.get();
                     Object rtn = methodObjectEntry.getKey().invoke(methodObjectEntry.getValue(), nettyRequest, nettyResponse);
-                    finalReturnProcessing(response, rtn);
+                    return finalReturnProcessing(response, rtn);
                 } catch (Exception se) {
                     log.error("exceptionHandler Exception", se);
                 }
             }
-
             //exception
-            throw new RuntimeException(e);
+            log.error("exception dispatch", e);
+            response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+            return response.send();
         }
     }
 
     private Publisher<Void> finalReturnProcessing(HttpServerResponse response, Object rtn) throws IOException {
-        if(null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
+        if (null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
             return response.sendString(Mono.just((String) rtn));
 
-        } else if(null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
+        } else if (null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
             final TemplateEngine templateEngine = new TemplateEngine();
             Context context = new Context();
             View rtnView = (View) rtn;
@@ -122,13 +127,13 @@ public class NettyDispatcher implements Dispatcher {
             final String result = templateEngine.process(viewString, context);
             return response.sendString(Mono.just(result));
 
-        }  else if(null != rtn && Publisher.class.isAssignableFrom(rtn.getClass())) {
+        } else if (null != rtn && Publisher.class.isAssignableFrom(rtn.getClass())) {
             // https://awesomeopensource.com/project/reactor/reactor-netty
             ByteBufFlux.fromString(Flux.just("Hello"));
             return response.sendString((Publisher<? extends String>) rtn);
 //            return response.sendObject(rtn);
 
-        } else if(null != rtn) {
+        } else if (null != rtn) {
             response.header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
             return response.sendString(Mono.just(mapper.writeValueAsString(rtn)));
         } else {
