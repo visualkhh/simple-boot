@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class H2Config {
     Integer port;
+    //
 }
