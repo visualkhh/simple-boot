@@ -12,6 +12,8 @@ link
   - reactive netty
       - https://godekdls.github.io/Reactor%20Netty/httpserver/#51-starting-and-stopping
       - 공식: https://projectreactor.io/docs/netty/release/reference/index.html
+      - 사용: https://awesomeopensource.com/project/reactor/reactor-netty
+        - 
   - java nio
       - http://eincs.com/2009/08/java-nio-bytebuffer-channel/
   - java reflection

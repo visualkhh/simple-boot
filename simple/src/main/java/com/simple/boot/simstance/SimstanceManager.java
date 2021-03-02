@@ -2,6 +2,7 @@ package com.simple.boot.simstance;
 
 
 import com.simple.boot.anno.*;
+import com.simple.boot.util.ReflectionUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class SimstanceManager {
     private final String SIMPLE_BASE_PACKAGE = "com.simple.boot";
     public static SimstanceManager instance;
     private final Class startClass;
-    public Map<Class, Object> sims;
+    public LinkedHashMap<Class, Object> sims;
 
     // TODO: singletoen
     private SimstanceManager(Map<Class, Object> definedSims, Class startClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -116,9 +117,9 @@ public class SimstanceManager {
                 }
                 parameterValus[i] = isSim;
             }
-            value = injectionCunstructors.get().newInstance(parameterValus);
+            value = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
         } else {
-            value = klass.getDeclaredConstructor().newInstance();
+            value = ReflectionUtils.newInstance(klass.getDeclaredConstructor());;
         }
         sims.put(klass, value);
         return value;
@@ -127,15 +128,15 @@ public class SimstanceManager {
 
     public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> exceptionHandlerClass, Comparator<T> comparator) {
         LinkedHashMap<Method, Object> rtn = new LinkedHashMap<>();
-        getSims().entrySet().stream()
-                .forEach(it -> {
-                    Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(exceptionHandlerClass)).forEach(sit -> rtn.put(sit, it.getValue()));
-                });
+        getSims().entrySet().stream().forEach(it -> {
+            Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(exceptionHandlerClass)).forEach(sit -> rtn.put(sit, it.getValue()));
+        });
 
 
         return rtn.entrySet().stream()
 //                .sorted(Map.Entry.comparingByValue((v1,v2)->v2.compareTo(v1)))
                 .sorted((s1, s2) -> comparator.compare(s1.getKey().getAnnotation(exceptionHandlerClass), s2.getKey().getAnnotation(exceptionHandlerClass)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2)->v1, LinkedHashMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
     }
+
 }

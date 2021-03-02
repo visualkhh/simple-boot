@@ -1,9 +1,17 @@
 rootProject.name = 'simple-boot'
-String[] simples = ['simple', 'simple-h2', 'simple-web', 'simple-hibernate']
+String[] simples = ['simple', 'simple-h2', 'simple-hibernate']
+String[] simple_webs = ['simple-web', 'simple-web-reactor-netty', 'simple-web-netty']
 String[] fronts = ['simple-front']
 String[] projects = ['example']
 
 simples.each {
+    include it
+    def projectDir = new File(rootDir, it)
+    if (!projectDir.exists()) {
+        projectDir.mkdirs()
+    }
+}
+simple_webs.each {
     include it
     def projectDir = new File(rootDir, it)
     if (!projectDir.exists()) {

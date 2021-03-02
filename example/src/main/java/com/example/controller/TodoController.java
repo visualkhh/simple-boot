@@ -11,7 +11,6 @@ import com.simple.boot.web.communication.Response;
 import com.simple.boot.web.controller.anno.PostMapping;
 import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Flux;
 
 @Slf4j
 @Controller
@@ -59,12 +58,13 @@ public class TodoController {
     }
 
     @PostMapping("/post")
-    public Flux<String> post(Request request, Response response) {
-//        request.body(String.class);
+    public String post(Request request, Response response) {
+        return "popopo";
+        //        request.body(String.class);
 //        request.body( )
-        return request.bodyFlux(String.class).map(it -> {
-            return it + "----";
-        });
+//        return request.bodyFlux(String.class).map(it -> {
+//            return it + "----";
+//        });
 //       return Flux.just("Hello");
     }
 }

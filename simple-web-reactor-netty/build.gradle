@@ -28,7 +28,13 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 //    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
+    // reactor netty
+    implementation platform('io.projectreactor:reactor-bom:Dysprosium-SR10')
+    implementation group: 'io.projectreactor.netty', name: 'reactor-netty-core', version: '1.0.4'
+    implementation group: 'io.projectreactor.netty', name: 'reactor-netty-http', version: '1.0.4'
+
     implementation project(':simple')
+    implementation project(':simple-web')
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
