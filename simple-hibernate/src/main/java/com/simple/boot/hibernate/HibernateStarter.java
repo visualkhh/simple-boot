@@ -5,6 +5,7 @@ import com.simple.boot.anno.Injection;
 import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.hibernate.config.HibernaterConfig;
 import com.simple.boot.simstance.SimstanceManager;
+import com.simple.boot.starter.Starter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,7 +19,7 @@ import java.io.Serializable;
 
 @Slf4j
 @Config(order = -1_010_000)
-public class HibernateStarter {
+public class HibernateStarter extends Starter {
     private final SimstanceManager simstanceManager;
     private final ConfigLoader configLoader;
     private SessionFactory sessionFactory;

@@ -5,6 +5,7 @@ import com.simple.boot.anno.Injection;
 import com.simple.boot.anno.Sim;
 import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.h2.config.H2Config;
+import com.simple.boot.starter.Starter;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Config(order = -1_020_000)
-public class H2Starter {
+public class H2Starter extends Starter {
 
     private final ConfigLoader configLoader;
 
