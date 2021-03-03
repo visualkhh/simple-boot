@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class NettyRequest implements Request {
 
 
-    private final FullHttpRequest request;
+    private final FullHttpRequest nettyRequest;
     String body;
 
     public NettyRequest(FullHttpRequest request) {
-        this.request = request;
+        this.nettyRequest = request;
     }
 
     @Override
@@ -35,7 +35,8 @@ public class NettyRequest implements Request {
 
     @Override
     public HttpMethod method() {
-        return null;
+        io.netty.handler.codec.http.HttpMethod method = nettyRequest.method();
+        return HttpMethod.valueOf(method.name().toUpperCase());
     }
 
     @Override
@@ -47,7 +48,7 @@ public class NettyRequest implements Request {
     @Override
     public String path() {
         try {
-            URI uri = new URI(request.uri());
+            URI uri = new URI(nettyRequest.uri());
             return uri.getPath();
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -58,7 +59,7 @@ public class NettyRequest implements Request {
 
     @Override
     public String uri() {
-        return request.uri();
+        return nettyRequest.uri();
     }
 
     @Override

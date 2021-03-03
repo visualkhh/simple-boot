@@ -9,7 +9,12 @@ public enum HttpMethod {
     GET,
     POST,
     PUT,
-    DELETE;
+    DELETE,
+    OPTIONS,
+    HEAD,
+    PATCH,
+    TRACE,
+    CONNECT;
 
     public static List<String> getMethods() {
         return Arrays.asList(HttpMethod.values()).stream().map(it -> it.name()).collect(Collectors.toList());

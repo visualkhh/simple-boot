@@ -14,6 +14,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -105,24 +106,28 @@ public class SimstanceManager {
         if (null != obj) {
             return obj;
         }
-        Object value = null;
+        Object sim = null;
         Optional<Constructor> injectionCunstructors = Stream.of(klass.getConstructors()).filter(it -> it.isAnnotationPresent(Injection.class)).findAny();
         if (injectionCunstructors.isPresent()) {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = new Object[parameterTypes.length];
             for (int i = 0; i < parameterTypes.length; i++) {
-                Object isSim = sims.get(parameterTypes[i]);
-                if (null == isSim) {
-                    isSim = create(parameterTypes[i]);
+                //search
+                Class parameterType = parameterTypes[i];
+//                Optional<Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).map(it -> it.getValue()).map(Optional::ofNullable).findFirst().flatMap(Function.identity());
+                Map.Entry<Class, Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).findFirst().get();
+                if (null == first.getValue()) {
+                    parameterValus[i] = create(first.getKey());
+                } else {
+                    parameterValus[i] = first.getValue();
                 }
-                parameterValus[i] = isSim;
             }
-            value = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
+            sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
         } else {
-            value = ReflectionUtils.newInstance(klass.getDeclaredConstructor());;
+            sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
         }
-        sims.put(klass, value);
-        return value;
+        sims.put(klass, sim);
+        return sim;
 
     }
 

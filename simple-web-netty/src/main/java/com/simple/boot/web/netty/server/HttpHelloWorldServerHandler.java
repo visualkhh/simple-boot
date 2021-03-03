@@ -18,6 +18,7 @@ package com.simple.boot.web.netty.server;
 import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
+import com.simple.boot.web.dispatch.Dispatcher;
 import com.simple.boot.web.netty.communication.NettyRequest;
 import com.simple.boot.web.netty.communication.NettyResponse;
 import com.simple.boot.web.netty.dispatch.NettyDispatcher;
@@ -41,13 +42,11 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 @Slf4j
 public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-    private static final byte[] CONTENT = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
-    private final SimstanceManager simstanceManager;
-    private final NettyDispatcher nettyDispatcher;
 
-    public HttpHelloWorldServerHandler(SimstanceManager simstanceManager) {
-        this.simstanceManager = simstanceManager;
-        nettyDispatcher = new NettyDispatcher(this.simstanceManager);
+    private final NettyDispatcher dispatcher;
+
+    public HttpHelloWorldServerHandler(NettyDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -62,18 +61,14 @@ public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<Ful
 //        log.info("POST/PUT : " + s);
 //          https://stackoverflow.com/questions/36474734/java-netty-get-post-request-content
 
-        Request request = new NettyRequest(req);
-        NettyResponse response = new NettyResponse();
+        NettyRequest request = new NettyRequest(req);
+        NettyResponse response = new NettyResponse(request);
 
-        nettyDispatcher.executeMapping(request, response);
+        dispatcher.executeMapping(request, response);
 
         boolean keepAlive = HttpUtil.isKeepAlive(req);
-        FullHttpResponse resp = new DefaultFullHttpResponse(req.protocolVersion(), OK,
-                Unpooled.wrappedBuffer(response.getBody()));
-        resp.headers()
-                .set(CONTENT_TYPE, TEXT_PLAIN)
-                .setInt(CONTENT_LENGTH, resp.content().readableBytes());
 
+        FullHttpResponse resp = response.toFullHttpResponse();
         if (keepAlive) {
             if (!req.protocolVersion().isKeepAliveDefault()) {
                 resp.headers().set(CONNECTION, KEEP_ALIVE);

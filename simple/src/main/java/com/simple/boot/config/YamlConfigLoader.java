@@ -19,8 +19,11 @@ public class YamlConfigLoader implements ConfigLoader {
 
     private final String name = "simple-boot.yaml";
     private Map<String, Object> configs;
+    private final ModelMapper modelMapper;
 
     public YamlConfigLoader() {
+        modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 //        yaml = new Yaml();
 //        inputStream = this.getClass()
 //                .getClassLoader()
@@ -36,9 +39,12 @@ public class YamlConfigLoader implements ConfigLoader {
 
     @Override
     public <T> T get(String key, Class<T> klass) {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper.map(configs.get(key), klass);
+    }
+
+    @Override
+    public void map(String key, Object destination) {
+        modelMapper.map(configs.get(key), destination);
     }
 
 //

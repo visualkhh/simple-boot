@@ -1,43 +1,55 @@
 package com.simple.boot.web.netty.dispatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simple.boot.anno.Config;
+import com.simple.boot.anno.Injection;
 import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
-import com.simple.boot.web.controller.anno.GetMapping;
+import com.simple.boot.web.controller.anno.*;
 import com.simple.boot.web.dispatch.Dispatcher;
+import com.simple.boot.web.http.HttpMethod;
 import com.simple.boot.web.model.MethodObjectSet;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Slf4j
+@Config
 public class NettyDispatcher extends Dispatcher {
 
-    private final ObjectMapper mapper;
-    private final SimstanceManager simstanceManager;
-
+    @Injection
     public NettyDispatcher(SimstanceManager simstanceManager) {
         super(simstanceManager);
-        this.simstanceManager = simstanceManager;
-        mapper = new ObjectMapper();
     }
 
-    @Override
-    public void executeMapping(Request request, Response response) {
-        Optional<MethodObjectSet> method = getControllerMappingAnnotaion(GetMapping.class, (a) -> a.value().equals(request.path()));
-        if(method.isPresent()) {
-            try {
-                String rtn = (String)method.get().invoke(request, response);
-                response.body(rtn.getBytes(StandardCharsets.UTF_8));
-                log.info("method invoke result: {}", rtn);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    @Override
+//    public void executeMapping(Request request, Response response) {
+//        Optional<MethodObjectSet> method = null;
+//        if (HttpMethod.GET == request.method()) {
+//            method = getControllerMappingAnnotaion(GetMapping.class, (a) -> a.value().equals(request.path()));
+//        } else if(HttpMethod.POST == request.method()) {
+//            method = getControllerMappingAnnotaion(PostMapping.class, (a) -> a.value().equals(request.path()));
+//        } else if(HttpMethod.POST == request.method()) {
+//            method = getControllerMappingAnnotaion(DeleteMapping.class, (a) -> a.value().equals(request.path()));
+//        } else if(HttpMethod.POST == request.method()) {
+//            method = getControllerMappingAnnotaion(PutMapping.class, (a) -> a.value().equals(request.path()));
+//        } else if(HttpMethod.POST == request.method()) {
+//            method = getControllerMappingAnnotaion(OptionsMapping.class, (a) -> a.value().equals(request.path()));
+//        } else {
+//            method = Optional.empty();
+//        }
+//        if(method.isPresent()) {
+//            try {
+//                String rtn = (String)method.get().invoke(request, response);
+//                response.body(rtn.getBytes(StandardCharsets.UTF_8));
+//                log.info("method invoke result: {}", rtn);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 //    public void mapping() {
 ////        Stream<Map.Entry<Class, Object>> controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class));
 //        getControllers().forEach((controllerClass, controller) -> {

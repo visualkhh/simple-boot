@@ -16,6 +16,8 @@
 package com.simple.boot.web.netty.server;
 
 import com.simple.boot.simstance.SimstanceManager;
+import com.simple.boot.web.dispatch.Dispatcher;
+import com.simple.boot.web.netty.dispatch.NettyDispatcher;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -27,10 +29,10 @@ import io.netty.handler.ssl.SslContext;
 public class HttpHelloWorldServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private final SslContext sslCtx;
-    private final SimstanceManager simstanceManager;
+    private final NettyDispatcher dispatcher;
 
-    public HttpHelloWorldServerInitializer(SslContext sslCtx, SimstanceManager simstanceManager) {
-        this.simstanceManager = simstanceManager;
+    public HttpHelloWorldServerInitializer(SslContext sslCtx, NettyDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
         this.sslCtx = sslCtx;
     }
 
@@ -43,7 +45,7 @@ public class HttpHelloWorldServerInitializer extends ChannelInitializer<SocketCh
         p.addLast("codec", new HttpServerCodec());
         p.addLast("aggregator", new HttpObjectAggregator(Short.MAX_VALUE));
 //        p.addLast(new HttpServerExpectContinueHandler());
-        p.addLast(new HttpHelloWorldServerHandler(simstanceManager));
+        p.addLast(new HttpHelloWorldServerHandler(dispatcher));
 //        p.addLast(new HttpHelloWorldTestServerHandler());
     }
 }

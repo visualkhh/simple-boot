@@ -2,33 +2,29 @@ package com.simple.boot.h2;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
-import com.simple.boot.anno.Sim;
-import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.h2.config.H2Config;
 import com.simple.boot.starter.Starter;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 @Slf4j
 @Config(order = -1_020_000)
 public class H2Starter extends Starter {
 
-    private final ConfigLoader configLoader;
+    private final H2Config config;
 
     @Injection
-    public H2Starter(ConfigLoader configLoader) throws SQLException {
-        this.configLoader = configLoader;
+    public H2Starter(H2Config config) throws SQLException {
+        this.config = config;
         init();
     }
 
     private void init() throws SQLException {
 //        Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
 //        Server server =  Server.createTcpServer("-tcpAllowOthers").start();
-        H2Config h2 = configLoader.get(H2Config.prefix, H2Config.class);
-        Server server = Server.createTcpServer("-web","-tcpPort" , String.valueOf(h2.getPort()), "-tcpAllowOthers").start();
+        Server server = Server.createTcpServer("-web","-tcpPort" , String.valueOf(config.getPort()), "-tcpAllowOthers").start();
 //        int port = 5555;
 //        Server.createTcpServer(
 //                "-tcp",
