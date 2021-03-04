@@ -1,4 +1,6 @@
 package com.simple.boot.web.throwable;
 
-public class NoSurchHttpMethodError extends SimpleBootException{
+import com.simple.boot.throwable.SimpleBootException;
+
+public class NoSurchHttpMethodError extends SimpleBootException {
 }

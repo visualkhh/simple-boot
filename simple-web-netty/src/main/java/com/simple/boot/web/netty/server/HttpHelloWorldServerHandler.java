@@ -21,7 +21,6 @@ import com.simple.boot.web.communication.Response;
 import com.simple.boot.web.dispatch.Dispatcher;
 import com.simple.boot.web.netty.communication.NettyRequest;
 import com.simple.boot.web.netty.communication.NettyResponse;
-import com.simple.boot.web.netty.dispatch.NettyDispatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -43,9 +42,9 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 @Slf4j
 public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    private final NettyDispatcher dispatcher;
+    private final Dispatcher dispatcher;
 
-    public HttpHelloWorldServerHandler(NettyDispatcher dispatcher) {
+    public HttpHelloWorldServerHandler(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
 

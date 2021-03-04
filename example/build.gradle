@@ -25,6 +25,7 @@ dependencies {
     implementation project(':simple-h2')
     implementation project(':simple-hibernate')
     implementation project(':simple-web')
+    implementation project(':simple-web-netty')
 
     // logback
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'

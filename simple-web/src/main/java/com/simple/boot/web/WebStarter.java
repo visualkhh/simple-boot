@@ -2,6 +2,7 @@ package com.simple.boot.web;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
+import com.simple.boot.anno.PostConstruct;
 import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.starter.Starter;
@@ -18,10 +19,11 @@ public class WebStarter extends Starter {
     @Injection
     public WebStarter(WebServer webServer) throws Exception {
         this.webServer = webServer;
-        init();
     }
 
-    public void init() throws Exception {
-        webServer.start();
+    @PostConstruct
+    public void start() {
+        Thread thread = new Thread(webServer);
+        thread.start();
     }
 }

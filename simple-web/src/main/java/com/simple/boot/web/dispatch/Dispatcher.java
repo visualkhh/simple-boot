@@ -3,8 +3,12 @@ package com.simple.boot.web.dispatch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Controller;
+import com.simple.boot.anno.Injection;
+import com.simple.boot.anno.PostConstruct;
 import com.simple.boot.simstance.SimstanceManager;
+import com.simple.boot.util.ReflectionUtils;
 import com.simple.boot.web.anno.ExceptionHandler;
 import com.simple.boot.web.anno.FilterAfterHandler;
 import com.simple.boot.web.anno.FilterBeforeHandler;
@@ -26,6 +30,7 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
@@ -40,21 +45,29 @@ import java.util.stream.Stream;
 @Getter
 @Setter
 @Slf4j
-public abstract class Dispatcher {
+@Config
+public class Dispatcher {
 
-    private final LinkedHashMap<Method, Object> exceptionHandlers;
-    private final LinkedHashMap<Method, Object> filterBeforeHandlers;
-    private final LinkedHashMap<Method, Object> filterAfterHandlers;
-    private final LinkedHashMap<Class, Object> controllers;
+    private LinkedHashMap<Method, Object> exceptionHandlers;
+    private LinkedHashMap<Method, Object> filterBeforeHandlers;
+    private LinkedHashMap<Method, Object> filterAfterHandlers;
+    private LinkedHashMap<Class, Object> controllers;
+
     private final ObjectMapper mapper;
 
-    public Dispatcher(SimstanceManager simstanceManager) {
-        exceptionHandlers = simstanceManager.getMethodAnnotation(ExceptionHandler.class, Comparator.comparingInt(ExceptionHandler::order));
+    public Dispatcher() {
+        this.mapper = new ObjectMapper();
+    }
+
+    @PostConstruct
+    @Injection
+    public void post(SimstanceManager simstanceManager) {
+        exceptionHandlers = simstanceManager.getMethodAnnotation(ExceptionHandler.class);
         filterBeforeHandlers = simstanceManager.getMethodAnnotation(FilterBeforeHandler.class, Comparator.comparingInt(FilterBeforeHandler::order));
         filterAfterHandlers = simstanceManager.getMethodAnnotation(FilterAfterHandler.class, Comparator.comparingInt(FilterAfterHandler::order));
         controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
-        mapper = new ObjectMapper();
     }
+
 
     public <T extends Annotation> Optional<MethodObjectSet> getControllerMappingAnnotaion(Class<T> annotations, Predicate<T> test) {
         for (Map.Entry<Class, Object> it : controllers.entrySet()) {
@@ -68,7 +81,15 @@ public abstract class Dispatcher {
     }
 
     public <T extends Throwable> Optional<MethodObjectSet> geExceptionHandlerAnnotaion(Class<T> exceptionClass) {
-        Optional<Map.Entry<Method, Object>> first = exceptionHandlers.entrySet().stream().filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(exceptionClass)).map(Optional::ofNullable).findFirst().flatMap(Function.identity());
+        Optional<Map.Entry<Method, Object>> first = exceptionHandlers.entrySet().stream()
+                .filter(it -> it.getKey().getAnnotation(ExceptionHandler.class).value().isAssignableFrom(exceptionClass))
+                .sorted((a, b) -> {
+                    Class<? extends Throwable> aClass = a.getKey().getAnnotation(ExceptionHandler.class).value();
+                    Class<? extends Throwable> bClass = b.getKey().getAnnotation(ExceptionHandler.class).value();
+                    return ReflectionUtils.superClassSize(bClass) - ReflectionUtils.superClassSize(aClass);
+                })
+                .map(Optional::ofNullable)
+                .findFirst().flatMap(Function.identity());
         if (first.isPresent()) {
             Map.Entry<Method, Object> excpetionEntry = first.get();
             return Optional.of(MethodObjectSet.builder().method(excpetionEntry.getKey()).object(excpetionEntry.getValue()).build());

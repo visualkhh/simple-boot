@@ -75,10 +75,25 @@ public class SimstanceManager {
         for (Class klass : sims.keySet()) {
             create(klass);
         }
+
+        //@PostConstruct 처리.
+        Set<Map.Entry<Method, Object>> posts = getMethodAnnotation(PostConstruct.class, Comparator.comparingInt(PostConstruct::order)).entrySet();
+        for (Map.Entry<Method, Object> post : posts) {
+            Method method = post.getKey();
+            Object obj = post.getValue();
+            Injection annotation = method.getAnnotation(Injection.class);
+            Object[] params = new Object[0];
+            if (null != annotation) {
+                params = getOrCreateSims(method.getParameterTypes());
+            }
+            ReflectionUtils.invoke(method, obj, params);
+        }
+
     }
 
     //    public <T extends Annotation> Map<Class, Object> addScanSim(Class<T> annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 //    }
+    @Deprecated
     public <T extends Annotation> List<Object> addScanSim(Class<T> annotation, Comparator<T> comparator) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Map<Class, Object> rsims = new LinkedHashMap<>();
         for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
@@ -110,38 +125,70 @@ public class SimstanceManager {
         Optional<Constructor> injectionCunstructors = Stream.of(klass.getConstructors()).filter(it -> it.isAnnotationPresent(Injection.class)).findAny();
         if (injectionCunstructors.isPresent()) {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
-            Object[] parameterValus = new Object[parameterTypes.length];
-            for (int i = 0; i < parameterTypes.length; i++) {
-                //search
-                Class parameterType = parameterTypes[i];
-//                Optional<Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).map(it -> it.getValue()).map(Optional::ofNullable).findFirst().flatMap(Function.identity());
-                Map.Entry<Class, Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).findFirst().get();
-                if (null == first.getValue()) {
-                    parameterValus[i] = create(first.getKey());
-                } else {
-                    parameterValus[i] = first.getValue();
-                }
-            }
+            Object[] parameterValus = getOrCreateSims(parameterTypes);
             sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
         } else {
             sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
         }
         sims.put(klass, sim);
         return sim;
-
     }
 
-    public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> exceptionHandlerClass, Comparator<T> comparator) {
+    public Object invokeInjectionAnnotaionParameterGetOrCreateSims(Method method, Object obj) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return ReflectionUtils.invoke(method, obj, injectionAnnotaionParameterGetOrCreateSims(method));
+    }
+    public Object[] injectionAnnotaionParameterGetOrCreateSims(Method method) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Object[] params = new Object[0];
+        Injection annotation = method.getAnnotation(Injection.class);
+        if (null != annotation) {
+            params = getOrCreateSims(method.getParameterTypes());
+        }
+        return params;
+    }
+    public Object[] getOrCreateSims(Class[] parameterTypes) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Object[] parameterValus = new Object[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            //search
+            Class parameterType = parameterTypes[i];
+//                Optional<Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).map(it -> it.getValue()).map(Optional::ofNullable).findFirst().flatMap(Function.identity());
+            Map.Entry<Class, Object> first = sims.entrySet().stream().filter(it -> parameterType.isAssignableFrom(it.getKey())).findFirst().get();
+            if (null == first.getValue()) {
+                parameterValus[i] = create(first.getKey());
+            } else {
+                parameterValus[i] = first.getValue();
+            }
+        }
+        return parameterValus;
+    }
+
+    public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> methodAnnotationClass) {
+        return getMethodAnnotation(methodAnnotationClass, null);
+    }
+    public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> methodAnnotationClass, Comparator<T> comparator) {
         LinkedHashMap<Method, Object> rtn = new LinkedHashMap<>();
+
+        /*
+            for (Map.Entry<Class, Object> sims : getSims().entrySet()) {
+            Class key = sims.getKey();
+            Object value = sims.getValue();
+            if(null == value) {
+            value = create(key);
+            }
+            Object finalValue = value;
+            Arrays.stream(key.getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(methodAnnotationClass)).forEach(sit -> rtn.put(sit, finalValue));
+            }
+         */
         getSims().entrySet().stream().forEach(it -> {
-            Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(exceptionHandlerClass)).forEach(sit -> rtn.put(sit, it.getValue()));
+            Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(methodAnnotationClass)).forEach(sit -> rtn.put(sit, it.getValue()));
         });
 
 
-        return rtn.entrySet().stream()
+        Stream<Map.Entry<Method, Object>> stream = rtn.entrySet().stream();
+        if(null != comparator) {
 //                .sorted(Map.Entry.comparingByValue((v1,v2)->v2.compareTo(v1)))
-                .sorted((s1, s2) -> comparator.compare(s1.getKey().getAnnotation(exceptionHandlerClass), s2.getKey().getAnnotation(exceptionHandlerClass)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
+            stream = stream.sorted((s1, s2) -> comparator.compare(s1.getKey().getAnnotation(methodAnnotationClass), s2.getKey().getAnnotation(methodAnnotationClass)));
+        }
+        return stream.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
     }
 
 }

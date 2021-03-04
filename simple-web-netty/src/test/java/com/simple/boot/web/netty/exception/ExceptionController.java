@@ -29,7 +29,7 @@ public class ExceptionController {
     public void nosurch(Request request, Response response) {
         response.status(HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(order = 100)
+    @ExceptionHandler
     public void ee(Request request, Response response) {
         log.info("eee {}, {}", request, response);
     }

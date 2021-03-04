@@ -1,4 +1,4 @@
-package com.simple.boot.web.anno;
+package com.simple.boot.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ExceptionHandler {
-    public Class<? extends Throwable> value() default Throwable.class;
+public @interface PostConstruct {
+    public int order() default 0;
 }

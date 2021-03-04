@@ -62,7 +62,11 @@ public class NettyResponse implements Response<byte[]> {
 
     public FullHttpResponse toFullHttpResponse() {
         HttpResponseStatus status = Optional.ofNullable(HttpResponseStatus.valueOf(this.status)).orElse(OK);
-        DefaultFullHttpResponse resp = new DefaultFullHttpResponse(request.getNettyRequest().protocolVersion(), status, Unpooled.wrappedBuffer(getBody()));
+        DefaultFullHttpResponse resp = new DefaultFullHttpResponse(
+                request.getNettyRequest().protocolVersion(),
+                status,
+                Unpooled.wrappedBuffer(Optional.ofNullable(getBody()).orElse(new byte[0]))
+        );
         this.header.forEach((k, v) -> resp.headers().set(k, v));
         resp.headers().setInt(CONTENT_LENGTH, resp.content().readableBytes());
         return resp;

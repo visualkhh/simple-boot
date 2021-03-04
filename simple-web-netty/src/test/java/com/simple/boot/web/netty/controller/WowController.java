@@ -1,7 +1,9 @@
 package com.simple.boot.web.netty.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
+import com.simple.boot.throwable.ProcessingException;
 import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
@@ -41,7 +43,7 @@ public class WowController {
 
 
     @PostMapping("/post")
-    public String post(Request request, Response response) {
+    public String post(Request request, Response response) throws ProcessingException {
         return "-a-sdasdsa   " + request.body(String.class);
         //        request.body(String.class);
 //        request.body( )

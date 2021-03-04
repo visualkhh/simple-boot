@@ -27,6 +27,13 @@ public class SimpleApplication implements SimpleBoot {
         Map<Class, Object> defined = new LinkedHashMap<>();
         defined.put(ConfigLoader.class, configLoader);
         simstanceManager = SimstanceManager.getInstance(defined, start);
+        log.info("started");
+
+        try {
+            Thread.currentThread().join();
+        }catch (Exception e) {
+            log.error("simpleApplication start error ", e);
+        }
     }
 
     @Override

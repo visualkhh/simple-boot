@@ -1,7 +1,7 @@
 web:
   host: localhost
   port: 8080
-
+  ssl: false
 h2:
   port: 9092
 

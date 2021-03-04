@@ -1,5 +1,4 @@
 package com.simple.boot.web.server;
 
-public interface WebServer {
-    public void start() throws Exception;
+public interface WebServer extends Runnable {
 }

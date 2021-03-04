@@ -1,9 +1,13 @@
 package com.simple.boot.web.netty.communication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simple.boot.throwable.ProcessingException;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.http.HttpMethod;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.util.CharsetUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +25,6 @@ public class NettyRequest implements Request {
 
 
     private final FullHttpRequest nettyRequest;
-    String body;
 
     public NettyRequest(FullHttpRequest request) {
         this.nettyRequest = request;
@@ -63,8 +66,22 @@ public class NettyRequest implements Request {
     }
 
     @Override
-    public <T> T body(Class<T> klass) {
-        return (T) body;
+    public <T> T body(Class<T> klass) throws ProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+//        String json = "[{\"name\":\"mkyong\", \"age\":37}, {\"name\":\"fong\", \"age\":38}]";
+        // 1. convert JSON array to Array objects
+        try {
+            if (byte[].class.isAssignableFrom(klass)) {
+                return (T) nettyRequest.content().array();
+            }
+            String body = nettyRequest.content().toString(CharsetUtil.UTF_8);
+            if (String.class.isAssignableFrom(klass)) {
+                return (T) body;
+            }
+            return mapper.readValue(body, klass);
+        } catch (Exception e) {
+            throw new ProcessingException(e);
+        }
     }
 //    @Override
 //    public <T> T body(Class<T> klass) {
