@@ -15,7 +15,14 @@ import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 
 import javax.persistence.Entity;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Slf4j
 @Config(order = -1_010_000)
@@ -86,6 +93,7 @@ public class HibernateStarter extends Starter {
         session.flush();
         session.clear();
         session.getTransaction().commit();
+        session.close();
         return save;
     }
 
@@ -94,7 +102,28 @@ public class HibernateStarter extends Starter {
         session.beginTransaction();
         T t = session.find(data, key);
         session.getTransaction().commit();
+        session.close();
         return t;
+    }
+    public <T> org.hibernate.query.Query<T> query(Session session, Class<T> data, Consumer<CriteriaQuery<T>> consumer) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(data);
+        Root<T> root = criteriaQuery.from(data);
+        criteriaQuery.select(root);
+
+        consumer.accept(criteriaQuery);
+        org.hibernate.query.Query<T> query = session.createQuery(criteriaQuery);
+        return query;
+    }
+
+    public <T> List<T> resultList(Class<T> data, Consumer<CriteriaQuery<T>> consumer) {
+        Session session = getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        org.hibernate.query.Query<T> query = query(session, data, consumer);
+        List<T> resultList = query.getResultList();
+        session.getTransaction().commit();
+        session.close();
+        return resultList;
     }
 
 }

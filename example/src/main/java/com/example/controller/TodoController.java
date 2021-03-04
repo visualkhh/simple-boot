@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.domain.Admin;
 import com.example.model.User;
+import com.example.service.UserService;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.hibernate.HibernateStarter;
@@ -20,10 +21,12 @@ import java.util.List;
 @Controller
 public class TodoController {
     private final HibernateStarter hibernateStarter;
+    private final UserService userService;
 
     @Injection
-    public TodoController(HibernateStarter hibernateStarter) {
+    public TodoController(HibernateStarter hibernateStarter, UserService userService) {
         this.hibernateStarter = hibernateStarter;
+        this.userService = userService;
     }
 
     @GetMapping("/admin")
@@ -35,10 +38,17 @@ public class TodoController {
         return "good";
     }
 
+    @PostMapping("/admin")
+    public void saveAdmin(Request request, Response response) throws ProcessingException {
+        Admin admin = request.body(Admin.class);
+        hibernateStarter.save(admin);
+    }
+
     @GetMapping("/admins")
-    public Admin admins(Request request, Response response){
-        Admin admin = hibernateStarter.find(Admin.class, 1);
-        return admin;
+    public List<Admin> admins(Request request, Response response){
+        List<Admin> admins = hibernateStarter.resultList(Admin.class, (a) -> {
+        });
+        return admins;
     }
 
     @GetMapping("/hello")
@@ -53,15 +63,11 @@ public class TodoController {
         user.setName("name");
         return user;
     }
+
+
     @GetMapping("/users")
     public List<User> users(Request request, Response response){
-        User user = new User();
-        user.setAge(1);
-        user.setName("name");
-        User user2 = new User();
-        user2.setAge(1);
-        user2.setName("name");
-        return Arrays.asList(user,user2);
+        return userService.users();
     }
 
     @GetMapping("/index")

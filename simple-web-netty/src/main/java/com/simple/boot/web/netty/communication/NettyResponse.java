@@ -61,7 +61,10 @@ public class NettyResponse implements Response<byte[]> {
     }
 
     public FullHttpResponse toFullHttpResponse() {
-        HttpResponseStatus status = Optional.ofNullable(HttpResponseStatus.valueOf(this.status)).orElse(OK);
+        if ( 0 == this.status) {
+            this.status = OK.code();
+        }
+        HttpResponseStatus status = HttpResponseStatus.valueOf(this.status);
         DefaultFullHttpResponse resp = new DefaultFullHttpResponse(
                 request.getNettyRequest().protocolVersion(),
                 status,

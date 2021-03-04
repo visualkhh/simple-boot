@@ -21,7 +21,7 @@ import com.simple.boot.web.http.HttpHeaderValues;
 import com.simple.boot.web.http.HttpMethod;
 import com.simple.boot.web.http.HttpStatus;
 import com.simple.boot.web.model.MethodObjectSet;
-import com.simple.boot.web.throwable.NoSurchHttpMethodError;
+import com.simple.boot.web.throwable.WebNoSurchHttpMethodError;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,6 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
@@ -123,7 +122,7 @@ public class Dispatcher {
         }
         try {
             if (!method.isPresent()) {
-                throw new NoSurchHttpMethodError();
+                throw new WebNoSurchHttpMethodError();
             }
             //before
             for (Map.Entry<Method, Object> it : getFilterBeforeHandlers().entrySet()) {
