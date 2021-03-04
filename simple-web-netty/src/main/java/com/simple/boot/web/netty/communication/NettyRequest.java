@@ -82,6 +82,13 @@ public class NettyRequest implements Request {
         } catch (Exception e) {
             throw new ProcessingException(e);
         }
+
+        /*
+        https://mkyong.com/java/jackson-convert-json-array-string-to-list/
+         // 3. alternative
+            List<Person> pp3 = mapper.readValue(json, new TypeReference<List<Person>>() {});
+
+         */
     }
 //    @Override
 //    public <T> T body(Class<T> klass) {
