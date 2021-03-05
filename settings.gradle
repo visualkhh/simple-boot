@@ -1,30 +1,59 @@
 rootProject.name = 'simple-boot'
-String[] simples = ['simple', 'simple-h2', 'simple-hibernate']
-String[] simple_webs = ['simple-web', 'simple-web-netty']
+String[] cores = ['simple']
+
+String[] others = []
+
+String[] dbs = ['simple-db', 'simple-db-h2', 'simple-db-hibernate']
+
+String[] webs = ['simple-web', 'simple-web-netty']
 String[] fronts = ['simple-front']
+
 String[] projects = ['example']
 
-simples.each {
+cores.each {
     include it
-    def projectDir = new File(rootDir, it)
+    def projectDir = new File("cores", it)
+    project(":${it}").projectDir = projectDir
     if (!projectDir.exists()) {
         projectDir.mkdirs()
     }
 }
-simple_webs.each {
+
+others.each {
     include it
-    def projectDir = new File(rootDir, it)
+    def projectDir = new File("others", it)
+    project(":${it}").projectDir = projectDir
+    if (!projectDir.exists()) {
+        projectDir.mkdirs()
+    }
+}
+
+dbs.each {
+    include it
+    def projectDir = new File("dbs", it)
+    project(":${it}").projectDir = projectDir
+    if (!projectDir.exists()) {
+        projectDir.mkdirs()
+    }
+}
+
+webs.each {
+    include it
+    def projectDir = new File("webs", it)
+    project(":${it}").projectDir = projectDir
     if (!projectDir.exists()) {
         projectDir.mkdirs()
     }
 }
 fronts.each {
     include it
-    def projectDir = new File(rootDir, it)
+    def projectDir = new File("fronts", it)
+    project(":${it}").projectDir = projectDir
     if (!projectDir.exists()) {
         projectDir.mkdirs()
     }
 }
+
 projects.each {
     include it
     def projectDir = new File(rootDir, it)
