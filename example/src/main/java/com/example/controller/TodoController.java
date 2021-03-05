@@ -69,7 +69,7 @@ public class TodoController {
     @GetMapping("/index")
     public View index(Request request, Response response){
         View view = new View("views/index.html");
-        view.put("name", "name");
+        view.put("name", "visualkhh");
         return view;
     }
 

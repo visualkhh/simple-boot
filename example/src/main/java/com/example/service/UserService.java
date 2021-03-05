@@ -1,10 +1,7 @@
 package com.example.service;
 
-import com.example.domain.Admin;
 import com.example.model.User;
-import com.simple.boot.anno.Injection;
 import com.simple.boot.anno.Service;
-import com.simple.boot.hibernate.HibernateStarter;
 
 import java.util.Arrays;
 import java.util.List;
