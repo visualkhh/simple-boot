@@ -9,12 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class FirstFilter {
+public class Filter {
 
     @FilterAfterHandler
     public void after(Request request, Response r) {
          log.info("after");
     }
+
     @FilterBeforeHandler
     public void before(Request request, Response r) {
          log.info("before");

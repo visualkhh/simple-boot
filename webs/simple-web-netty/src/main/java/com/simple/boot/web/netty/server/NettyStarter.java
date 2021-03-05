@@ -2,6 +2,7 @@ package com.simple.boot.web.netty.server;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
+import com.simple.boot.starter.Starter;
 import com.simple.boot.web.config.WebConfig;
 import com.simple.boot.web.dispatch.Dispatcher;
 import com.simple.boot.web.server.WebServer;
@@ -20,12 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Config
-public class NettyServer implements WebServer {
+public class NettyStarter extends Starter implements WebServer {
     private Dispatcher dispatcher;
     private WebConfig config;
 
     @Injection
-    public NettyServer(Dispatcher dispatcher, WebConfig config) throws Exception {
+    public NettyStarter(Dispatcher dispatcher, WebConfig config) throws Exception {
         this.dispatcher = dispatcher;
         this.config = config;
         init();
