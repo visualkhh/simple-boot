@@ -14,6 +14,10 @@ public class WebNoSurchHttpMethodError extends WebSimpleBootError {
         super(request, response);
     }
 
+    public WebNoSurchHttpMethodError(String msg, Request request, Response response) {
+        super(msg, request, response);
+    }
+
     public WebNoSurchHttpMethodError(Throwable cause) {
         super(cause);
     }

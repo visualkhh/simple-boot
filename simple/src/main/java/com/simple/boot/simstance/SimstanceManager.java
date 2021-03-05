@@ -2,6 +2,8 @@ package com.simple.boot.simstance;
 
 
 import com.simple.boot.anno.*;
+import com.simple.boot.proxy.SimProxyMethodHandler;
+import com.simple.boot.util.ProxyUtils;
 import com.simple.boot.util.ReflectionUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +16,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,8 +74,12 @@ public class SimstanceManager {
 //        }
 
         for (Class klass : sims.keySet()) {
-            create(klass);
+            Object obj = create(klass);
         }
+
+
+
+
 
         //@PostConstruct 처리.
         Set<Map.Entry<Method, Object>> posts = getMethodAnnotation(PostConstruct.class, Comparator.comparingInt(PostConstruct::order)).entrySet();
@@ -126,9 +131,11 @@ public class SimstanceManager {
         if (injectionCunstructors.isPresent()) {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = getOrCreateSims(parameterTypes);
-            sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
+//            sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
+            sim = ProxyUtils.newInstanceMethodProxy(klass, parameterTypes, parameterValus , new SimProxyMethodHandler());
         } else {
-            sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
+//            sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
+            sim = ProxyUtils.newInstanceMethodProxy(klass, new Class[0], new Object[0] , new SimProxyMethodHandler());
         }
         sims.put(klass, sim);
         return sim;

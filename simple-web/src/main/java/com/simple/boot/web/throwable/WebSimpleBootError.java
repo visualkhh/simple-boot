@@ -13,6 +13,11 @@ public class WebSimpleBootError extends SimpleBootException {
         this.request = request;
         this.response = response;
     }
+    public WebSimpleBootError(String msg, Request request, Response response) {
+        super(msg);
+        this.request = request;
+        this.response = response;
+    }
 
     public WebSimpleBootError(Throwable cause) {
         super(cause);

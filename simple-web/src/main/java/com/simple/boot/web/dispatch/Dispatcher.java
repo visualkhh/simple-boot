@@ -122,7 +122,7 @@ public class Dispatcher {
         }
         try {
             if (!method.isPresent()) {
-                throw new WebNoSurchHttpMethodError();
+                throw new WebNoSurchHttpMethodError(request.uri(), request, response);
             }
             //before
             for (Map.Entry<Method, Object> it : getFilterBeforeHandlers().entrySet()) {
