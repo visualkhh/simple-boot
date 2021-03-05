@@ -26,7 +26,7 @@ public class SimpleApplication implements SimpleBoot {
         configLoader.load();
         Map<Class, Object> defined = new LinkedHashMap<>();
         defined.put(ConfigLoader.class, configLoader);
-        simstanceManager = SimstanceManager.getInstance(defined, start);
+        simstanceManager = new SimstanceManager(defined, start);
         log.info("started");
 
         try {

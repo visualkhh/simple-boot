@@ -26,12 +26,10 @@ import java.util.stream.Stream;
 public class SimstanceManager {
 
     private final String SIMPLE_BASE_PACKAGE = "com.simple.boot";
-    public static SimstanceManager instance;
     private final Class startClass;
     public LinkedHashMap<Class, Object> sims;
 
-    // TODO: singletoen
-    private SimstanceManager(Map<Class, Object> definedSims, Class startClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public SimstanceManager(Map<Class, Object> definedSims, Class startClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         this.startClass = startClass;
         sims = new LinkedHashMap<>();
         sims.putAll(definedSims);
@@ -39,20 +37,9 @@ public class SimstanceManager {
         init(this.startClass);
     }
 
-    public static SimstanceManager getInstance() throws NullPointerException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        if (null != SimstanceManager.instance) {
-            return SimstanceManager.instance;
-        } else {
-            throw new NullPointerException();
-        }
-    }
 
-    public static SimstanceManager getInstance(Map<Class, Object> definedSims, Class startClass) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        if (null == SimstanceManager.instance) {
-            SimstanceManager.instance = new SimstanceManager(definedSims, startClass);
-        }
-        return SimstanceManager.instance;
-    }
+
+
 
     private void init(Class startClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
@@ -79,9 +66,6 @@ public class SimstanceManager {
         for (Class klass : sims.keySet()) {
             Object obj = create(klass);
         }
-
-
-
 
 
         //@PostConstruct 처리.
@@ -135,10 +119,10 @@ public class SimstanceManager {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = getOrCreateSims(parameterTypes);
 //            sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
-            sim = ProxyUtils.newInstanceMethodProxy(klass, parameterTypes, parameterValus , new SimProxyMethodHandler(this));
+            sim = ProxyUtils.newInstanceMethodProxy(klass, parameterTypes, parameterValus, new SimProxyMethodHandler(this));
         } else {
 //            sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
-            sim = ProxyUtils.newInstanceMethodProxy(klass, new Class[0], new Object[0] , new SimProxyMethodHandler(this));
+            sim = ProxyUtils.newInstanceMethodProxy(klass, new Class[0], new Object[0], new SimProxyMethodHandler(this));
         }
         sims.put(klass, sim);
         return sim;
@@ -147,6 +131,7 @@ public class SimstanceManager {
     public Object invokeInjectionAnnotaionParameterGetOrCreateSims(Method method, Object obj) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return ReflectionUtils.invoke(method, obj, injectionAnnotaionParameterGetOrCreateSims(method));
     }
+
     public Object[] injectionAnnotaionParameterGetOrCreateSims(Method method) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Object[] params = new Object[0];
         Injection annotation = method.getAnnotation(Injection.class);
@@ -155,6 +140,7 @@ public class SimstanceManager {
         }
         return params;
     }
+
     public Object[] getOrCreateSims(Class[] parameterTypes) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Object[] parameterValus = new Object[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
@@ -174,6 +160,7 @@ public class SimstanceManager {
     public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> methodAnnotationClass) {
         return getMethodAnnotation(methodAnnotationClass, null);
     }
+
     public <T extends Annotation> LinkedHashMap<Method, Object> getMethodAnnotation(Class<T> methodAnnotationClass, Comparator<T> comparator) {
         LinkedHashMap<Method, Object> rtn = new LinkedHashMap<>();
 
@@ -194,7 +181,7 @@ public class SimstanceManager {
 
 
         Stream<Map.Entry<Method, Object>> stream = rtn.entrySet().stream();
-        if(null != comparator) {
+        if (null != comparator) {
 //                .sorted(Map.Entry.comparingByValue((v1,v2)->v2.compareTo(v1)))
             stream = stream.sorted((s1, s2) -> comparator.compare(s1.getKey().getAnnotation(methodAnnotationClass), s2.getKey().getAnnotation(methodAnnotationClass)));
         }
@@ -207,8 +194,9 @@ public class SimstanceManager {
             return null != e.getKey() && null != e.getValue() && klass.isAssignableFrom(e.getKey());
         }).entrySet().stream().collect(Collectors.toMap((it) -> {
             return (Class<T>) it.getKey();
-        }, (it) -> (T)it.getValue(), (x, y) -> y, LinkedHashMap::new));
+        }, (it) -> (T) it.getValue(), (x, y) -> y, LinkedHashMap::new));
     }
+
     public LinkedHashMap<Class, Object> getSims(Predicate<Map.Entry<Class, Object>> test) {
         return this.getSims().entrySet().stream()
                 .filter(test)
