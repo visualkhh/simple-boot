@@ -1,0 +1,38 @@
+{
+  "name": "simple-boot-front",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "start:dev": "webpack serve --open ",
+    "start-noopen:dev": "webpack serve"
+  },
+  "devDependencies": {
+    "css-loader": "^5.0.2",
+    "extract-loader": "^5.1.0",
+    "file-loader": "^6.2.0",
+    "handlebars-loader": "^1.7.1",
+    "html-loader": "^2.0.0",
+    "reflect-metadata": "^0.1.13",
+    "style-loader": "^2.0.0",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "file": "^0.2.2",
+    "handlebars": "^4.7.7",
+    "handlebars-webpack-plugin": "^2.2.1",
+    "html-webpack-plugin": "^5.1.0",
+    "localized-strings": "^0.2.4",
+    "npm": "^7.5.4",
+    "rxjs": "^6.5.5",
+    "system": "^2.0.1",
+    "ts-loader": "^7.0.5",
+    "webpack": "^5.22.0"
+  }
+}
