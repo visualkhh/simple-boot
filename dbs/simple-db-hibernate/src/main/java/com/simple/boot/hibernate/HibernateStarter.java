@@ -2,8 +2,11 @@ package com.simple.boot.hibernate;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
+import com.simple.boot.anno.PostConstruct;
 import com.simple.boot.config.ConfigLoader;
 import com.simple.boot.hibernate.config.HibernaterConfig;
+import com.simple.boot.hibernate.manager.HibernateManager;
+import com.simple.boot.hibernate.manager.HibernateTransactionManager;
 import com.simple.boot.simstance.SimstanceManager;
 import com.simple.boot.starter.Starter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,32 +18,30 @@ import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 
 import javax.persistence.Entity;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 @Slf4j
 @Config(order = -1_010_000)
 public class HibernateStarter extends Starter {
-    private final SimstanceManager simstanceManager;
-    private final ConfigLoader configLoader;
+    private final Class startClass;
+    private final HibernaterConfig config;
+    private final HibernateTransactionManager hibernateTransactionManager;
     private SessionFactory sessionFactory;
 
     @Injection
-    public HibernateStarter(SimstanceManager simstanceManager, ConfigLoader configLoader) {
-        this.simstanceManager = simstanceManager;
-        this.configLoader = configLoader;
-        init();
+    public HibernateStarter(SimstanceManager simstanceManager, HibernaterConfig config, HibernateTransactionManager hibernateTransactionManager) {
+        this.startClass = simstanceManager.getStartClass();
+        this.config = config;
+        this.hibernateTransactionManager = hibernateTransactionManager;
     }
 
-    private void init() {
-        HibernaterConfig config = this.configLoader.get(HibernaterConfig.prefix, HibernaterConfig.class);
-        Class startClass = simstanceManager.getStartClass();
+    @PostConstruct
+    public void init() {
 
 //        Configuration configuration_pp = getHibernateConfigByCode();
 //        Configuration configuration = new Configuration();
@@ -61,9 +62,8 @@ public class HibernateStarter extends Starter {
         StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.build());
+        hibernateTransactionManager.setSessionFactory(sessionFactory);
     }
-
-
 //    public Configuration getHibernateConfigByCode() {
 //        Configuration configuration = new Configuration();
 //        configuration.setProperty(Environment.DIALECT, 							"org.hibernate.dialect.H2Dialect");
@@ -85,7 +85,7 @@ public class HibernateStarter extends Starter {
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-
+//
     public Serializable save(Object data) {
         Session session = getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -111,11 +111,16 @@ public class HibernateStarter extends Starter {
         Root<T> root = criteriaQuery.from(data);
         criteriaQuery.select(root);
 
-        consumer.accept(criteriaQuery);
+        if(null != consumer) {
+            consumer.accept(criteriaQuery);
+        }
         org.hibernate.query.Query<T> query = session.createQuery(criteriaQuery);
         return query;
     }
 
+    public <T> List<T> resultList(Class<T> data) {
+        return resultList(data, null);
+    }
     public <T> List<T> resultList(Class<T> data, Consumer<CriteriaQuery<T>> consumer) {
         Session session = getSessionFactory().getCurrentSession();
         session.beginTransaction();

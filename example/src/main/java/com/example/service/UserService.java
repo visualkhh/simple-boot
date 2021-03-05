@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.domain.Admin;
 import com.example.model.User;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.anno.Service;
@@ -10,12 +11,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final HibernateStarter hibernateStarter;
-
-    @Injection
-    public UserService(HibernateStarter hibernateStarter) {
-        this.hibernateStarter = hibernateStarter;
-    }
 
     public List<User> users() {
         User user = new User();
@@ -26,4 +21,6 @@ public class UserService {
         user2.setName("name2");
         return Arrays.asList(user, user2);
     }
+
+
 }

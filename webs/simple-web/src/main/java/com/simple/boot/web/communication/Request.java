@@ -18,7 +18,7 @@ public interface Request {
 
     public String uri();
 
-    public <T> T body(Class<T> klass) throws ProcessingException, ProcessingException;
+    public <T> T body(Class<T> klass) throws ProcessingException;
 
     //    public <T> Flux<T> bodyFlux(Class<T> klass);
     public Map<String, List<String>> queryParameters();

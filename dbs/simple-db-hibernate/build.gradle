@@ -31,6 +31,12 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
 
     implementation project(':simple')
+    implementation project(':simple-db')
+
+
+    //필수!
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    ///////
 
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'

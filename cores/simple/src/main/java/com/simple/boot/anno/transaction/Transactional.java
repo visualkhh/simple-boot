@@ -1,4 +1,4 @@
-package com.simple.boot.anno;
+package com.simple.boot.anno.transaction;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -29,9 +29,12 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
 
+    //필수!
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    ///////
+
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

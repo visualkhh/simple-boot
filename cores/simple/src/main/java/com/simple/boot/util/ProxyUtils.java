@@ -19,6 +19,9 @@ public class ProxyUtils {
         T t = (T) Proxy.newProxyInstance(inter.getClassLoader(), new Class[]{inter}, handler);
         return t;
     }
+    public static <T> T newInstanceMethodProxy(Class<T> objClass, MethodHandler handler) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return newInstanceMethodProxy(objClass, new Class[0], new Object[0], handler, null);
+    }
     public static <T> T newInstanceMethodProxy(Class<T> objClass, Class[] paramTypes, Object[] args, MethodHandler handler) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return newInstanceMethodProxy(objClass, paramTypes, args, handler, null);
     }

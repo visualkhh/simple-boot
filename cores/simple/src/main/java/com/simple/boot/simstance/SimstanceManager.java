@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,6 +55,8 @@ public class SimstanceManager {
     }
 
     private void init(Class startClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        // scan
         for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
             Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());
             reflections.getTypesAnnotatedWith(Sim.class, true).stream().forEach(it -> sims.put(it, null));
@@ -98,28 +101,28 @@ public class SimstanceManager {
 
     //    public <T extends Annotation> Map<Class, Object> addScanSim(Class<T> annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 //    }
-    @Deprecated
-    public <T extends Annotation> List<Object> addScanSim(Class<T> annotation, Comparator<T> comparator) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Map<Class, Object> rsims = new LinkedHashMap<>();
-        for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
-            Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());
-            reflections.getTypesAnnotatedWith(annotation, true).stream().forEach(it -> {
-//                sims.put(it, null);
-                rsims.put(it, null);
-            });
-        }
-
-        List<Class> collect = rsims.keySet().stream().sorted((s1, s2) -> {
-            return comparator.compare((T) s1.getAnnotation(annotation), (T) s2.getAnnotation(annotation));
-        }).collect(Collectors.toList());
-
-
-        List<Object> rtn = new ArrayList<>();
-        for (Class klass : collect) {
-            rtn.add(create(klass));
-        }
-        return rtn;
-    }
+//    @Deprecated
+//    public <T extends Annotation> List<Object> addScanSim(Class<T> annotation, Comparator<T> comparator) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//        Map<Class, Object> rsims = new LinkedHashMap<>();
+//        for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
+//            Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());
+//            reflections.getTypesAnnotatedWith(annotation, true).stream().forEach(it -> {
+////                sims.put(it, null);
+//                rsims.put(it, null);
+//            });
+//        }
+//
+//        List<Class> collect = rsims.keySet().stream().sorted((s1, s2) -> {
+//            return comparator.compare((T) s1.getAnnotation(annotation), (T) s2.getAnnotation(annotation));
+//        }).collect(Collectors.toList());
+//
+//
+//        List<Object> rtn = new ArrayList<>();
+//        for (Class klass : collect) {
+//            rtn.add(create(klass));
+//        }
+//        return rtn;
+//    }
 
     public Object create(Class klass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Object obj = sims.get(klass);
@@ -132,10 +135,10 @@ public class SimstanceManager {
             Class[] parameterTypes = injectionCunstructors.get().getParameterTypes();
             Object[] parameterValus = getOrCreateSims(parameterTypes);
 //            sim = ReflectionUtils.newInstance(injectionCunstructors.get(), parameterValus);
-            sim = ProxyUtils.newInstanceMethodProxy(klass, parameterTypes, parameterValus , new SimProxyMethodHandler());
+            sim = ProxyUtils.newInstanceMethodProxy(klass, parameterTypes, parameterValus , new SimProxyMethodHandler(this));
         } else {
 //            sim = ReflectionUtils.newInstance(klass.getDeclaredConstructor());
-            sim = ProxyUtils.newInstanceMethodProxy(klass, new Class[0], new Object[0] , new SimProxyMethodHandler());
+            sim = ProxyUtils.newInstanceMethodProxy(klass, new Class[0], new Object[0] , new SimProxyMethodHandler(this));
         }
         sims.put(klass, sim);
         return sim;
@@ -198,4 +201,17 @@ public class SimstanceManager {
         return stream.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
     }
 
+
+    public <T> LinkedHashMap<Class<T>, T> getSimsNotNullObjAndIsAssignableFrom(Class<T> klass) {
+        return getSims((e) -> {
+            return null != e.getKey() && null != e.getValue() && klass.isAssignableFrom(e.getKey());
+        }).entrySet().stream().collect(Collectors.toMap((it) -> {
+            return (Class<T>) it.getKey();
+        }, (it) -> (T)it.getValue(), (x, y) -> y, LinkedHashMap::new));
+    }
+    public LinkedHashMap<Class, Object> getSims(Predicate<Map.Entry<Class, Object>> test) {
+        return this.getSims().entrySet().stream()
+                .filter(test)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
+    }
 }

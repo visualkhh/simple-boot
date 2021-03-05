@@ -27,6 +27,12 @@ dependencies {
     implementation project(':simple-web')
     implementation project(':simple-web-netty')
 
+
+    //필수!
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    ///////
+
+
     // logback
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'

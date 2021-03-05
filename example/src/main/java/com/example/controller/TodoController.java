@@ -2,10 +2,10 @@ package com.example.controller;
 
 import com.example.domain.Admin;
 import com.example.model.User;
+import com.example.service.AdminService;
 import com.example.service.UserService;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
-import com.simple.boot.hibernate.HibernateStarter;
 import com.simple.boot.throwable.ProcessingException;
 import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.communication.Request;
@@ -14,47 +14,42 @@ import com.simple.boot.web.controller.anno.PostMapping;
 import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.List;
 
 @Slf4j
 @Controller
 public class TodoController {
-    private final HibernateStarter hibernateStarter;
     private final UserService userService;
+    private final AdminService adminService;
 
     @Injection
-    public TodoController(HibernateStarter hibernateStarter, UserService userService) {
-        this.hibernateStarter = hibernateStarter;
+    public TodoController(AdminService adminService, UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/admin")
-    public String admin(Request request, Response response){
-        Admin admin = new Admin();
-        admin.setSeq(1);
-        admin.setName("av");
-        hibernateStarter.save(admin);
-        return "good";
-    }
-
-    @PostMapping("/admin")
-    public void saveAdmin(Request request, Response response) throws ProcessingException {
-        Admin admin = request.body(Admin.class);
-        hibernateStarter.save(admin);
-    }
-
-    @GetMapping("/admins")
-    public List<Admin> admins(Request request, Response response){
-        List<Admin> admins = hibernateStarter.resultList(Admin.class, (a) -> {
-        });
-        return admins;
+        this.adminService = adminService;
     }
 
     @GetMapping("/hello")
     public String hello(Request request, Response response){
         return "Hello World!";
     }
+
+    @GetMapping("/admins")
+    public List<Admin> admins(Request request, Response response){
+        return adminService.admins();
+    }
+
+    @PostMapping("/admin")
+    public Serializable saveAdmin(Request request, Response response) throws ProcessingException {
+        Admin admin = request.body(Admin.class);
+        if(null == admin.getName()){
+            admin.setName(String.valueOf(System.currentTimeMillis()));
+        }
+        Serializable save = adminService.save(admin);
+        return save;
+    }
+
+
 
     @GetMapping("/user")
     public User user(Request request, Response response){
@@ -69,6 +64,7 @@ public class TodoController {
     public List<User> users(Request request, Response response){
         return userService.users();
     }
+
 
     @GetMapping("/index")
     public View index(Request request, Response response){
