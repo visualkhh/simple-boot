@@ -37,12 +37,7 @@ public class SimstanceManager {
         init(this.startClass);
     }
 
-
-
-
-
     private void init(Class startClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-
         // scan
         for (String pit : Arrays.asList(SIMPLE_BASE_PACKAGE, startClass.getPackage().getName())) {
             Reflections reflections = new Reflections(pit, new TypeAnnotationsScanner());

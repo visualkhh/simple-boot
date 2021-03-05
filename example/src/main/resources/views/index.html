@@ -13,11 +13,12 @@
 <script>
     $(document).ready(function(){
         $.ajax({
-            url:'/users',
+            url:'/admins',
             success:function(data){
                 console.log(data);
                 $.each(data,function(index, item){
-                    $('#container').append("<div>"+item.name+"("+item.age+")</div>");
+                    // $('#container').append("<div>"+item.name+"("+item.age+")</div>");
+                    $('#container').append("<div>"+item.seq+"("+item.name+")</div>");
                 });
             }
         })
