@@ -89,12 +89,12 @@ simple-boot  [v1.0.0]
   * simple [core]
 * dbs
   * simple-db [core]
-    * simple-db-h2
-    * simple-db-hibernate
+    * simple-db-h2 [<img src="https://www.h2database.com/html/images/h2-logo-2.png" height="10"/>](h2.png)
+    * simple-db-hibernate [<img src="https://hibernate.org/images/hibernate-logo.svg" height="10"/>](hibernate.png)
 * webs
   * simple-web [core]
-    * simple-web-thymeleaf
-    * simple-web-netty
+    * simple-web-thymeleaf [<img src="https://www.thymeleaf.org/images/thymeleaf.png" height="10"/>](thymeleaf.png)
+    * simple-web-netty [<img src="https://netty.io/images/logo.png" height="10"/>](netty.png)
   
 
 ## Create Modules 기능 모듈 추가
@@ -127,7 +127,7 @@ simple-boot  [v1.0.0]
   ```
 
 ## TODO Modules
-* 많은 참여가 필요합니다.
+* 같이 만들어 나갈 개발자분 참여가 필요합니다.
 
 
 ### 구현체 interface (Type 으로 구성필요한 항목) 
