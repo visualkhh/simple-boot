@@ -19,7 +19,7 @@ simple-boot  [v1.0.0]
 
 
 ### example project
-* 다음은 Java의 완전한 simple-boot 애플리케이션에 대한 간단한 web project입니다.
+* 다음은 Java의 완전한 simple-boot 애플리케이션에 대한 간단한 web project 입니다.
   * gradle
     ```groovy
     dependencies {
@@ -105,7 +105,7 @@ simple-boot  [v1.0.0]
     private final ModuleConfig config;
     private final SimstanceManager simstanceManager;
     @Injection
-    public HibernateStarter(SimstanceManager simstanceManager, ModuleConfig config) {
+    public ModuleStarter(SimstanceManager simstanceManager, ModuleConfig config) {
         this.simstanceManager = simstanceManager;
         this.config = config;
     }
@@ -125,10 +125,12 @@ simple-boot  [v1.0.0]
       }
   }
   ```
-### 구현체 interface
+### 구현체 interface (Type 으로 구성필요한 항목) 
 * simple-web
   * com.simple.boot.web.server.WebServer
+    * 웹서버
   * com.simple.boot.web.view.ViewResolver
+    * 뷰엔진
 
 ## 도움 받기
 * 많은 참여가 필요합니다.
