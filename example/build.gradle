@@ -14,6 +14,7 @@ repositories {
 dependencies {
 
     // project
+    implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.3'
     implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     implementation project(':simple')
     implementation project(':simple-db')
@@ -33,7 +34,7 @@ dependencies {
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 

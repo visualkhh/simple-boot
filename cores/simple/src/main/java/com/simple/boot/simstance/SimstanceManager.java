@@ -171,7 +171,7 @@ public class SimstanceManager {
             Arrays.stream(key.getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(methodAnnotationClass)).forEach(sit -> rtn.put(sit, finalValue));
             }
          */
-        getSims().entrySet().stream().forEach(it -> {
+        getSims().entrySet().stream().filter(it -> null != it.getValue()).forEach(it -> {
             Arrays.stream(it.getKey().getDeclaredMethods()).filter(sit -> sit.isAnnotationPresent(methodAnnotationClass)).forEach(sit -> rtn.put(sit, it.getValue()));
         });
 
