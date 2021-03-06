@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 @Setter
 @NoArgsConstructor
 public class Aop {
+
     Method method;
     Object object;
     Object[] args;
@@ -28,7 +29,7 @@ public class Aop {
 
     public Object invokeNoThrows() {
         try {
-            return ReflectionUtils.invoke(method, object, this.args);
+            return ReflectionUtils.invoke(method, object, this);
         } catch (Exception e) {
             e.printStackTrace();
         }

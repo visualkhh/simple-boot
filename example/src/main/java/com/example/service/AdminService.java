@@ -3,9 +3,8 @@ package com.example.service;
 import com.example.domain.Admin;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.anno.Service;
-import com.simple.boot.anno.transaction.Transactional;
+import com.simple.boot.transaction.anno.Transactional;
 import com.simple.boot.db.DatabaseAccessor;
-import com.simple.boot.db.hibernate.manager.HibernateDatabaseAccessor;
 
 import java.io.Serializable;
 import java.util.List;

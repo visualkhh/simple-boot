@@ -21,7 +21,6 @@ public class MethodObjectSet {
         return ReflectionUtils.invoke(method, object, parameter);
     }
 
-
     public Class getKlass() {
         if (null != klass) {
             return this.klass;

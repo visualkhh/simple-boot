@@ -1,7 +1,7 @@
 package com.simple.boot.proxy;
 
 
-import com.simple.boot.anno.transaction.Transactional;
+import com.simple.boot.transaction.anno.Transactional;
 import com.simple.boot.aop.Aop;
 import com.simple.boot.aop.anno.AopAfter;
 import com.simple.boot.aop.anno.AopBefore;
@@ -36,13 +36,13 @@ public class SimProxyMethodHandler implements MethodHandler {
 //        System.out.println("Handling " + thisMethod + " via the method handler");
 
         try {
-            forEach(thisMethod, Transactional.class, TransactionManager.class, (a, o) -> o.beginTransaction());
             findMethodToAopForEach(AopAfter.class, args, (a) -> StringUtils.isMatches(thisMethod.toString(), a.regex())).forEach(it -> it.invokeNoThrows());
+            forEach(thisMethod, Transactional.class, TransactionManager.class, (a, o) -> o.beginTransaction());
 
             Object rtn = proceed.invoke(self, args);
 
-            findMethodToAopForEach(AopBefore.class, args, (a) -> StringUtils.isMatches(thisMethod.toString(), a.regex())).forEach(it -> it.invokeNoThrows());
             forEach(thisMethod, Transactional.class, TransactionManager.class, (a, o) -> o.commit());
+            findMethodToAopForEach(AopBefore.class, args, (a) -> StringUtils.isMatches(thisMethod.toString(), a.regex())).forEach(it -> it.invokeNoThrows());
             return rtn;
         } catch (Exception e) {
             forEach(thisMethod, Transactional.class, TransactionManager.class, (a, o) -> o.rollback());
