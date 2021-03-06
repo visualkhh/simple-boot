@@ -8,7 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 
 @Slf4j
 public class ExampleApplication {
-    public static void main(String[] args) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+    public static void main(String[] args) {
         new SimpleApplication().run(ExampleApplication.class);
     }
+
 }

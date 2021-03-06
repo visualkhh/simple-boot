@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public enum HttpMethod {
+
     GET,
     POST,
     PUT,

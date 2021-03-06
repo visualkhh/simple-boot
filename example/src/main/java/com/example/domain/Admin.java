@@ -13,8 +13,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class Admin implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Integer seq;
     String name;
+
 }

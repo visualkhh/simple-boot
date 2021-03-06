@@ -2,7 +2,6 @@ package com.simple.boot.web.http;
 
 public enum HttpHeaderValues {
 
-
     APPLICATION_JSON("application/json"),
     APPLICATION_X_WWW_FORM_URLENCODED("application/x-www-form-urlencoded"),
     APPLICATION_OCTET_STREAM("application/octet-stream"),
@@ -55,12 +54,12 @@ public enum HttpHeaderValues {
     WEBSOCKET("websocket"),
     XMLHTTPREQUEST("XmlHttpRequest");
 
-
     private String value;
 
     HttpHeaderValues(String value) {
         this.value = value;
     }
+
     public String value() {
         return this.value;
     }

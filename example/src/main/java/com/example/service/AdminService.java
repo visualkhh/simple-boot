@@ -12,14 +12,14 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private DatabaseAccessor hibernateManager;
+    private DatabaseAccessor databaseAccessor;
 
     public AdminService() {
     }
 
     @Injection
-    public AdminService(DatabaseAccessor hibernateManager) {
-        this.hibernateManager = hibernateManager;
+    public AdminService(DatabaseAccessor databaseAccessor) {
+        this.databaseAccessor = databaseAccessor;
     }
 
     public void print() {
@@ -28,13 +28,12 @@ public class AdminService {
 
     @Transactional
     public Serializable save(Admin admin) {
-        return hibernateManager.save(admin);
+        return databaseAccessor.save(admin);
     }
 
     @Transactional
     public List<Admin> admins() {
-        return hibernateManager.resultList(Admin.class);
+        return databaseAccessor.resultList(Admin.class);
     }
-
 
 }

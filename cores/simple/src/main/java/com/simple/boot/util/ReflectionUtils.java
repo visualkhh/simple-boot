@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ReflectionUtils extends org.reflections.ReflectionUtils {
+public class ReflectionUtils { //  extends org.reflections.ReflectionUtils
 
     public static int superClassSize(Class klass) {
         int i = 0;

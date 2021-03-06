@@ -63,7 +63,7 @@ public class Dispatcher {
         filterBeforeHandlers = simstanceManager.getMethodAnnotation(FilterBeforeHandler.class, Comparator.comparingInt(FilterBeforeHandler::order));
         filterAfterHandlers = simstanceManager.getMethodAnnotation(FilterAfterHandler.class, Comparator.comparingInt(FilterAfterHandler::order));
         controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
-
+        // optional field
         viewResolver = simstanceManager.getSims(ViewResolver.class);
     }
 

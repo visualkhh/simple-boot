@@ -20,16 +20,15 @@ public class SimpleApplication implements SimpleBoot {
     private SimstanceManager simstanceManager;
 
     @Override
-    public void run(Class start) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        log.debug("start boot {}", start);
-        configLoader = new YamlConfigLoader();
-        configLoader.load();
-        Map<Class, Object> defined = new LinkedHashMap<>();
-        defined.put(ConfigLoader.class, configLoader);
-        simstanceManager = new SimstanceManager(defined, start);
-        log.info("started");
-
+    public void run(Class start)  {
         try {
+            log.debug("start boot {}", start);
+            configLoader = new YamlConfigLoader();
+            configLoader.load();
+            Map<Class, Object> defined = new LinkedHashMap<>();
+            defined.put(ConfigLoader.class, configLoader);
+            simstanceManager = new SimstanceManager(defined, start);
+            log.info("started");
             Thread.currentThread().join();
         }catch (Exception e) {
             log.error("simpleApplication start error ", e);

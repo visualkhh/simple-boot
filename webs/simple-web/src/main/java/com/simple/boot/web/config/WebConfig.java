@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Config
 public class WebConfig {
+
     String host;
     Integer port;
     Boolean ssl;

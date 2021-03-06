@@ -19,5 +19,4 @@ public class UserService {
         return Arrays.asList(user, user2);
     }
 
-
 }

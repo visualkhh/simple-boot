@@ -1,6 +1,7 @@
 package com.simple.boot.web.http;
 
 public enum HttpHeaderNames {
+
     ACCEPT("accept"),
     ACCEPT_CHARSET("accept-charset"),
     ACCEPT_ENCODING("accept-encoding"),
@@ -83,7 +84,6 @@ public enum HttpHeaderNames {
     WWW_AUTHENTICATE("www-authenticate"),
     X_FRAME_OPTIONS("x-frame-options"),
     X_REQUESTED_WITH("x-requested-with");
-
 
     private String value;
 

@@ -59,7 +59,6 @@ public enum HttpStatus {
     NOT_EXTENDED(510, "Not Extended"),
     NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required");
 
-
     private int value;
     private String desc;
 
@@ -78,7 +77,6 @@ public enum HttpStatus {
                 return httpStatus;
             }
         }
-
         return null;
     }
 }
