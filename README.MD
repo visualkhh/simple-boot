@@ -4,16 +4,18 @@ simple-boot  [v1.0.0]
 애플리케이션 및 서비스를 최소의 요구 사항으로 생성할 수 있도록 도와줍니다.
 
 
-주요기능:
-* 개발을 위해 획기적으로 빠르고 광범위하게 액세스할 수 있는 시작 경험을 제공합니다.
-  * 객체관리 (생성, 라이프)
+## 주요기능
+* 개발을 위해 획기적으로 빠르고 광범위하게 액세스할 수 있는 시작 경험을 제공합니다.이제 비지니스에만 집중하세요.
+  * 객체관리 (생성, 라이프 사이클)
   * 디펜던시 인젝션
+  * 등..
   
 * 의존관계 설정으로만으로 추가 기능을 쉽고 빠르게 적용할수 있습니다.
 
 ## 설치 및 시작
 참조 문서에는 자세한 설치 지침과 포괄적인 시작 가이드가 포함되어 있습니다.  
 다음은 Java의 완전한 Spring Boot 애플리케이션에 대한 간단한 티저입니다.
+* version: >= java8
 
 
 ### example project
@@ -118,11 +120,10 @@ simple-boot  [v1.0.0]
   public class ModuleConfig {
      // something... public Map<String, Object> property;
       @Injection
-      public HibernaterConfig(ConfigLoader configLoader) {
+      public ModuleConfig(ConfigLoader configLoader) {
           configLoader.map("module", this);
       }
   }
-
   ```
 ### 구현체 interface
 * simple-web

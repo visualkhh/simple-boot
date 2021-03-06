@@ -1,14 +1,26 @@
-node
- - https://choiyb2.tistory.com/97
- - webpack
-   - webpakc-dev-server: https://github.com/webpack/webpack-dev-server#readme
-gradle
- - moowor.node plugin: https://plugins.gradle.org/plugin/com.moowork.node
- - https://github.com/srs/gradle-node-plugin
+simple-front
+===
+
+
+## 주요기능
+* SPA 프론트 프레임워크
+* 진행중...
+
+## TODO
+* 진행중...
+
+
 
 
 link
 ===
+  node
+  - https://choiyb2.tistory.com/97
+  - webpack
+      - webpakc-dev-server: https://github.com/webpack/webpack-dev-server#readme
+        gradle
+  - moowor.node plugin: https://plugins.gradle.org/plugin/com.moowork.node
+  - https://github.com/srs/gradle-node-plugin
   - webpack
     - 공식
       -  loader

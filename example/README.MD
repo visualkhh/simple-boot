@@ -1,8 +1,14 @@
 example project
 ===
 
-# 요구사항
-- https://www.notion.so/Streaming-Service-e6094e6932bc4e97935719e9ed972673
+## 주요기능
+* example project
+
+## TODO
+* 새로 생길 모듈 적용
+* 많은 참여가 필요합니다.
+
+
 
 
 
