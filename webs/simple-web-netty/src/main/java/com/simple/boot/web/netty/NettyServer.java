@@ -1,11 +1,10 @@
-package com.simple.boot.web.netty.server;
+package com.simple.boot.web.netty;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
-import com.simple.boot.starter.Starter;
 import com.simple.boot.web.config.WebConfig;
 import com.simple.boot.web.dispatch.Dispatcher;
-import com.simple.boot.web.netty.server.HttpHelloWorldServerInitializer;
+import com.simple.boot.web.netty.server.HttpServerInitializer;
 import com.simple.boot.web.server.WebServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -60,7 +59,7 @@ public class NettyServer implements WebServer {
                 serverBootstrap.group(bossGroup, workerGroup)
                         .channel(NioServerSocketChannel.class)
                         .handler(new LoggingHandler(LogLevel.INFO))
-                        .childHandler(new HttpHelloWorldServerInitializer(sslCtx, dispatcher));
+                        .childHandler(new HttpServerInitializer(sslCtx, dispatcher));
 
                 Channel ch = serverBootstrap.bind(PORT).sync().channel();
                 log.info("Open your web browser and navigate to " +

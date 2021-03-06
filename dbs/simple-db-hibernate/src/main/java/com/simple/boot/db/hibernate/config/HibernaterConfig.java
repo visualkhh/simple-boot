@@ -12,10 +12,12 @@ import java.util.Map;
 @Setter
 @Config
 public class HibernaterConfig {
+
     public Map<String, Object> property;
 
     @Injection
     public HibernaterConfig(ConfigLoader configLoader) {
         configLoader.map("hibernate", this);
     }
+
 }

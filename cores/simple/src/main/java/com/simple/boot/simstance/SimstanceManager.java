@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +26,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class SimstanceManager {
 
-    private final String SIMPLE_BASE_PACKAGE = "com.simple.boot";
+    private final static String SIMPLE_BASE_PACKAGE = "com.simple.boot";
     private final Class startClass;
     public LinkedHashMap<Class, Object> sims;
 
@@ -196,5 +197,9 @@ public class SimstanceManager {
         return this.getSims().entrySet().stream()
                 .filter(test)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
+    }
+
+    public <T> Optional<T> getSims(Class<T> klass) {
+        return this.getSims().entrySet().stream().filter(it -> klass.isAssignableFrom(it.getKey())).map(it -> (T)it.getValue()).map(Optional::ofNullable).findFirst().flatMap(Function.identity());
     }
 }

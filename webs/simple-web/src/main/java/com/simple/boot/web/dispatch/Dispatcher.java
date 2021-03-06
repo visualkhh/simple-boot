@@ -1,8 +1,6 @@
 package com.simple.boot.web.dispatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
@@ -22,11 +20,10 @@ import com.simple.boot.web.http.HttpMethod;
 import com.simple.boot.web.http.HttpStatus;
 import com.simple.boot.model.MethodObjectSet;
 import com.simple.boot.web.throwable.WebNoSurchHttpMethodError;
+import com.simple.boot.web.view.ViewResolver;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -52,6 +49,7 @@ public class Dispatcher {
     private LinkedHashMap<Method, Object> filterAfterHandlers;
     private LinkedHashMap<Class, Object> controllers;
 
+    private Optional<ViewResolver> viewResolver;
     private final ObjectMapper mapper;
 
     public Dispatcher() {
@@ -65,6 +63,8 @@ public class Dispatcher {
         filterBeforeHandlers = simstanceManager.getMethodAnnotation(FilterBeforeHandler.class, Comparator.comparingInt(FilterBeforeHandler::order));
         filterAfterHandlers = simstanceManager.getMethodAnnotation(FilterAfterHandler.class, Comparator.comparingInt(FilterAfterHandler::order));
         controllers = simstanceManager.getSims().entrySet().stream().filter(it -> it.getKey().isAnnotationPresent(Controller.class)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
+
+        viewResolver = simstanceManager.getSims(ViewResolver.class);
     }
 
 
@@ -120,24 +120,24 @@ public class Dispatcher {
         } else {
             method = Optional.empty();
         }
+
+
         try {
             if (!method.isPresent()) {
                 throw new WebNoSurchHttpMethodError(request.uri(), request, response);
             }
-            //before
+            // filter before
             for (Map.Entry<Method, Object> it : getFilterBeforeHandlers().entrySet()) {
                 it.getKey().invoke(it.getValue(), request, response);
             }
-            Object rtn = method.get().invoke(request, response);
 
-            //after
+            Object rtn = method.get().invoke(request, response);
+            response.body(finalReturnProcessing(request, response, rtn));
+
+            // filter after
             for (Map.Entry<Method, Object> it : getFilterAfterHandlers().entrySet()) {
                 it.getKey().invoke(it.getValue(), request, response);
             }
-
-
-            byte[] bytes = finalReturnProcessing(response, rtn);
-            response.body(bytes);
             log.info("method invoke result: {}", rtn);
         } catch (Exception e) {
             log.info("controller execute Error", e);
@@ -145,7 +145,7 @@ public class Dispatcher {
             if (first.isPresent()) {
                 try {
                     Object rtn = first.get().invoke(request, response);
-                    response.body(finalReturnProcessing(response, rtn));
+                    response.body(finalReturnProcessing(request, response, rtn));
                 } catch (Exception se) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR);
                     log.info("exceptionHandler Exception", se);
@@ -155,18 +155,11 @@ public class Dispatcher {
     }
 
 
-    private byte[] finalReturnProcessing(Response response, Object rtn) throws IOException {
+    private byte[] finalReturnProcessing(Request request, Response response, Object rtn) throws IOException {
         if (null != rtn && String.class.isAssignableFrom(rtn.getClass())) {
             return ((String) rtn).getBytes(StandardCharsets.UTF_8);
-        } else if (null != rtn && View.class.isAssignableFrom(rtn.getClass())) {
-            final TemplateEngine templateEngine = new TemplateEngine();
-            Context context = new Context();
-            View rtnView = (View) rtn;
-            context.setVariables(rtnView);
-            response.putHeader(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_HTML);
-            String viewString = Resources.toString(Resources.getResource(rtnView.getView()), Charsets.UTF_8);
-            final String result = templateEngine.process(viewString, context);
-            return result.getBytes(StandardCharsets.UTF_8);
+        } else if (null != rtn && View.class.isAssignableFrom(rtn.getClass()) && viewResolver.isPresent()) {
+            return Optional.ofNullable(viewResolver.get().process(request, response, (View) rtn)).orElse("").getBytes(StandardCharsets.UTF_8);
         } else if (null != rtn) {
             response.putHeader(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
             return mapper.writeValueAsString(rtn).getBytes(StandardCharsets.UTF_8);

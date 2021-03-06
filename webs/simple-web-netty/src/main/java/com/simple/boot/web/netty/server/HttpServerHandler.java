@@ -40,11 +40,11 @@ import static io.netty.handler.codec.http.HttpHeaderValues.TEXT_PLAIN;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 @Slf4j
-public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private final Dispatcher dispatcher;
 
-    public HttpHelloWorldServerHandler(Dispatcher dispatcher) {
+    public HttpServerHandler(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
 

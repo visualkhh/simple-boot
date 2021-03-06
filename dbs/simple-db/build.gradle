@@ -1,6 +1,5 @@
 buildscript {
     dependencies {
-//        project(':simple')
     }
 }
 
@@ -8,8 +7,8 @@ buildscript {
 plugins {
     id 'java'
 }
-//group 'com.simple.boot.web'
 
+group 'com.simple.boot.db'
 version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
@@ -18,19 +17,18 @@ repositories {
 }
 
 dependencies {
-    // lombok
+
+    // project
+    implementation project(':simple')
+
+    // 필수!
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+
+    // project default
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
-
-    implementation project(':simple')
-
-
-    //필수!
-    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
-    ///////
-
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'

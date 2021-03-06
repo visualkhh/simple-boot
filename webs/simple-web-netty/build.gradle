@@ -7,7 +7,7 @@ buildscript {
 plugins {
     id 'java'
 }
-//group 'com.simple.boot.web'
+group 'com.simple.boot.web.netty'
 version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
@@ -16,30 +16,21 @@ repositories {
 }
 
 dependencies {
-    // lombok
+
+    // project
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.58.Final'
+    implementation project(':simple')
+    implementation project(':simple-web')
+
+    // 필수!
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+
+    // project default
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
-
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
-    implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
-
-
-    // https://mvnrepository.com/artifact/io.netty/netty-all
-    implementation group: 'io.netty', name: 'netty-all', version: '4.1.58.Final'
-
-    implementation project(':simple')
-    implementation project(':simple-web')
-
-
-    //필수!
-    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
-    ///////
-
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
