@@ -10,11 +10,11 @@ simple-boot  [v1.0.0]
   * 디펜던시 인젝션
   * 등..
   
-* 의존관계 설정으로만으로 추가 기능을 쉽고 빠르게 적용할수 있습니다.
+* 의존관계 설정으로만으로 추가 기능(modules)을 쉽고 빠르게 적용할수 있습니다.
 
 ## 설치 및 시작
 참조 문서에는 자세한 설치 지침과 포괄적인 시작 가이드가 포함되어 있습니다.  
-다음은 Java의 완전한 Spring Boot 애플리케이션에 대한 간단한 티저입니다.
+다음은 Java의 완전한 simple-boot 애플리케이션에 대한 간단한 티저입니다.
 * version: >= java8
 
 
@@ -137,4 +137,4 @@ simple-boot  [v1.0.0]
 * 많은 참여가 필요합니다.
 
 ## License
-* Spring Boot is Open Source software released under the Apache 2.0 license.
+* simple-boot is Open Source software released under the Apache 2.0 license.
