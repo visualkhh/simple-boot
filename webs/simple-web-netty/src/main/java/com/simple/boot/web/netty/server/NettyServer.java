@@ -5,6 +5,7 @@ import com.simple.boot.anno.Injection;
 import com.simple.boot.starter.Starter;
 import com.simple.boot.web.config.WebConfig;
 import com.simple.boot.web.dispatch.Dispatcher;
+import com.simple.boot.web.netty.server.HttpHelloWorldServerInitializer;
 import com.simple.boot.web.server.WebServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -21,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Config
-public class NettyStarter extends Starter implements WebServer {
+public class NettyServer implements WebServer {
     private Dispatcher dispatcher;
     private WebConfig config;
 
     @Injection
-    public NettyStarter(Dispatcher dispatcher, WebConfig config) throws Exception {
+    public NettyServer(Dispatcher dispatcher, WebConfig config) throws Exception {
         this.dispatcher = dispatcher;
         this.config = config;
         init();
