@@ -1,4 +1,4 @@
-package com.simple.boot.hibernate.manager;
+package com.simple.boot.db.hibernate.manager;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.transaction.TransactionManager;

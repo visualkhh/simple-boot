@@ -1,4 +1,4 @@
-package com.simple.boot.h2.config;
+package com.simple.boot.db.h2.config;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;

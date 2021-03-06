@@ -1,4 +1,4 @@
-package com.simple.boot.web.model;
+package com.simple.boot.model;
 
 import com.simple.boot.util.ReflectionUtils;
 import lombok.Builder;
@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 @Getter
 @Setter
 public class MethodObjectSet {
+
     Class klass;
     Object object;
     Method method;
@@ -19,6 +20,7 @@ public class MethodObjectSet {
     public Object invoke(Object... parameter) throws InvocationTargetException, IllegalAccessException {
         return ReflectionUtils.invoke(method, object, parameter);
     }
+
 
     public Class getKlass() {
         if (null != klass) {

@@ -1,4 +1,4 @@
-package com.simple.boot.hibernate.domain;
+package com.simple.boot.db.hibernate.domain;
 
 import javax.persistence.Entity;
 

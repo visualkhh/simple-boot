@@ -1,4 +1,4 @@
-package com.simple.boot.hibernate.config;
+package com.simple.boot.db.hibernate.config;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;

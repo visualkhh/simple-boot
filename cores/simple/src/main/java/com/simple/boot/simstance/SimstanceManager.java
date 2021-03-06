@@ -186,7 +186,7 @@ public class SimstanceManager {
 
     public <T> LinkedHashMap<Class<T>, T> getSimsNotNullObjAndIsAssignableFrom(Class<T> klass) {
         return getSims((e) -> {
-            return null != e.getKey() && null != e.getValue() && klass.isAssignableFrom(e.getKey());
+            return null != e.getKey() && null != e.getValue() && null!=klass && klass.isAssignableFrom(e.getKey());
         }).entrySet().stream().collect(Collectors.toMap((it) -> {
             return (Class<T>) it.getKey();
         }, (it) -> (T) it.getValue(), (x, y) -> y, LinkedHashMap::new));

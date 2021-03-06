@@ -20,7 +20,7 @@ import com.simple.boot.web.http.HttpHeaderNames;
 import com.simple.boot.web.http.HttpHeaderValues;
 import com.simple.boot.web.http.HttpMethod;
 import com.simple.boot.web.http.HttpStatus;
-import com.simple.boot.web.model.MethodObjectSet;
+import com.simple.boot.model.MethodObjectSet;
 import com.simple.boot.web.throwable.WebNoSurchHttpMethodError;
 import lombok.Getter;
 import lombok.Setter;

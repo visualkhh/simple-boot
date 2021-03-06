@@ -1,8 +1,8 @@
-package com.simple.boot.h2;
+package com.simple.boot.db.h2;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
-import com.simple.boot.h2.config.H2Config;
+import com.simple.boot.db.h2.config.H2Config;
 import com.simple.boot.starter.Starter;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;

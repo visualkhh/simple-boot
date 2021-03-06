@@ -1,4 +1,4 @@
-package com.simple.boot.h2;
+package com.simple.boot.db.h2;
 
 import com.simple.boot.SimpleApplication;
 import org.junit.jupiter.api.Test;

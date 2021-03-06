@@ -4,7 +4,8 @@ import com.example.domain.Admin;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.anno.Service;
 import com.simple.boot.anno.transaction.Transactional;
-import com.simple.boot.hibernate.manager.HibernateManager;
+import com.simple.boot.db.DatabaseAccessor;
+import com.simple.boot.db.hibernate.manager.HibernateDatabaseAccessor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private HibernateManager hibernateManager;
+    private DatabaseAccessor hibernateManager;
 
     public AdminService() {
     }
 
     @Injection
-    public AdminService(HibernateManager hibernateManager) {
+    public AdminService(DatabaseAccessor hibernateManager) {
         this.hibernateManager = hibernateManager;
     }
 

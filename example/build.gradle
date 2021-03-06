@@ -22,6 +22,7 @@ dependencies {
     implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.3'
     implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     implementation project(':simple')
+    implementation project(':simple-db')
     implementation project(':simple-db-h2')
     implementation project(':simple-db-hibernate')
     implementation project(':simple-web')

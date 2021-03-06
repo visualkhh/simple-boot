@@ -1,4 +1,4 @@
-package com.simple.boot.hibernate;
+package com.simple.boot.db.hibernate;
 
 import com.simple.boot.SimpleApplication;
 import org.junit.jupiter.api.Test;

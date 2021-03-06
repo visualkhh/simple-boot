@@ -1,7 +1,8 @@
-package com.simple.boot.hibernate.manager;
+package com.simple.boot.db.hibernate.manager;
 
 import com.simple.boot.anno.Config;
 import com.simple.boot.anno.Injection;
+import com.simple.boot.db.DatabaseAccessor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,22 +16,24 @@ import java.util.function.Consumer;
 
 @Config
 @Slf4j
-public class HibernateManager {
+public class HibernateDatabaseAccessor implements DatabaseAccessor {
     private final HibernateTransactionManager tm;
     private SessionFactory sessionFactory;
 
     @Injection
-    public HibernateManager(HibernateTransactionManager hibernateTransactionManager) {
+    public HibernateDatabaseAccessor(HibernateTransactionManager hibernateTransactionManager) {
         this.tm = hibernateTransactionManager;
     }
 
 
+    @Override
     public Serializable save(Object data) {
         Serializable save = tm.currentSession().save(data);
 //        session.flush();session.clear();session.getTransaction().commit();session.close();
         return save;
     }
 //
+    @Override
     public <T> T find(Class<T> data, Serializable key) {
         T t = tm.currentSession().find(data, key);
         return t;
@@ -49,6 +52,7 @@ public class HibernateManager {
         return query;
     }
 
+    @Override
     public <T> List<T> resultList(Class<T> data) {
         return resultList(data, null);
     }
