@@ -95,9 +95,29 @@ simple-boot  [v1.0.0]
   * simple-web [core]
     * simple-web-thymeleaf [<img src="https://www.thymeleaf.org/images/thymeleaf.png" height="10"/>](thymeleaf.png)
     * simple-web-netty [<img src="https://netty.io/images/logo.png" height="10"/>](netty.png)
-  
+```
+┌─ cores ─────────────┐     ┌── dbs ─────────────────────────────────┐
+│   ┌──────────────┐  │     │   ┌────────────┐    ┌──────────────┐   │
+│   │    simple    ◄──┼─────┤   │ simple-db  ◄────┤ simple-db-h2 │   │
+│   └──────▲───────┘  │     │   └──────▲─────┘    └──────────────┘   │
+└──────────┼──────────┘     │          │                             │
+           │                │   ┌──────┴──────────────┐              │
+           │                │   │ simple-db-hibernate │              │
+           │                │   └─────────────────────┘              │
+┌─ webs ───┴─────────┐      └────────────────────────────────────────┘
+│   ┌────────────┐   └───────────────────────────────────────────────┐
+│   │ simple-web ◄────────┐     ┌────────[ViewResolver]┐             │
+│   └──▲─────────┘        │     │ simple-web-thymeleaf │             │
+│      │                  └─────┤ ...                  │             │
+│   ┌──┴────[WebServer]┐        └──────────────────────┘             │
+│   │ simple-web-netty │                                             │
+│   │ ...              │                                             │
+│   └──────────────────┘                                             │
+└────────────────────────────────────────────────────────────────────┘
+      
+```
 
-## Create Modules 기능 모듈 추가
+## Modules 추가
 - package 위치: com.simple.boot.{모듈이름}
   ```java
   @Config
@@ -145,3 +165,4 @@ simple-boot  [v1.0.0]
 
 ## License
 * simple-boot is Open Source software released under the Apache 2.0 license.
+* visualkhh@gmail.com
