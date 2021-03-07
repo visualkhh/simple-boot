@@ -101,24 +101,38 @@ simple-boot  [v1.0.0]
 │   │    simple    ◄──┼─────┤   │ simple-db  ◄────┤ simple-db-h2 │   │
 │   └──────▲───────┘  │     │   └──────▲─────┘    └──────────────┘   │
 └──────────┼──────────┘     │          │                             │
-           │                │   ┌──────┴──────────────┐              │
-           │                │   │ simple-db-hibernate │              │
-           │                │   └─────────────────────┘              │
+           │                │   ┌──────┴──────────────────────┐      │
+           │                │   │        * DatabaseAccessor   │      │
+           │                │   │        * TransactionManager │      │
+           │                │   │                             │      │
+           │                │   │     simple-db-hibernate     │      │
+           │                │   └─────────────────────────────┘      │
 ┌─ webs ───┴─────────┐      └────────────────────────────────────────┘
 │   ┌────────────┐   └───────────────────────────────────────────────┐
-│   │ simple-web ◄────────┐     ┌────────[ViewResolver]┐             │
-│   └──▲─────────┘        │     │ simple-web-thymeleaf │             │
-│      │                  └─────┤ ...                  │             │
-│   ┌──┴────[WebServer]┐        └──────────────────────┘             │
-│   │ simple-web-netty │                                             │
-│   │ ...              │                                             │
-│   └──────────────────┘                                             │
+│   │ simple-web ◄────────┐     ┌─────────────────────────────┐      │
+│   └──────▲─────┘        │     │           * ViewResolver    │      │
+│          │              │     │                             │      │
+│          │              │     │     simple-web-thymeleaf    │      │
+│          │              └─────┤     ...                     │      │
+│   ┌──────┴─────────────────┐  └─────────────────────────────┘      │
+│   │         * WebServer    │                                       │
+│   │                        │                                       │
+│   │    simple-web-netty    │                                       │
+│   │    ...                 │                                       │
+│   └────────────────────────┘                                       │
 └────────────────────────────────────────────────────────────────────┘
-      
+
+-─ name ─- : group name 
+    *      : implements 대상 interface
+ ◄ ▲ ▼ ►   : dependency arrow
+   ...     : more
 ```
 
 ## Modules 추가
 - package 위치: com.simple.boot.{모듈이름}
+- public class 모듈이름 extends Starter { ... }
+- @PostConstruct Method쪽 구동 로직 구현.
+  
   ```java
   @Config
   public class ModuleStarter extends Starter {
