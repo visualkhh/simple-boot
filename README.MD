@@ -159,9 +159,6 @@ simple-boot  [v1.0.0]
   }
   ```
 
-## TODO Modules
-* 같이 만들어 나갈 개발자분 참여가 필요합니다.
-
 
 ### 구현체 interface (Type 으로 구성필요한 항목) 
 * simple
@@ -176,8 +173,10 @@ simple-boot  [v1.0.0]
   * com.simple.boot.web.view.ViewResolver
     * 뷰엔진
 
+
 ## 도움 받기
-* 많은 참여가 필요합니다.
+* 추가 Modules
+  * 같이 만들어 나갈 개발자분 참여가 필요합니다.
 
 ## 보고된 문제
 * 많은 참여가 필요합니다.
