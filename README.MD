@@ -165,6 +165,12 @@ simple-boot  [v1.0.0]
 
 
 ### 구현체 interface (Type 으로 구성필요한 항목) 
+* simple
+  * com.simple.boot.transaction.TransactionManager
+    * 트렌젝션 제어
+* simple-db
+  * com.simple.boot.db.DatabaseAccessor
+    * 데이터베이스 접근 제어
 * simple-web
   * com.simple.boot.web.server.WebServer
     * 웹서버
