@@ -9,19 +9,42 @@
 <h1 th:text="${name}"></h1>
 <div id="container">
 </div>
-
+<div>
+    <input type="text" id="name">
+    <button id="create">생성</button>
+</div>
 <script>
-    $(document).ready(function(){
+    function load() {
+        $('#container').empty();
         $.ajax({
             url:'/admins',
             success:function(data){
                 console.log(data);
                 $.each(data,function(index, item){
-                    // $('#container').append("<div>"+item.name+"("+item.age+")</div>");
-                    $('#container').append("<div>"+item.seq+"("+item.name+")</div>");
+                    $('#container').append("<div>seq: "+item.seq+", name: "+item.name+"</div>");
                 });
             }
         })
+    }
+    $(document).ready(function(){
+        load();
+        $("#create").click(function () {
+            $.ajax({
+                url:'/admin',
+                type:'POST',
+                data: JSON.stringify({
+                    name: $("#name").val(),
+                }),
+                contentType:"application/json; charset=UTF-8",
+                dataType:"json",
+                success:function(data){
+                },
+                complete: function (jqXHR){
+                    $("#name").val('')
+                    load();
+                }
+            })
+        });
     });
 </script>
 </body>

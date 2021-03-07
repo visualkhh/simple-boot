@@ -56,10 +56,10 @@ simple-boot  [v1.0.0]
             Admin admin = request.body(Admin.class);
             return adminService.save(admin);
         }
-        @GetMapping("/index")
+        @GetMapping("/")
         public View index(Request request, Response response){
             View view = new View("views/index.html");
-            view.put("name", "visualkhh");
+            view.put("name", "demo page");
             return view;
         }
     }
