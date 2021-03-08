@@ -14,8 +14,17 @@ simple-front
 
 link
 ===
-  node
-  - https://choiyb2.tistory.com/97
+  - vscode
+    - debug: https://code.visualstudio.com/docs/editor/debugging
+  - ESLint
+    - https://pks2974.medium.com/tslint-%EC%97%90%EC%84%9C-eslint-%EB%A1%9C-%EC%9D%B4%EC%82%AC%ED%95%98%EA%B8%B0-ecd460a1e599
+    - https://www.npmjs.com/package/eslint
+    - https://medium.com/@zakaria.benjaoued/hinting-linting-with-eslint-fb6656b3fdc9
+    - https://openbase.com/js/eslint-plugin-node/documentation
+  - javascript
+    - window hashChangeEvent: https://developer.mozilla.org/ko/docs/Web/API/WindowEventHandlers/onhashchange
+  - node
+    - https://choiyb2.tistory.com/97
   - webpack
       - webpakc-dev-server: https://github.com/webpack/webpack-dev-server#readme
         gradle

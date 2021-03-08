@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="hello-word.css">
+</head>
+<body>
+<h1><a style="font-size: 25px" href="/#">◀︎</a>  hello world</h1>
+<ul>
+    {{#each numbers as |number i|}}
+        <li>{{number}}</li>
+    {{/each}}
+</ul>
+<h1>admins</h1>
+<ul>
+    {{#each admins as |admin i|}}
+        <li>{{admin.seq}}, {{admin.name}}</li>
+    {{/each}}
+</ul>
+
+<div>
+    <input type="text" id="name"/> <button id="save">save</button>
+</div>
+<br>
+</body>
+</html>

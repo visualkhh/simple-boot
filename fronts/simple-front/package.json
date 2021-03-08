@@ -10,14 +10,20 @@
     "start-noopen:dev": "webpack serve"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
     "css-loader": "^5.0.2",
+    "eslint": "^7.21.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
     "handlebars-loader": "^1.7.1",
     "html-loader": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "style-loader": "^2.0.0",
-    "tslint": "^6.1.1",
     "typescript": "^3.8.3",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
