@@ -1,5 +1,3 @@
-import {Module} from '@src/com/simple/boot/module/Module'
-
 /**
  * Type for what object is instances of
  */

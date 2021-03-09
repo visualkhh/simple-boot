@@ -5,8 +5,5 @@ import html from './index.html'
 @Sim()
 export class Index extends Module {
     public numbers = [1, 2, 3, 4, 5, 6, 7];
-
-    get template(): string {
-        return html;
-    }
+    template = html;
 }

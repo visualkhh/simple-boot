@@ -41,7 +41,7 @@ export const SimstanceManager = new class {
             // Reflect.defineMetadata("key", "value", obj, "name");
             // const result = Reflect.getOwnMetadataKeys(obj, 'name');
             // const result = Reflect.getMetadata('design:properties', r) || []
-            console.log('proxy ', r, r instanceof Module)
+            // console.log('proxy ', r, r instanceof Module)
 
             for (const key in r) {
                 // if (typeof r[key] === 'object' && key === 'admins') {
