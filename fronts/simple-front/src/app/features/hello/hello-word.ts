@@ -17,13 +17,16 @@ export class HelloWord extends Module {
             {{/each}}
         `;
         }
-    }()
+    }();
 
     constructor(public ajaxService: AjaxService) {
         super()
     }
 
     onInit() {
+        // fromEvent(window, 'click').subscribe(it => {
+        //     this.numbers = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random()];
+        // })
         this.loadData();
     }
 
@@ -31,7 +34,7 @@ export class HelloWord extends Module {
         this.ajaxService.getJSON('/admins').subscribe(it => {
             this.admins.datas = it as any[]
             console.log('ajaxService -admins->', this.admins);
-            this.admins.render();
+            // this.admins.render();
         })
     }
 

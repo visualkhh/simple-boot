@@ -1,3 +1,5 @@
+import {Module} from '@src/com/simple/boot/module/Module'
+
 export class SimProxyMethodHandler implements ProxyHandler<any> {
     public get(target: any, name: string): any {
         console.log('SimProxyMethodHandler get', target, name)
@@ -7,17 +9,28 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
 
     public set(obj: any, prop: string, value: any): boolean {
         console.log('SimProxyMethodHandler set', obj, prop, value)
-        if (prop === 'age') {
-            if (!Number.isInteger(value)) {
-                throw new TypeError('The age is not an integer')
-            }
-            if (value > 200) {
-                throw new RangeError('The age seems invalid')
-            }
-        }
+        // if (prop === 'age') {
+        //     if (!Number.isInteger(value)) {
+        //         throw new TypeError('The age is not an integer')
+        //     }
+        //     if (value > 200) {
+        //         throw new RangeError('The age seems invalid')
+        //     }
+        // }
 
         // The default behavior to store the value
         obj[prop] = value
+
+        if (obj instanceof Module) {
+            obj.render();
+        }
+        for (const key in obj) {
+            // console.log('sub-->', key, obj, obj[key] instanceof Module)
+            if (obj[key] instanceof Module) {
+                obj[key].render();
+            }
+        }
+
         return true
     }
 
