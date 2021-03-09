@@ -4,26 +4,21 @@ import {AjaxService} from '@src/com/simple/boot/service/AjaxService'
 import html from './hello-world.html'
 import {fromEvent} from 'rxjs'
 
-export class Admins extends Module {
-    public datas: any[] = [];
-
-    constructor(selector?: string | undefined) {
-        super(selector)
-    }
-
-    get template(): string {
-        return `
+@Sim()
+export class HelloWord extends Module {
+    public numbers = [1, 2, 3, 4, 5, 6, 7];
+    private admins = new class extends Module {
+        selector = '#admins';
+        public datas: any[] = [];
+        get template(): string {
+            return `
             {{#each datas as |data i|}}
                 <li>{{data.seq}}, {{data.name}}</li>
             {{/each}}
         `;
-    }
-}
+        }
+    }()
 
-@Sim()
-export class HelloWord extends Module {
-    public numbers = [1, 2, 3, 4, 5, 6, 7];
-    private admins = new Admins('#admins');
     constructor(public ajaxService: AjaxService) {
         super()
     }
