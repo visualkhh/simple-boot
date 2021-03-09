@@ -1,4 +1,5 @@
 import {Module} from '@src/com/simple/boot/module/Module'
+import {Renderer} from '@src/com/simple/boot/render/Renderer'
 
 export abstract class Router {
     hashchange(event?: HashChangeEvent) {
@@ -16,7 +17,7 @@ export abstract class Router {
         } else {
             renderStr = '404'
         }
-        document.querySelector('#app')!.innerHTML = renderStr
+        Renderer.render(renderStr)
         module?.onChangeRendered();
     }
 

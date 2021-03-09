@@ -4,7 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface SimpleBoot {
 
-    public void run(Class startClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
+    public SimpleBoot run(Class startClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
+
+    public void join();
 
     public <T> T getSim(Class<T> klass);
 }

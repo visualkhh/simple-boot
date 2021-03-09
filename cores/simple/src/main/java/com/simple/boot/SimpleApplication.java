@@ -20,7 +20,7 @@ public class SimpleApplication implements SimpleBoot {
     private SimstanceManager simstanceManager;
 
     @Override
-    public void run(Class start)  {
+    public SimpleBoot run(Class start)  {
         try {
             log.debug("start boot {}", start);
             configLoader = new YamlConfigLoader();
@@ -29,9 +29,18 @@ public class SimpleApplication implements SimpleBoot {
             defined.put(ConfigLoader.class, configLoader);
             simstanceManager = new SimstanceManager(defined, start);
             log.info("started");
-            Thread.currentThread().join();
         }catch (Exception e) {
             log.error("simpleApplication start error ", e);
+        }
+        return this;
+    }
+
+    @Override
+    public void join() {
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            log.error("simpleApplication join error ", e);
         }
     }
 

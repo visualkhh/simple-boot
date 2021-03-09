@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 public class ExampleApplication {
 
     public static void main(String[] args) {
-        new SimpleApplication().run(ExampleApplication.class);
+        new SimpleApplication().run(ExampleApplication.class).join();
     }
 
 }

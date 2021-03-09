@@ -10,10 +10,8 @@ export class SimpleApplication {
     }
 
     public async run() {
-        const objects = this.sims.map((it, i, a) => SimstanceManager.resolve(it))
-        console.log('===', objects)
-
-        this.routing();
+        this.sims.map((it, i, a) => SimstanceManager.resolve(it))
+        await this.routing();
     }
 
     private async routing() {

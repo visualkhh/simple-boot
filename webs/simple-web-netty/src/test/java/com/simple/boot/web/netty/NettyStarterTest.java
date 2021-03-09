@@ -11,7 +11,7 @@ class NettyStarterTest {
 
     @Test
     public void test() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        new SimpleApplication().run(NettyStarterTest.class);
+        new SimpleApplication().run(NettyStarterTest.class).join();
     }
 
 }

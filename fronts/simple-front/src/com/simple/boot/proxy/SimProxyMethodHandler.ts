@@ -22,7 +22,7 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
 
     apply(target: any, thisArg: any, argumentsList?: any): any {
         // console.log('SimProxyMethodHandler apply', target, 'thisArg',thisArg, 'arg',argumentsList);
-        console.log('SimProxyMethodHandler apply',  'arg',argumentsList);
+        console.log('SimProxyMethodHandler apply', 'arg', argumentsList);
         return target.apply(thisArg, argumentsList);
         // return argumentsList[0] + argumentsList[1] + argumentsList[2];
     }
