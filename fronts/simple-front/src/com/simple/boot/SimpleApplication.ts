@@ -9,9 +9,10 @@ export class SimpleApplication {
     constructor(public sims: ConstructorType<any>[]) {
     }
 
-    public async run() {
+    public run(): SimpleApplication {
         this.sims.map((it, i, a) => SimstanceManager.resolve(it))
-        await this.routing();
+        this.routing();
+        return this;
     }
 
     private async routing() {

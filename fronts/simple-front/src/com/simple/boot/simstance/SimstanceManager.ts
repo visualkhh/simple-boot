@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import {ConstructorType} from '@src/com/simple/boot/types/Types'
 import {NoSuchSim} from '@src/com/simple/boot/throwable/NoSuchSim'
+import {SimProxyMethodHandler} from '@src/com/simple/boot/proxy/SimProxyMethodHandler'
 // import {SimProxyMethodHandler} from '@src/com/simple/boot/proxy/SimProxyMethodHandler'
 
 export const SimstanceManager = new class {
@@ -34,8 +35,17 @@ export const SimstanceManager = new class {
             })
             const r = new target(...injections)
             // proxy는 나중에.좀더 좋은 방법을 찾아보자.
+
+            // const obj = {};
+            // Reflect.defineMetadata("key", "value", obj, "name");
+            // const result = Reflect.getOwnMetadataKeys(obj, 'name');
+            // const result = Reflect.getMetadata('design:properties', r) || []
+            // console.log('fields->', result)
             // for (const key in r) {
-            //     r[key] = new Proxy(r[key], new SimProxyMethodHandler());
+            //     if (typeof r[key] === 'object' && key === 'admins') {
+            //         console.log('proxy ', key, r);
+            //         r[key] = new Proxy(r[key], new SimProxyMethodHandler());
+            //     }
             // }
             // r.subPu
             // r = new Proxy(target, new SimProxyMethodHandler());

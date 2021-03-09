@@ -1,7 +1,8 @@
 export class SimProxyMethodHandler implements ProxyHandler<any> {
     public get(target: any, name: string): any {
         console.log('SimProxyMethodHandler get', target, name)
-        return name in target ? target[name] : 37
+        return target[name];
+        // return name in target ? target[name] : 37
     }
 
     public set(obj: any, prop: string, value: any): boolean {

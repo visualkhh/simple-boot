@@ -12,7 +12,7 @@ export abstract class Router {
     public render(module: Module | undefined): void {
         let renderStr = ''
         if (module) {
-            renderStr = module.render()
+            renderStr = module.renderString()
             module.onInit()
         } else {
             renderStr = '404'

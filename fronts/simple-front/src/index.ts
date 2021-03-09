@@ -120,6 +120,5 @@ const app = new SimpleApplication([
     AppRouter,
     Index,
     HelloWord
-]);
-app.run();
+]).run();
 console.log('start: ', app)
