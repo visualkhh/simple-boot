@@ -55,6 +55,7 @@ export const SimstanceManager = new class {
             }
             // r.subPu
             // r = new Proxy(target, new SimProxyMethodHandler());
+            console.log('simstanceManager set ', target, r, r instanceof Module)
             this._storege.set(target, r)
             return r
         }

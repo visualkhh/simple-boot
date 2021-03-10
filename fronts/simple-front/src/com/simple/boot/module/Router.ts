@@ -3,7 +3,7 @@ import {Renderer} from '@src/com/simple/boot/render/Renderer'
 
 export abstract class Router {
     hashchange(event?: HashChangeEvent) {
-        console.log('hashchange router', event)
+        // console.log('hashchange router', event)
         const path = window.location.hash.replace('#', '')
         const renderModule = this.routing(path)
         this.render(renderModule);

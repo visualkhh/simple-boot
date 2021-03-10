@@ -19,4 +19,18 @@ export class Module {
     public render() {
         Renderer.renderTo(this.selector || Renderer.selector, this);
     }
+
+    public renderWrapString(): string {
+        // return '-0-';
+        if (!this.selector) {
+            return Handlebars.compile(this.template)(this);
+        } else {
+            return `<div id="${this.selector}">${Handlebars.compile(this.template)(this)}</div>`;
+        }
+    }
+
+    public toString(): string {
+        return this.renderWrapString();
+        // return '--' + this.renderWrapString() + '--';
+    }
 }

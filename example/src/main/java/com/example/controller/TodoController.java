@@ -7,15 +7,17 @@ import com.example.service.UserService;
 import com.simple.boot.anno.Controller;
 import com.simple.boot.anno.Injection;
 import com.simple.boot.throwable.ProcessingException;
-import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.communication.Request;
 import com.simple.boot.web.communication.Response;
+import com.simple.boot.web.controller.anno.GetMapping;
 import com.simple.boot.web.controller.anno.PostMapping;
 import com.simple.boot.web.controller.returns.View;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,19 +33,19 @@ public class TodoController {
     }
 
     @GetMapping("/hello")
-    public String hello(Request request, Response response){
+    public String hello(Request request, Response response) {
         return "Hello World!";
     }
 
     @GetMapping("/admins")
-    public List<Admin> admins(Request request, Response response){
+    public List<Admin> admins(Request request, Response response) {
         return adminService.admins();
     }
 
     @PostMapping("/admin")
     public Serializable saveAdmin(Request request, Response response) throws ProcessingException {
         Admin admin = request.body(Admin.class);
-        if(null == admin.getName()){
+        if (null == admin.getName()) {
             admin.setName(String.valueOf(System.currentTimeMillis()));
         }
         Serializable save = adminService.save(admin);
@@ -51,9 +53,27 @@ public class TodoController {
     }
 
 
+    @GetMapping("/i18n")
+    public Map<String, String> i18n(Request request, Response response) {
+        String lang = request.queryFirstParameters().get("lang");
+        Map<String, String> langs = new HashMap<>();
+        if ("ko".equals(lang)) {
+            langs.put("hello", "안녕하세요");
+            langs.put("ok", "확인");
+            langs.put("close", "닫기");
+            langs.put("wait user", "고객 기다려주세요");
+        } else {
+            langs.put("hello", "hello");
+            langs.put("ok", "ok");
+            langs.put("close", "close");
+            langs.put("wait user", "wait user");
+        }
+        return langs;
+    }
+
 
     @GetMapping("/user")
-    public User user(Request request, Response response){
+    public User user(Request request, Response response) {
         User user = new User();
         user.setAge(1);
         user.setName("name");
@@ -62,13 +82,13 @@ public class TodoController {
 
 
     @GetMapping("/users")
-    public List<User> users(Request request, Response response){
+    public List<User> users(Request request, Response response) {
         return userService.users();
     }
 
 
     @GetMapping("/")
-    public View index(Request request, Response response){
+    public View index(Request request, Response response) {
         View view = new View("views/index.html");
         view.put("name", "demo page");
         return view;

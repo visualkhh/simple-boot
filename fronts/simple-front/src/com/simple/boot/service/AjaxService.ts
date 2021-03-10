@@ -17,7 +17,7 @@ export class AjaxService {
     }
 
     getJSON<T>(url: string, headers?: Object): Observable<T> {
-        return ajax.getJSON(url, headers)
+        return ajax.getJSON<T>(url, headers)
     }
 
     patch(url: string, body?: any, headers?: Object): Observable<AjaxResponse> {

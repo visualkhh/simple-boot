@@ -7,6 +7,7 @@
 </head>
 <body>
 <h1><a style="font-size: 25px" href="/#">◀︎</a>  hello world</h1>
+<div>{{i18ns.hello}}</div>
 <ul>
     {{#each numbers as |number i|}}
         <li>{{number}}</li>
@@ -18,5 +19,15 @@
     <input type="text" id="name"/> <button id="save">save</button>
 </div>
 <br>
+
+<div>
+{{{admins}}}
+</div>
+<div>
+    {{#each i18ns as |i18n i|}}
+    <li>{{@key}} {{i18n}}</li>
+    {{/each}}
+</div>
+
 </body>
 </html>
