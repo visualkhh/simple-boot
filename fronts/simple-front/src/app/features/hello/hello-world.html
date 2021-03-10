@@ -6,28 +6,37 @@
     <link rel="stylesheet" href="hello-word.css">
 </head>
 <body>
-<h1><a style="font-size: 25px" href="/#">◀︎</a>  hello world</h1>
-<div>{{i18ns.hello}}</div>
+<h1><a style="font-size: 25px" href="/#">◀︎</a> hello world</h1>
+<div>{{{i18ns.hello}}}</div>
 <ul>
     {{#each numbers as |number i|}}
-        <li>{{number}}</li>
+    <li>{{number}}</li>
     {{/each}}
 </ul>
 <h1>admins</h1>
-<ul id="admins"></ul>
-<div>
-    <input type="text" id="name"/> <button id="save">save</button>
-</div>
-<br>
-
-<div>
 {{{admins}}}
+<div>
+    <input type="text" id="name"/>
+    <button id="save">save</button>
 </div>
+<br/>
+<br/>
+languages
 <div>
     {{#each i18ns as |i18n i|}}
-    <li>{{@key}} {{i18n}}</li>
+    <li>{{@key}} {{{i18n}}}</li>
     {{/each}}
 </div>
-
+<br/>
+<br/>
+<div>
+    change language(ko, en)
+    <div>
+        <input type="text" id="language" value="ko"/>
+        <button id="language-save">save</button>
+    </div>
+</div>
+<br/>
+<br/>
 </body>
 </html>

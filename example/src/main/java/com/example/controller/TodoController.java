@@ -61,12 +61,12 @@ public class TodoController {
             langs.put("hello", "안녕하세요");
             langs.put("ok", "확인");
             langs.put("close", "닫기");
-            langs.put("wait user", "고객 기다려주세요");
+            langs.put("wait_user", "고객 기다려주세요");
         } else {
             langs.put("hello", "hello");
             langs.put("ok", "ok");
             langs.put("close", "close");
-            langs.put("wait user", "wait user");
+            langs.put("wait_user", "wait user");
         }
         return langs;
     }

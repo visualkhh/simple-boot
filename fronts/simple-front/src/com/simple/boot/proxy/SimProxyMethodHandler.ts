@@ -8,16 +8,16 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
     }
 
     public set(obj: any, prop: string, value: any): boolean {
-        console.log('SimProxyMethodHandler set obj:', obj, ' prop:', prop, ' value:', value)
+        console.log('SimProxyMethodHandler set :', prop, ' value:', value, ' obj:', obj)
         obj[prop] = value
         if (obj instanceof Module) {
             obj.render();
         }
-        for (const key in obj) {
-            if (obj[key] instanceof Module) {
-                obj[key].render();
-            }
-        }
+        // for (const key in obj) {
+        //     if (obj[key] instanceof Module) {
+        //         obj[key].render();
+        //     }
+        // }
 
         return true
     }
@@ -27,5 +27,10 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
         // console.log('SimProxyMethodHandler apply', 'arg', argumentsList);
         return target.apply(thisArg, argumentsList);
         // return argumentsList[0] + argumentsList[1] + argumentsList[2];
+    }
+
+    has(target: any, key: PropertyKey): boolean {
+        // console.log('isProxy: ', target, key);
+        return key in target;
     }
 }

@@ -18,11 +18,14 @@ export const Renderer = new class {
     }
 
     public renderTo(selctor: string, module: Module | string) {
-        if (module instanceof Module) {
-            document.querySelector(selctor)!.innerHTML = module.renderString();
-            module.onChangeRendered();
-        } else {
-            document.querySelector(selctor)!.innerHTML = module;
+        const querySelector = document.querySelector(selctor)
+        if (querySelector) {
+            if (module instanceof Module) {
+                document.querySelector(selctor)!.innerHTML = module.renderString();
+                module.onChangeRendered();
+            } else {
+                document.querySelector(selctor)!.innerHTML = module;
+            }
         }
     }
 }()

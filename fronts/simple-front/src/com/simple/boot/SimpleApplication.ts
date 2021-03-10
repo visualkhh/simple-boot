@@ -29,4 +29,8 @@ export class SimpleApplication {
             routers.forEach(it => it.hashchange(nEvent))
         })
     }
+
+    public getSim<T>(key: ConstructorType<T>): T {
+        return SimstanceManager.getSim(key);
+    }
 }

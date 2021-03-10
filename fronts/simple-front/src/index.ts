@@ -122,3 +122,8 @@ const app = new SimpleApplication([
     HelloWord
 ]).run();
 console.log('start: ', app)
+
+// fromEvent(window, 'click').subscribe(it => {
+//     const sim = app.getSim(HelloWord)
+//     sim.numbers = [4444]
+// })
