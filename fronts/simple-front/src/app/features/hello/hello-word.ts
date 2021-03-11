@@ -4,7 +4,6 @@ import {AjaxService} from '@src/com/simple/boot/service/AjaxService'
 import html from './hello-world.html'
 import {fromEvent} from 'rxjs'
 import {I18nService} from '@src/app/features/service/I18nService'
-import {ModuleProperty} from '@src/com/simple/boot/types/Types'
 
 @Sim()
 export class HelloWord extends Module {
@@ -23,34 +22,11 @@ export class HelloWord extends Module {
         `
     }()
 
-    // private i18ns: { [key: string]: string } | undefined
-    private i18ns: ModuleProperty | undefined
-
     constructor(public i18nService: I18nService, public ajaxService: AjaxService) {
         super()
-        console.log('HelloWord constructor', i18nService, ajaxService)
     }
 
     onInit() {
-        // fromEvent(window, 'click').subscribe(it => {
-        //     this.i18nService.reload('en');
-        // // this.numbers = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random()];
-        // })
-        // console.log('onInit', this.renderWrapString());
-        // console.log('onInit  ', this.admins.renderWrapString());
-        this.i18nService.subscribe(it => {
-            console.log('i18nservice: ', it)
-            if (!this.i18ns) {
-                this.i18ns = it
-            } else {
-                for (const k in it) {
-                    this.i18ns[k] = it[k]
-                    this.i18ns[k].render()
-                }
-            }
-            // SimstanceManager.getSim(HelloWord).i18ns = it;
-            // this.render()
-        })
         this.loadData()
     }
 
@@ -61,7 +37,7 @@ export class HelloWord extends Module {
     }
 
     onChangeRendered() {
-
+        this.i18nService.renderSubscribe(it => {});
         fromEvent(document.querySelector('#save')!, 'click').subscribe(it => {
             const nameText = document.querySelector('#name') as HTMLInputElement
             this.ajaxService.postJson('/admin', {name: nameText.value}).subscribe(it => {
@@ -70,7 +46,7 @@ export class HelloWord extends Module {
         })
         fromEvent(document.querySelector('#language-save')!, 'click').subscribe(it => {
             const languageText = document.querySelector('#language') as HTMLInputElement
-            this.i18nService.reload(languageText.value)
+            this.i18nService.reloadAndRender(languageText.value)
         })
     }
 }

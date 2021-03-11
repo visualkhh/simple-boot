@@ -13,12 +13,7 @@ export class Module {
     public onInit() {}
     public onChangeRendered() {}
 
-    // get template(): string {
-    //     return ''
-    // }
-
     public render() {
-        console.log('render-=->', this.selector, this.renderString())
         Renderer.renderTo(this.selector || Renderer.selector, this);
     }
 
@@ -35,9 +30,6 @@ export class Module {
     }
 
     public toString(): string {
-        const s = this.renderWrapString()
-        console.log('tostring,  ', s)
-        return s;
-        // return '--' + this.renderWrapString() + '--';
+        return this.renderWrapString()
     }
 }

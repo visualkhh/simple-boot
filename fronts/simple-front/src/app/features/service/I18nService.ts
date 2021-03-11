@@ -1,46 +1,88 @@
 import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
-// import {ModuleProperty} from '@src/com/simple/boot/types/Types'
-// import {Module} from '@src/com/simple/boot/module/Module'
 import {AjaxService} from '@src/com/simple/boot/service/AjaxService'
-import {BehaviorSubject} from 'rxjs'
-import {ModuleProperty} from '@src/com/simple/boot/types/Types'
+import {BehaviorSubject, Observable} from 'rxjs'
 import {Module} from '@src/com/simple/boot/module/Module'
-// import {ModuleProperty} from '@src/com/simple/boot/types/Types'
-// import {Renderer} from '@src/com/simple/boot/render/Renderer'
+import Handlebars from 'handlebars'
+import {map} from 'rxjs/operators'
 
-// import {BehaviorSubject} from 'rxjs'
+export class I18nModule extends Module {
+    wrapElement = 'span';
+    constructor(public selector: string, public data: string) {
+        super(selector, '{{data}}')
+    }
+}
+
+export interface I18nModuleProperty {
+    [name: string]: I18nModule
+}
 
 @Sim()
-// export class I18nService implements ModuleProperty {
 export class I18nService {
-    public i18n$ = new BehaviorSubject(undefined as unknown as ModuleProperty)
-    // public i18n$ = new BehaviorSubject({} as ModuleProperty)
-    // public i18n$ = new BehaviorSubject({} as { [key: string]: string })
+    public i18n$ = new BehaviorSubject(undefined as unknown as I18nModuleProperty)
 
     constructor(public ajaxService: AjaxService) {
-        console.log('I18nService constructor', this.i18n$)
-        this.reload()
+        this.reload();
+        Handlebars.registerHelper('i18n', (aString) => {
+            const i18nModule = new I18nModule(this.makeKey(aString), aString)
+            return i18nModule.renderWrapString();
+        });
     }
 
-    public reload(lang = 'ko'): void {
-        this.ajaxService.getJSON<{ [key: string]: string }>(`/i18n?lang=${lang}`).subscribe(it => {
-            // const rtn = {} as { [key: string]: string }
-            const rtn = {} as ModuleProperty
-            for (const key in it) {
-                rtn[key] = new class extends Module {
-                    wrapElement = 'span'
-                    selector = '#__I18nService__' + key
-                    public data = it[key]
-                    template = '{{data}}'
-                }()
-            }
-            this.i18n$.next(rtn);
-            // Object.assign(this, it)
+    public reloadAndRender(lang = 'ko'): void {
+        this.requestObservable(lang).pipe(
+            map(it => this.transI18nModule(it)),
+            map(it => {
+                for (const key in it) {
+                    it[key].render()
+                }
+                return it
+            })
+        ).subscribe(it => {
+            this.publishI18nModule(it);
         })
     }
 
-    // subscribe(next?: (value: { [key: string]: string }) => void, error?: (error: any) => void, complete?: () => void) {
-    subscribe(next?: (value: ModuleProperty) => void, error?: (error: any) => void, complete?: () => void) {
+    public reload(lang = 'ko') {
+        this.requestObservable(lang).pipe(
+            map(it => this.transI18nModule(it))
+        ).subscribe(it => {
+            this.publishI18nModule(it);
+        })
+    }
+
+    public requestObservable(lang = 'ko'): Observable<{ [key: string]: string }> {
+        return this.ajaxService.getJSON<{ [key: string]: string }>(`/i18n?lang=${lang}`)
+    }
+
+    public transI18nModule(i18n: { [key: string]: string }): I18nModuleProperty {
+        const rtn = {} as I18nModuleProperty
+        for (const key in i18n) {
+            const selector = this.makeKey(key)
+            rtn[key] = new I18nModule(selector, i18n[key]);
+        }
+        return rtn;
+    }
+
+    public publishI18nModule(i18n: I18nModuleProperty) {
+        this.i18n$.next(i18n);
+    }
+
+    public makeKey(key: string): string {
+        return '#__I18nService__' + key;
+    }
+
+    subscribe(next?: (value: I18nModuleProperty) => void, error?: (error: any) => void, complete?: () => void) {
         return this.i18n$.subscribe(next, error, complete)
+    }
+
+    renderSubscribe(next?: (value: I18nModuleProperty) => void, error?: (error: any) => void, complete?: () => void) {
+        return this.i18n$.pipe(
+            map(it => {
+                for (const key in it) {
+                    it[key].render()
+                }
+                return it;
+            })
+        ).subscribe(next, error, complete)
     }
 }

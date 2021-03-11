@@ -7,6 +7,7 @@
 </head>
 <body>
 <h1><a style="font-size: 25px" href="/#">◀︎</a> hello world</h1>
+
 <div>{{{i18ns.hello}}}</div>
 <ul>
     {{#each numbers as |number i|}}
@@ -23,9 +24,12 @@
 <br/>
 languages
 <div>
-    {{#each i18ns as |i18n i|}}
-    <li>{{@key}} {{{i18n}}}</li>
-    {{/each}}
+    <li>{{{i18n 'hello'}}}</li>
+    <li>{{{i18n 'ok'}}}</li>
+    <li>{{{i18n 'close'}}}</li>
+<!--    {{#each i18ns as |i18n i|}}-->
+<!--    <li>{{@key}} {{{i18n}}}</li>-->
+<!--    {{/each}}-->
 </div>
 <br/>
 <br/>
