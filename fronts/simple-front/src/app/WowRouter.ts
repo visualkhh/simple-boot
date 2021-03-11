@@ -2,15 +2,13 @@ import {Router} from '@src/com/simple/boot/module/Router'
 import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
 import {HelloWord} from '@src/app/features/hello/hello-word'
 import {Index} from '@src/app/features/index/index'
-import {HelloRouter} from '@src/app/HelloRouter'
+import {AppRouter} from '@src/app/AppRouter'
 
 @Sim()
-export class AppRouter extends Router {
+export class HelloRouter extends Router {
     constructor() {
-        super('', [
-            HelloRouter
-        ])
-        console.log('AppRouter constructor')
+        super('wow/')
+        console.log('helloRouter constructor ', this.root)
     }
 
     '' = Index;

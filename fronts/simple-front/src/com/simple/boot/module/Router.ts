@@ -8,39 +8,55 @@ export interface Routers {
 }
 
 export abstract class Router implements Routers {
-    constructor(public root: string) {
+    constructor(public root: string, public childs: ConstructorType<Router>[] = []) {
     }
 
-    hashchange(event?: HashChangeEvent) {
-        // console.log('hashchange router', event)
-        if (event) {
-            console.log('-->', event.oldURL, event.newURL);
-        }
+    hashchange(parentRoots: string): boolean {
         const path = window.location.hash.replace('#', '')
-        const renderModule = this.routing(path)
-        this.render(renderModule);
-    }
-
-    public render(module: Module | undefined): void {
-        let renderStr = ''
-        if (module) {
-            renderStr = module.renderString()
-            module.onInit()
+        if (this.isRootUrl(parentRoots, path)) {
+            // 내가 그리지못하면 -> 없으면
+            if (!this.render(this.routing(parentRoots, path))) {
+                // 자식중에 그려라.
+                for (const child of this.childs) {
+                    const route = SimstanceManager.getSim(child)
+                    if (route && route.hashchange(parentRoots + (this.root || ''))) {
+                        return true
+                    }
+                }
+                return false
+            }
+            return true
         } else {
-            renderStr = '404'
+            return false
         }
-        Renderer.render(renderStr)
-        module?.onChangedRendered();
     }
 
-    public routing(path: string): Module | undefined {
-        const routers = this as Routers;
-        // const regex = /^The/i;
-        const regex = new RegExp('^' + this.root, 'i');
-        path = path.replace(regex, '');
-        const newVar = (routers[path] as ConstructorType<any>)
-        return SimstanceManager.getSim(newVar);
+    public isRootUrl(parentRoots: string, hashUrl: string): boolean {
+        return hashUrl.startsWith(parentRoots + this.root)
     }
 
-    // [name: string]: ConstructorType<any>
+    public render(module: Module | undefined): boolean {
+        if (module) {
+            const renderStr = module.renderString()
+            module.onInit()
+            Renderer.render(renderStr)
+            module.onChangedRendered()
+            return true
+        } else {
+            return false
+        }
+    }
+
+    public routing(parentRoots: string, path: string): Module | undefined {
+        console.log('--routing-->', path)
+        const routers = this as Routers
+        const urlRoot = parentRoots + this.root
+        const regex = new RegExp('^' + urlRoot, 'i')
+        path = path.replace(regex, '')
+        const fieldModule = (routers[path] as ConstructorType<any>)
+        console.log('routing path ', this.root, path, fieldModule)
+        if (fieldModule) {
+            return SimstanceManager.getSim(fieldModule)
+        }
+    }
 }

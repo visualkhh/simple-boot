@@ -112,15 +112,9 @@
 // // })
 
 import {SimpleApplication} from '@src/com/simple/boot/SimpleApplication'
-import {HelloWord} from '@src/app/features/hello/hello-word'
-import {Index} from '@src/app/features/index/index'
 import {AppRouter} from '@src/app/AppRouter'
 
-const app = new SimpleApplication([
-    AppRouter,
-    Index,
-    HelloWord
-]).run();
+const app = new SimpleApplication([AppRouter]).run();
 console.log('start: ', app)
 
 // fromEvent(window, 'click').subscribe(it => {

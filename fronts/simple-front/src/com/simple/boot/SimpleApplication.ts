@@ -2,35 +2,43 @@ import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
 import {ConstructorType} from '@src/com/simple/boot/types/Types'
 import {Router} from '@src/com/simple/boot/module/Router'
 import {fromEvent} from 'rxjs'
-import {fromIterable} from 'rxjs/internal-compatibility'
-import {filter, map, toArray} from 'rxjs/operators'
+import {Renderer} from '@src/com/simple/boot/render/Renderer'
 
 export class SimpleApplication {
+    private routers: Router[] = []
+
     constructor(public sims: ConstructorType<any>[]) {
     }
 
     public run(): SimpleApplication {
         this.sims.map((it, i, a) => SimstanceManager.resolve(it))
-        this.routing();
-        return this;
+        this.routers = Array.from(SimstanceManager.storege.values())
+            .filter(it => it instanceof Router)
+            .map(it => it as Router)
+            .sort((a, b) => a.root.length < b.root.length ? -1 : 1)
+        this.routing()
+        return this
     }
 
-    private async routing() {
-        const routers = await fromIterable(SimstanceManager.storege.values()).pipe(
-            filter(it => it instanceof Router),
-            map(it => it as Router),
-            toArray()
-        ).toPromise();
-
-        routers.forEach(it => it.hashchange())
-
+    private routing() {
         fromEvent(window, 'hashchange').subscribe((it) => {
-            const nEvent = it as HashChangeEvent;
-            routers.forEach(it => it.hashchange(nEvent))
+            const executRouter = this.executeRouter()
+            console.log('execute Router hashChange', executRouter)
         })
+        window.dispatchEvent(new Event('hashchange'))
+    }
+
+    private executeRouter(): Router | undefined {
+        for (const router of this.routers) {
+            if (router.hashchange('')) {
+                return router
+            } else {
+                Renderer.render('404 not found')
+            }
+        }
     }
 
     public getSim<T>(key: ConstructorType<T>): T {
-        return SimstanceManager.getSim(key);
+        return SimstanceManager.getSim(key)
     }
 }
