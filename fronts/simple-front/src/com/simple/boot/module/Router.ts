@@ -1,9 +1,18 @@
 import {Module} from '@src/com/simple/boot/module/Module'
 import {Renderer} from '@src/com/simple/boot/render/Renderer'
+import {ConstructorType} from '@src/com/simple/boot/types/Types'
+import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
 
-export abstract class Router {
+export interface Routers {
+    [name: string]: ConstructorType<any> | any
+}
+
+export abstract class Router implements Routers {
     hashchange(event?: HashChangeEvent) {
         // console.log('hashchange router', event)
+        if (event) {
+            console.log('-->', event.oldURL, event.newURL);
+        }
         const path = window.location.hash.replace('#', '')
         const renderModule = this.routing(path)
         this.render(renderModule);
@@ -18,8 +27,14 @@ export abstract class Router {
             renderStr = '404'
         }
         Renderer.render(renderStr)
-        module?.onChangeRendered();
+        module?.onChangedRendered();
     }
 
-    public abstract routing(path: string): Module | undefined;
+    public routing(path: string): Module | undefined {
+        const routers = this as Routers;
+        const newVar = (routers[path] as ConstructorType<any>)
+        return SimstanceManager.getSim(newVar);
+    }
+
+    // [name: string]: ConstructorType<any>
 }

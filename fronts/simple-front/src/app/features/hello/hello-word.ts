@@ -36,7 +36,7 @@ export class HelloWord extends Module {
         })
     }
 
-    onChangeRendered() {
+    onChangedRendered() {
         this.i18nService.renderSubscribe(it => {});
         fromEvent(document.querySelector('#save')!, 'click').subscribe(it => {
             const nameText = document.querySelector('#name') as HTMLInputElement

@@ -11,7 +11,7 @@ export const Renderer = new class {
     public render(module: Module | string) {
         if (module instanceof Module) {
             document.querySelector(this.selector)!.innerHTML = module.renderString();
-            module.onChangeRendered();
+            module.onChangedRendered();
         } else {
             document.querySelector(this.selector)!.innerHTML = module;
         }
@@ -22,7 +22,7 @@ export const Renderer = new class {
         if (querySelector) {
             if (module instanceof Module) {
                 document.querySelector(selctor)!.innerHTML = module.renderString();
-                module.onChangeRendered();
+                module.onChangedRendered();
             } else {
                 document.querySelector(selctor)!.innerHTML = module;
             }

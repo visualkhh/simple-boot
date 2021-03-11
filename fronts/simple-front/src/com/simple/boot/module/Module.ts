@@ -11,7 +11,7 @@ export class Module {
     }
 
     public onInit() {}
-    public onChangeRendered() {}
+    public onChangedRendered() {}
 
     public render() {
         Renderer.renderTo(this.selector || Renderer.selector, this);
