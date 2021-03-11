@@ -5,6 +5,11 @@ import {Index} from '@src/app/features/index/index'
 
 @Sim()
 export class AppRouter extends Router {
+    constructor() {
+        super('')
+    }
+
     '' = Index;
+    'hello/wow' = HelloWord;
     'hello-world' = HelloWord;
 }

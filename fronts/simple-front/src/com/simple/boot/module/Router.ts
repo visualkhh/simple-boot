@@ -8,6 +8,9 @@ export interface Routers {
 }
 
 export abstract class Router implements Routers {
+    constructor(public root: string) {
+    }
+
     hashchange(event?: HashChangeEvent) {
         // console.log('hashchange router', event)
         if (event) {
@@ -32,6 +35,9 @@ export abstract class Router implements Routers {
 
     public routing(path: string): Module | undefined {
         const routers = this as Routers;
+        // const regex = /^The/i;
+        const regex = new RegExp('^' + this.root, 'i');
+        path = path.replace(regex, '');
         const newVar = (routers[path] as ConstructorType<any>)
         return SimstanceManager.getSim(newVar);
     }
