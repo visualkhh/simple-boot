@@ -1,4 +1,4 @@
-import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
+import {simstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
 import {ConstructorType} from '@src/com/simple/boot/types/Types'
 import {Router} from '@src/com/simple/boot/module/Router'
 import {fromEvent} from 'rxjs'
@@ -11,11 +11,14 @@ export class SimpleApplication {
     }
 
     public run(): SimpleApplication {
-        this.sims.map((it, i, a) => SimstanceManager.resolve(it))
-        this.routers = Array.from(SimstanceManager.storege.values())
+        const sims = simstanceManager.getOrNewSims(Router);
+        // console.log('------> sims', sims);
+        // this.sims.map((it, i, a) => simstanceManager.resolve(it))
+        this.routers = sims
             .filter(it => it instanceof Router)
             .map(it => it as Router)
-            .sort((a, b) => a.root.length < b.root.length ? -1 : 1)
+            .sort((a, b) => a.path.length < b.path.length ? -1 : 1)
+        console.log('simpleApplication--> ', this.routers, simstanceManager)
         this.routing()
         return this
     }
@@ -29,6 +32,7 @@ export class SimpleApplication {
     }
 
     private executeRouter(): Router | undefined {
+        console.log('executeRouter-->', this.routers)
         for (const router of this.routers) {
             if (router.hashchange('')) {
                 return router
@@ -39,6 +43,6 @@ export class SimpleApplication {
     }
 
     public getSim<T>(key: ConstructorType<T>): T {
-        return SimstanceManager.getSim(key)
+        return simstanceManager.getOrNewSim(key)
     }
 }

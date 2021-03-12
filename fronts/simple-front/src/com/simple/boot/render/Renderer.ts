@@ -18,13 +18,13 @@ export const Renderer = new class {
     }
 
     public renderTo(selctor: string, module: Module | string) {
-        const querySelector = document.querySelector(selctor)
+        const querySelector = document.querySelector(`#${selctor}`)
         if (querySelector) {
             if (module instanceof Module) {
-                document.querySelector(selctor)!.innerHTML = module.renderString();
+                querySelector.innerHTML = module.renderString();
                 module.onChangedRendered();
             } else {
-                document.querySelector(selctor)!.innerHTML = module;
+                querySelector.innerHTML = module;
             }
         }
     }

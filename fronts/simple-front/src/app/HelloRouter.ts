@@ -7,7 +7,7 @@ import {Index} from '@src/app/features/index/index'
 export class HelloRouter extends Router {
     constructor() {
         super('hello/')
-        console.log('helloRouter constructor ', this.root)
+        console.log('helloRouter constructor ', this.path)
     }
 
     '' = Index

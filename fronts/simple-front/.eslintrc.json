@@ -23,6 +23,7 @@
         "new-cap": "off",
         "eol-last": "off",
         "semi": "off",
+        "camelcase": "off",
         "no-trailing-spaces": "off",
         "indent": ["error", 4],
         "node/no-path-concat": "off"

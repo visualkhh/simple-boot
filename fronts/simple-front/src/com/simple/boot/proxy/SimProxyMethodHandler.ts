@@ -1,4 +1,5 @@
 import {Module} from '@src/com/simple/boot/module/Module'
+import {simstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
 
 export class SimProxyMethodHandler implements ProxyHandler<any> {
     public get(target: any, name: string): any {
@@ -6,6 +7,8 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
     }
 
     public set(obj: any, prop: string, value: any): boolean {
+        value = simstanceManager.proxy(value, Module);
+
         obj[prop] = value
         if (obj instanceof Module) {
             obj.render();
@@ -24,6 +27,9 @@ export class SimProxyMethodHandler implements ProxyHandler<any> {
     }
 
     has(target: any, key: PropertyKey): boolean {
+        if (key === 'isProxy') {
+            return true;
+        }
         return key in target;
     }
 }

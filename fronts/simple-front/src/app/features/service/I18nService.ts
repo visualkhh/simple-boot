@@ -7,8 +7,9 @@ import {map} from 'rxjs/operators'
 
 export class I18nModule extends Module {
     wrapElement = 'span';
+    template = '{{data}}'
     constructor(public selector: string, public data: string) {
-        super(selector, '{{data}}')
+        super();
     }
 }
 
@@ -68,7 +69,7 @@ export class I18nService {
     }
 
     public makeKey(key: string): string {
-        return '#__I18nService__' + key;
+        return '__I18n__' + key;
     }
 
     subscribe(next?: (value: I18nModuleProperty) => void, error?: (error: any) => void, complete?: () => void) {
