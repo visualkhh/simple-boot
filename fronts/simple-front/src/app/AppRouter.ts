@@ -8,7 +8,7 @@ import {App} from '@src/app/layouts/App'
 
 @Sim()
 export class AppRouter extends Router {
-    path = ''
+    // path = ''
     module = App
     childs = [
         HelloRouter,
