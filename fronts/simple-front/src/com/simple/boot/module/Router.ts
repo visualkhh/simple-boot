@@ -9,56 +9,53 @@ export interface Routers {
 }
 
 export class Router implements Routers {
-    constructor(public path: string, public module = new Module('empty'), public childs: ConstructorType<Router>[] = []) {
+    // constructor(public path: string, public module = new Module('router-empty'), public childs: ConstructorType<Router>[] = []) {
+    constructor(public path: string, public module?: ConstructorType<Module>, public childs: ConstructorType<Router>[] = []) {
     }
 
-    getExecutorRouter(parentRoots: string): Router | undefined {
-        const path = LocationUtils.hash();
-        if (this.isRootUrl(parentRoots, path)) {
-            // 내가 가지고 있지 않으면
-            if (!this.routing(parentRoots, path)) {
-                // 자식중에 찾아라..
-                for (const child of this.childs) {
-                    const route = simstanceManager.getOrNewSim(child)
-                    const executorRouter = route.getExecutorRouter(parentRoots + (this.path || ''))
-                    if (route && executorRouter) {
-                        return executorRouter
-                    }
-                }
-            }
-            return this
-        }
-    }
-
-    hashchange(parentRoots: string): boolean {
+    hashchange(parentRoots: string[]): boolean {
+        // console.log('---routing hashChange -> ', parentRoots);
         const path = LocationUtils.hash();
         if (this.isRootUrl(parentRoots, path)) {
             // 내가 그리지못하면 -> 없으면
-            if (!this.render(this.routing(parentRoots, path))) {
-                // 자식중에 그려라.
+            const fieldModule = this.routing(parentRoots, path)
+            if (this.moduleObject && fieldModule) {
+                this.renderRouterModule(this.moduleObject);
+            }
+            if (!this.render(fieldModule, (this.moduleObject?.router_outlet_selector || this.moduleObject?.selector))) {
+                // 내꺼에 없으면 자식중에 그려라.
                 for (const child of this.childs) {
                     const route = simstanceManager.getOrNewSim(child)
-                    if (route && route.hashchange(parentRoots + (this.path || ''))) {
+                    const childParentRoot = parentRoots.slice();
+                    childParentRoot.push((this.path || ''))
+                    if (route && route.hashchange(childParentRoot)) {
                         return true
                     }
                 }
                 return false
+            } else { // 마지막 true
+                return true
             }
-            return true
         } else {
             return false
         }
     }
 
-    public isRootUrl(parentRoots: string, hashUrl: string): boolean {
-        return hashUrl.startsWith(parentRoots + this.path)
+    get moduleObject() {
+        if (this.module) {
+            return simstanceManager.getOrNewSim(this.module)
+        }
     }
 
-    public render(module: Module | undefined): boolean {
-        if (module) {
-            const renderStr = module.renderString()
+    public isRootUrl(parentRoots: string[], hashUrl: string): boolean {
+        return hashUrl.startsWith(parentRoots.join('') + (this.path || ''))
+    }
+
+    public renderRouterModule(module: Module | undefined, targetSelector = 'app'): boolean {
+        if (module && !module.exist()) {
+            const renderStr = module.renderWrapString()
             module.onInit()
-            Renderer.render(renderStr)
+            Renderer.renderTo(targetSelector, renderStr)
             module.onChangedRendered()
             return true
         } else {
@@ -66,10 +63,24 @@ export class Router implements Routers {
         }
     }
 
-    public routing(parentRoots: string, path: string): Module | undefined {
+    public render(module: Module | undefined, targetSelector = 'app'): boolean {
+        if (module) {
+            const renderStr = module.renderString()
+            module.onInit()
+            Renderer.renderTo(targetSelector, renderStr)
+            module.onChangedRendered()
+            return true
+        } else {
+            return false
+        }
+    }
+
+
+    // my field find
+    public routing(parentRoots: string[], path: string): Module | undefined {
         console.log('--routing-->', path)
         const routers = this as Routers
-        const urlRoot = parentRoots + this.path
+        const urlRoot = parentRoots.join('') + this.path
         const regex = new RegExp('^' + urlRoot, 'i')
         path = path.replace(regex, '')
         const fieldModule = (routers[path] as ConstructorType<any>)

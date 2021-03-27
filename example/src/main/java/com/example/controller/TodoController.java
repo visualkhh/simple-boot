@@ -63,10 +63,10 @@ public class TodoController {
             langs.put("close", "닫기");
             langs.put("wait_user", "고객 기다려주세요");
         } else {
-            langs.put("hello", "hello");
-            langs.put("ok", "ok");
-            langs.put("close", "close");
-            langs.put("wait_user", "wait user");
+            langs.put("hello", "hello en");
+            langs.put("ok", "ok en");
+            langs.put("close", "close en");
+            langs.put("wait_user", "wait user en");
         }
         return langs;
     }

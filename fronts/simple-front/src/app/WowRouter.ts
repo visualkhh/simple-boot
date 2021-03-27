@@ -5,11 +5,7 @@ import {Index} from '@src/app/features/index/index'
 
 @Sim()
 export class WowRouter extends Router {
-    constructor() {
-        super('wow/')
-        console.log('WowRouter constructor ', this.path)
-    }
-
+    path = 'wow/'
     '' = Index
     'hello/wow' = HelloWord
     'hello-world' = HelloWord

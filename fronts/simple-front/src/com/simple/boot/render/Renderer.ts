@@ -2,30 +2,39 @@ import {Module} from '@src/com/simple/boot/module/Module'
 import Handlebars from 'handlebars'
 
 export const Renderer = new class {
-    public selector = '#app';
+    public selector = 'app';
 
     public renderString(template: string, obj: any): string {
         return Handlebars.compile(template)(obj);
     }
 
     public render(module: Module | string) {
-        if (module instanceof Module) {
-            document.querySelector(this.selector)!.innerHTML = module.renderString();
+        const targetElement = document.querySelector(`#${this.selector}`)
+        if (targetElement && module instanceof Module) {
+            targetElement.innerHTML = module.renderString();
             module.onChangedRendered();
-        } else {
-            document.querySelector(this.selector)!.innerHTML = module;
+        } else if (targetElement && typeof module === 'string') {
+            // console.log('Renderer-->render', module, targetElement)
+            targetElement.innerHTML = module
         }
     }
 
-    public renderTo(selctor: string, module: Module | string) {
-        const querySelector = document.querySelector(`#${selctor}`)
-        if (querySelector) {
-            if (module instanceof Module) {
-                querySelector.innerHTML = module.renderString();
-                module.onChangedRendered();
-            } else {
-                querySelector.innerHTML = module;
-            }
+    public renderTo(selector: string, module: Module | string) {
+        const targetElement = document.querySelector(`#${selector}`)
+        if (targetElement && module instanceof Module) {
+            targetElement.innerHTML = module.renderString();
+            module.onChangedRendered();
+        } else if (targetElement && typeof module === 'string') {
+            // console.log('Renderer-to->render', module, targetElement)
+            targetElement.innerHTML = module;
+        }
+    }
+
+    public exist(selector: string): boolean {
+        if (document.querySelector(`#${selector}`)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }()

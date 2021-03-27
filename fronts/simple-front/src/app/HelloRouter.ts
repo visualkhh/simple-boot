@@ -5,11 +5,7 @@ import {Index} from '@src/app/features/index/index'
 
 @Sim()
 export class HelloRouter extends Router {
-    constructor() {
-        super('hello/')
-        console.log('helloRouter constructor ', this.path)
-    }
-
+    path = 'hello/'
     '' = Index
     'hello/wow' = HelloWord
     'hello-world' = HelloWord
