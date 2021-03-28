@@ -6,11 +6,11 @@ import {fromEvent} from 'rxjs'
 import {I18nService} from '@src/app/features/service/I18nService'
 import {LoopModule} from '@src/app/shareds/LoopModule'
 import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
-
+import css from './hello-word.css'
 @Sim()
 export class HelloWord extends Module {
     template = html
-
+    styleImports = [css]
     public numbers = [1, 2, 3, 4, 5, 6, 7]
     private admins = new class extends Module {
         public datas: any[] = []

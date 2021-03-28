@@ -30,6 +30,15 @@ export const Renderer = new class {
         }
     }
 
+    public prependStyle(selector: string, style: string | undefined) {
+        const targetElement = document.querySelector(`#${selector}`)
+        if (targetElement && style) {
+            const htmlStyleElement = document.createElement('style')
+            htmlStyleElement.innerHTML = style;
+            targetElement.prepend(htmlStyleElement)
+        }
+    }
+
     public exist(selector: string): boolean {
         if (document.querySelector(`#${selector}`)) {
             return true;

@@ -29,7 +29,7 @@ export class SimpleApplication {
         const routers: Router[] = [];
         const executeModule = simstanceManager.getOrNewSim(this.rootRouter)?.getExecuteModule(routers)
         if (executeModule) {
-            console.log('executeRouter-->', routers, executeModule)
+            // console.log('executeRouter-->', routers, executeModule)
             let lastRouterSelector = 'app';
             routers.forEach(it => {
                 this.renderRouterModule(it.moduleObject, lastRouterSelector);
@@ -38,7 +38,7 @@ export class SimpleApplication {
                     lastRouterSelector = selctor;
                 }
             });
-            console.log('===>', lastRouterSelector);
+            // console.log('===>', lastRouterSelector);
             this.render(executeModule, lastRouterSelector)
         } else {
             Renderer.render('404 not found')
@@ -55,9 +55,8 @@ export class SimpleApplication {
 
     public renderRouterModule(module: Module | undefined, targetSelector = 'app'): boolean {
         if (module && !module.exist()) {
-            const renderStr = module.renderWrapString()
             module.onInit()
-            Renderer.renderTo(targetSelector, renderStr)
+            module.renderWrap(targetSelector);
             module.onChangedRendered()
             return true
         } else {
@@ -67,9 +66,8 @@ export class SimpleApplication {
 
     public render(module: Module | undefined, targetSelector: string): boolean {
         if (module) {
-            const renderStr = module.renderString()
             module.onInit()
-            Renderer.renderTo(targetSelector, renderStr)
+            module.render(targetSelector);
             module.onChangedRendered()
             return true
         } else {

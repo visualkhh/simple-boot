@@ -30,12 +30,18 @@ module.exports = {
                 // }
             },
             {
-                test: /\.css$/i,
+                test: /\.css$/,
                 use: [
+                    // {
+                    //     loader: 'style-loader'
+                    // },
+                    {
+                        loader: 'css-loader'
+                    }
                     // "handlebars-loader", // handlebars loader expects raw resource string
-                    // "style-loader",
-                    'extract-loader',
-                    'css-loader'
+                    // 'extract-loader',
+                    // 'style-loader',
+                    // 'css-loader'
                 ]
             },
             // {

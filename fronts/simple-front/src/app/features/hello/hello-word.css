@@ -1,4 +1,10 @@
-
+/*[module-selector]*/
 h1 {
     color: brown;
+}
+
+
+/*[module-selector]*/
+div {
+    color: pink;
 }
