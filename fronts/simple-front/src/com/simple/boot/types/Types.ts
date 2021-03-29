@@ -1,7 +1,7 @@
 /**
  * Type for what object is instances of
  */
-import {Module} from '@src/com/simple/boot/module/Module'
+import {Module} from '../module/Module'
 
 export interface ConstructorType<T> {
     new(...args: any[]): T;

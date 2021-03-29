@@ -1,6 +1,9 @@
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+// const tsConfigPath = path.resolve(__dirname, "tsconfig")
+
 // var HtmlWebpackPlugin = require('html-webpack-plugin'); // https://github.com/jantimon/html-webpack-plugin
 // var ExtractTextPlugin = require('extract-text-webpack-plugin'); // https://webpack.js.org/plugins/extract-text-webpack-plugin/
 
@@ -14,6 +17,11 @@ module.exports = {
     //         handlebars: 'handlebars/dist/handlebars.min.js'
     //     }
     // },
+    // resolve: {
+    //     // Add `.ts` and `.tsx` as a resolvable extension.
+    //     extensions: [".ts", ".tsx", ".js"],
+    //     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })]
+    // },
     module: {
         rules: [
             {
@@ -22,8 +30,21 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
+                test: /\.(txt|min)$/i,
+                use: 'raw-loader'
+            },
+            {
                 test: /\.html$/i,
                 loader: 'html-loader'
+                // options: {
+                //     attributes: {
+                //         list: [
+                //             { tag: 'img', attribute: 'src', type: 'src' },
+                //             { tag: 'link', attribute: 'href', type: 'src' },
+                //             // { tag: 'a', attribute: 'href', type: 'src' } <--- throws error when included
+                //         ]
+                //     }
+                // }
                 // ,
                 // options: {
                 //     minimize: true

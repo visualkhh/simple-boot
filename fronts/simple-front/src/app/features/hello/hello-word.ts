@@ -1,12 +1,14 @@
-import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
-import {Module} from '@src/com/simple/boot/module/Module'
-import {AjaxService} from '@src/com/simple/boot/service/AjaxService'
+import {Sim} from '../../../com/simple/boot/decorators/SimDecorator'
+import {Module} from '../../../com/simple/boot/module/Module'
+import {AjaxService} from '../../../com/simple/boot/service/AjaxService'
+import {SimstanceManager} from '../../../com/simple/boot/simstance/SimstanceManager'
+import {ViewService} from '../../../com/simple/boot/service/ViewService'
 import html from './hello-world.html'
-import {fromEvent} from 'rxjs'
-import {I18nService} from '@src/app/features/service/I18nService'
-import {LoopModule} from '@src/app/shareds/LoopModule'
-import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
 import css from './hello-word.css'
+import {LoopModule} from '../../shareds/LoopModule'
+import {delay, mergeMap} from 'rxjs/operators'
+import {fromEvent} from 'rxjs'
+
 @Sim()
 export class HelloWord extends Module {
     template = html
@@ -28,9 +30,8 @@ export class HelloWord extends Module {
     public amodule = new LoopModule('amodule')
     public bmodule = new LoopModule('bmodule')
 
-    constructor(public i18nService: I18nService, public ajaxService: AjaxService, public simstance: SimstanceManager) {
+    constructor(public v: ViewService, public ajax: AjaxService, public simstance: SimstanceManager) {
         super()
-        console.log('--->', simstance);
     }
 
     onInit() {
@@ -39,26 +40,18 @@ export class HelloWord extends Module {
     }
 
     loadData() {
-        this.ajaxService.getJSON('/admins').subscribe(it => {
+        this.ajax.getJson('/admins').subscribe(it => {
             this.admins.datas = it as any[]
         })
     }
 
     onChangedRendered() {
-        this.i18nService.renderSubscribe(it => {
+        this.v.eI('save')?.click<Event>().pipe(
+            mergeMap(it => this.ajax.getJson('https://randomuser.me/api/', {name: this.v.eI('name')?.value}))
+        ).subscribe(it => {
+            this.loadData()
         })
-        fromEvent(document.querySelector('#save')!, 'click').subscribe(it => {
-            const nameText = document.querySelector('#name') as HTMLInputElement
-            this.ajaxService.postJson('/admin', {name: nameText.value}).subscribe(it => {
-                this.loadData()
-            })
-        })
-        fromEvent(document.querySelector('#language-save')!, 'click').subscribe(it => {
-            const languageText = document.querySelector('#language') as HTMLInputElement
-            this.i18nService.reloadAndRender(languageText.value)
-        })
-
-        fromEvent(document.querySelector('#module-data-change')!, 'click').subscribe(it => {
+        this.v.eI('module-data-change')?.click().subscribe(it => {
             this.amodule.datas = [5, 6, 7, 8, 9]
             this.bmodule.datas = [1, 4, 6, 87, 5, 6, 7, 8, 9]
         })

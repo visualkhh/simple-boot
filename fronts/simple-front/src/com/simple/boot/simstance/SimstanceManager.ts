@@ -1,8 +1,8 @@
 import 'reflect-metadata'
-import {ConstructorType} from '@src/com/simple/boot/types/Types'
-import {NoSuchSim} from '@src/com/simple/boot/throwable/NoSuchSim'
-import {SimProxyMethodHandler} from '@src/com/simple/boot/proxy/SimProxyMethodHandler'
-import {Module} from '@src/com/simple/boot/module/Module'
+import {ConstructorType} from '../../../../com/simple/boot/types/Types'
+import {NoSuchSim} from '../../../../com/simple/boot/throwable/NoSuchSim'
+import {SimProxyMethodHandler} from '../../../../com/simple/boot/proxy/SimProxyMethodHandler'
+import {Module} from '../../../../com/simple/boot/module/Module'
 
 export class SimstanceManager {
     private _storege = new Map<ConstructorType<any>, any>()

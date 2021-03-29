@@ -2,6 +2,10 @@ tip
 ===
 
 ## link
+- rxjs
+  - pipe chain: https://kimsereyblog.blogspot.com/2018/11/moving-from-chaining-to-piping-in-rxjs.html
+- test
+  - https://yonghyunlee.gitlab.io/temp_post/jest/
 - vscode
     - debug: https://code.visualstudio.com/docs/editor/debugging
 - ESLint
@@ -18,15 +22,23 @@ tip
       gradle
 - moowor.node plugin: https://plugins.gradle.org/plugin/com.moowork.node
 - https://github.com/srs/gradle-node-plugin
+- npm
+  - feather-icons: https://www.npmjs.com/package/feather-icons
+  - font-awesome
+    - https://www.daleseo.com/font-awesome/
+    - https://fontawesome.com/v4.7.0/examples/
 - webpack
     - 공식
         -  loader
         - https://webpack.js.org/loaders/html-loader/
         - https://webpack.js.org/loaders/
         - https://webpack-v3.jsx.app/loaders/
+        - https://webpack.js.org/loaders/
         - setting
             - https://medium.com/@jonas_duri/build-a-landing-page-with-webpack-4-6efe83deb7fe
             - https://kdydesign.github.io/2020/10/06/spa-route-tutorial/
+    - Webpack, Typescript에서 Path Alias 설정하기: https://jonghyun-park.medium.com/webpack-typescript%EC%97%90%EC%84%9C-path-alias-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-ec32428622d2
+
 - typescript
     - decorator
         - https://haeguri.github.io/2019/08/25/typescript-decorator/

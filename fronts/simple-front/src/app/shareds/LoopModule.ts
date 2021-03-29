@@ -1,4 +1,4 @@
-import {Module} from '@src/com/simple/boot/module/Module'
+import {Module} from '../../../src/com/simple/boot/module/Module'
 
 export class LoopModule extends Module {
     public datas = [1, 2, 3, 4, 5, 6, 7]

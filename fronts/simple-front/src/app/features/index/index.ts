@@ -1,5 +1,5 @@
-import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
-import {Module} from '@src/com/simple/boot/module/Module'
+import {Sim} from '../../../com/simple/boot/decorators/SimDecorator'
+import {Module} from '../../../com/simple/boot/module/Module'
 import html from './index.html'
 import css from './index.css'
 @Sim()
@@ -9,6 +9,8 @@ export class Index extends Module {
     template = html;
     styleImports = [css]
     onInit() {
-        console.log('Index-->', css)
+    }
+
+    onChangedRendered() {
     }
 }

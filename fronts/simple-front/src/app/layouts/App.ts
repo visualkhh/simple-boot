@@ -1,23 +1,28 @@
-import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
-import {Module} from '@src/com/simple/boot/module/Module'
-import {AjaxService} from '@src/com/simple/boot/service/AjaxService'
+import {Sim} from '../../com/simple/boot/decorators/SimDecorator'
+import {Module} from '../../com/simple/boot/module/Module'
+import {AjaxService} from '../../com/simple/boot/service/AjaxService'
 import html from './app.html'
-import {I18nService} from '@src/app/features/service/I18nService'
-// import {fromEvent} from 'rxjs'
-// import {LoopModule} from '@src/app/shareds/LoopModule'
-import {SimstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
+import {SimstanceManager} from '../../com/simple/boot/simstance/SimstanceManager'
+import css from './app.css'
+import cssFirst from './app-first.css'
+// const feather = 'a';
+// import feather from '../../../test.txt'
+// import feather from 'feather-icons/dist/feather.min'
+// import('feather-icons/dist/feather.min')
+// const feather = require('feather-icons/dist/feather.min')
 
 @Sim()
 export class App extends Module {
-    constructor(public i18nService: I18nService, public ajaxService: AjaxService, public simstance: SimstanceManager) {
+    styleImports = [cssFirst, css]
+    constructor(public ajaxService: AjaxService, public simstance: SimstanceManager) {
         super('app-router-module', html)
-        console.log('--->', simstance);
+        // import('feather-icons/dist/feather.min.js').then(it => {
+        //     alert('it====', it)
+        // })
+        // console.log('App Constructor-->', feather)
     }
 
     onInit() {
-    }
-
-    loadData() {
     }
 
     onChangedRendered() {

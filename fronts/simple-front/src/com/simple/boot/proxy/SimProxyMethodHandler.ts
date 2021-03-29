@@ -1,5 +1,5 @@
-import {Module} from '@src/com/simple/boot/module/Module'
-import {simstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
+import {Module} from '../../../../com/simple/boot/module/Module'
+import {simstanceManager} from '../../../../com/simple/boot/simstance/SimstanceManager'
 
 export class SimProxyMethodHandler implements ProxyHandler<any> {
     public get(target: any, name: string): any {

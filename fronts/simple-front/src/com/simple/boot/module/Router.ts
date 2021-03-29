@@ -1,7 +1,7 @@
-import {Module} from '@src/com/simple/boot/module/Module'
-import {ConstructorType} from '@src/com/simple/boot/types/Types'
-import {simstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
-import {LocationUtils} from '@src/com/simple/boot/util/window/LocationUtils'
+import {Module} from '../../../../com/simple/boot/module/Module'
+import {ConstructorType} from '../../../../com/simple/boot/types/Types'
+import {simstanceManager} from '../../../../com/simple/boot/simstance/SimstanceManager'
+import {LocationUtils} from '../../../../com/simple/boot/util/window/LocationUtils'
 
 export interface Routers {
     [name: string]: ConstructorType<any> | any

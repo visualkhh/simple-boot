@@ -1,4 +1,4 @@
-import {Module} from '@src/com/simple/boot/module/Module'
+import {Module} from '../../../../com/simple/boot/module/Module'
 import Handlebars from 'handlebars'
 
 export const Renderer = new class {

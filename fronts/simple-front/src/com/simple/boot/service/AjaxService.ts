@@ -1,4 +1,4 @@
-import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
+import {Sim} from '../../../../com/simple/boot/decorators/SimDecorator'
 import {ajax, AjaxResponse} from 'rxjs/ajax'
 import {Observable} from 'rxjs'
 
@@ -16,7 +16,7 @@ export class AjaxService {
         return ajax.get(url, headers)
     }
 
-    getJSON<T>(url: string, headers?: Object): Observable<T> {
+    getJson<T>(url: string, headers?: Object): Observable<T> {
         return ajax.getJSON<T>(url, headers)
     }
 

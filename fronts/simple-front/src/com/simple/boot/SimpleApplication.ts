@@ -1,9 +1,9 @@
-import {simstanceManager} from '@src/com/simple/boot/simstance/SimstanceManager'
-import {ConstructorType} from '@src/com/simple/boot/types/Types'
-import {Router} from '@src/com/simple/boot/module/Router'
+import {simstanceManager} from './simstance/SimstanceManager'
+import {ConstructorType} from './types/Types'
+import {Router} from './module/Router'
 import {fromEvent} from 'rxjs'
-import {Renderer} from '@src/com/simple/boot/render/Renderer'
-import {Module} from '@src/com/simple/boot/module/Module'
+import {Renderer} from './render/Renderer'
+import {Module} from './module/Module'
 
 export class SimpleApplication {
     // private routers: Router[] = []
@@ -57,7 +57,7 @@ export class SimpleApplication {
         if (module && !module.exist()) {
             module.onInit()
             module.renderWrap(targetSelector);
-            module.onChangedRendered()
+            // module.onChangedRendered()
             return true
         } else {
             return false
@@ -68,7 +68,7 @@ export class SimpleApplication {
         if (module) {
             module.onInit()
             module.render(targetSelector);
-            module.onChangedRendered()
+            // module.onChangedRendered()
             return true
         } else {
             return false
