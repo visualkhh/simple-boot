@@ -4,7 +4,6 @@ import {Index} from './features/index'
 import {App} from './layouts/App'
 import {HelloWord} from './features/hello/hello-word'
 
-//
 @Sim()
 export class AppRouter extends Router {
     module = App

@@ -26,6 +26,7 @@
         "camelcase": "off",
         "no-trailing-spaces": "off",
         "indent": ["error", 4],
-        "node/no-path-concat": "off"
+        "node/no-path-concat": "off",
+        "import/no-webpack-loader-syntax": "off"
     }
 }

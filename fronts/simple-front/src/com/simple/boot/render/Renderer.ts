@@ -12,7 +12,7 @@ export const Renderer = new class {
         const targetElement = document.querySelector(`#${this.selector}`)
         if (targetElement && module instanceof Module) {
             targetElement.innerHTML = module.renderString();
-            module.onChangedRendered();
+            module.privateChangedRendered();
         } else if (targetElement && typeof module === 'string') {
             // console.log('Renderer-->render', module, targetElement)
             targetElement.innerHTML = module
@@ -23,7 +23,7 @@ export const Renderer = new class {
         const targetElement = document.querySelector(`#${selector}`)
         if (targetElement && module instanceof Module) {
             targetElement.innerHTML = module.renderString();
-            module.onChangedRendered();
+            module.privateChangedRendered();
         } else if (targetElement && typeof module === 'string') {
             // console.log('Renderer-to->render', module, targetElement)
             targetElement.innerHTML = module;

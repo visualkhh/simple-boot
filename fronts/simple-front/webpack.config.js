@@ -30,6 +30,17 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
+                test: /\.script\.js$/,
+                use: [
+                    {
+                        loader: 'script-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.(txt|min)$/i,
                 use: 'raw-loader'
             },
@@ -50,21 +61,21 @@ module.exports = {
                 //     minimize: true
                 // }
             },
-            {
-                test: /\.css$/,
-                use: [
-                    // {
-                    //     loader: 'style-loader'
-                    // },
-                    {
-                        loader: 'css-loader'
-                    }
-                    // "handlebars-loader", // handlebars loader expects raw resource string
-                    // 'extract-loader',
-                    // 'style-loader',
-                    // 'css-loader'
-                ]
-            },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         // {
+            //         //     loader: 'style-loader'
+            //         // },
+            //         {
+            //             loader: 'css-loader'
+            //         }
+            //         // "handlebars-loader", // handlebars loader expects raw resource string
+            //         // 'extract-loader',
+            //         // 'style-loader',
+            //         // 'css-loader'
+            //     ]
+            // },
             // {
             //     test: /\.(png|svg|jpe?g|gif)$/,
             //     use: [

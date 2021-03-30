@@ -3,28 +3,22 @@ import {Module} from '../../com/simple/boot/module/Module'
 import {AjaxService} from '../../com/simple/boot/service/AjaxService'
 import html from './app.html'
 import {SimstanceManager} from '../../com/simple/boot/simstance/SimstanceManager'
-import css from './app.css'
-import cssFirst from './app-first.css'
-// const feather = 'a';
-// import feather from '../../../test.txt'
-// import feather from 'feather-icons/dist/feather.min'
-// import('feather-icons/dist/feather.min')
-// const feather = require('feather-icons/dist/feather.min')
+import bootstrap from 'raw-loader!../../assets/libs/bootstrap/css/bootstrap.min.css';
+import css from 'raw-loader!./dashboard.css'
 
 @Sim()
 export class App extends Module {
-    styleImports = [cssFirst, css]
+    styleImports = [bootstrap, css]
     constructor(public ajaxService: AjaxService, public simstance: SimstanceManager) {
         super('app-router-module', html)
-        // import('feather-icons/dist/feather.min.js').then(it => {
-        //     alert('it====', it)
-        // })
-        // console.log('App Constructor-->', feather)
     }
 
     onInit() {
+        import('script-loader!../../assets/libs/bootstrap/js/bootstrap.bundle.min.js');
+        import('script-loader!../../assets/libs/feather/feather.min.js');
     }
 
     onChangedRendered() {
+        import('script-loader!./layout.js');
     }
 }

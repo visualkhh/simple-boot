@@ -38,8 +38,9 @@ export class SimpleApplication {
                     lastRouterSelector = selctor;
                 }
             });
-            // console.log('===>', lastRouterSelector);
-            this.render(executeModule, lastRouterSelector)
+            this.render(executeModule, lastRouterSelector);
+            executeModule.privateInitedChiled();
+            routers.reverse().forEach(it => it.moduleObject?.privateInitedChiled());
         } else {
             Renderer.render('404 not found')
         }
@@ -55,7 +56,7 @@ export class SimpleApplication {
 
     public renderRouterModule(module: Module | undefined, targetSelector = 'app'): boolean {
         if (module && !module.exist()) {
-            module.onInit()
+            module.privateInit()
             module.renderWrap(targetSelector);
             // module.onChangedRendered()
             return true
@@ -66,8 +67,8 @@ export class SimpleApplication {
 
     public render(module: Module | undefined, targetSelector: string): boolean {
         if (module) {
-            module.onInit()
-            module.render(targetSelector);
+            module.privateInit()
+            module.renderWrap(targetSelector);
             // module.onChangedRendered()
             return true
         } else {
