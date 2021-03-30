@@ -8,7 +8,7 @@ String[] dbs = ['simple-db', 'simple-db-h2', 'simple-db-hibernate']
 String[] webs = ['simple-web', 'simple-web-thymeleaf', 'simple-web-netty']
 String[] fronts = ['simple-front']
 
-String[] projects = ['example']
+String[] projects = ['example', 'example-front']
 
 cores.each {
     include it

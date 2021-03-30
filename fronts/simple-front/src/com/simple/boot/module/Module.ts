@@ -1,9 +1,9 @@
 import Handlebars from 'handlebars'
 import {Renderer} from '../../../../com/simple/boot/render/Renderer'
-import {LifeCycle} from '@src/com/simple/boot/module/LifeCycle'
+import {LifeCycle} from '../module/LifeCycle'
 import {fromEvent} from "rxjs";
-import {View} from "@src/com/simple/boot/service/view/View";
-const {v4: uuidv4} = require('uuid')
+import {View} from "../service/view/View";
+import {RandomUtils} from "../util/random/RandomUtils";
 
 export class Module implements LifeCycle {
     public router_outlet_selector: string | undefined
@@ -12,9 +12,9 @@ export class Module implements LifeCycle {
 
     constructor(public selector = '', public template = '{{data}}', public wrapElement = 'div') {
         this.originalSelector = selector;
-        this.selector = `___Module___${this.selector}_${uuidv4()}`
+        this.selector = `___Module___${this.selector}_${RandomUtils.uuid()}`
         if (this.template.search('\\[router-outlet\\]')) {
-            this.router_outlet_selector = `___Module___router-outlet_${this.selector}_${uuidv4()}`
+            this.router_outlet_selector = `___Module___router-outlet_${this.selector}_${RandomUtils.uuid()}`
             this.template = this.template.replace('[router-outlet]', ` id='${this.router_outlet_selector}' `)
         }
     }
@@ -27,7 +27,7 @@ export class Module implements LifeCycle {
         const selectors = 'module-event-' + endFix;
         document.querySelectorAll('[' + selectors + ']').forEach(it => {
             if (!it.id) {
-                it.id = `___Module___${this.originalSelector}_child-element_${uuidv4()}`
+                it.id = `___Module___${this.originalSelector}_child-element_${RandomUtils.uuid()}`
             }
             const attribute = it.getAttribute(selectors);
             const newVar = this as any;

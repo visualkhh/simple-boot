@@ -1,8 +1,8 @@
-import {Sim} from '../../com/simple/boot/decorators/SimDecorator'
-import {Module} from '../../com/simple/boot/module/Module'
-import {AjaxService} from '../../com/simple/boot/service/AjaxService'
+import {Sim} from 'simple-boot-front/src/com/simple/boot/decorators/SimDecorator'
+import {Module} from 'simple-boot-front/src/com/simple/boot/module/Module'
+import {AjaxService} from 'simple-boot-front/src/com/simple/boot/service/AjaxService'
 import html from './app.html'
-import {SimstanceManager} from '../../com/simple/boot/simstance/SimstanceManager'
+import {SimstanceManager} from 'simple-boot-front/src/com/simple/boot/simstance/SimstanceManager'
 import bootstrap from 'raw-loader!../../assets/libs/bootstrap/css/bootstrap.min.css';
 import css from 'raw-loader!./dashboard.css'
 

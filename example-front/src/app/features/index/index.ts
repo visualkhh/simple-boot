@@ -1,9 +1,9 @@
-import {Sim} from '../../../com/simple/boot/decorators/SimDecorator'
-import {Module} from '../../../com/simple/boot/module/Module'
+import {Sim} from 'simple-boot-front/src/com/simple/boot/decorators/SimDecorator'
+import {Module} from 'simple-boot-front/src/com/simple/boot/module/Module'
 import html from './index.html'
-import {ViewService} from '@src/com/simple/boot/service/view/ViewService'
-import {RandomUtils} from '@src/com/simple/boot/util/random/RandomUtils'
-import {View} from "@src/com/simple/boot/service/view/View";
+import {ViewService} from 'simple-boot-front/src/com/simple/boot/service/view/ViewService'
+import {RandomUtils} from 'simple-boot-front/src/com/simple/boot/util/random/RandomUtils'
+import {View} from "simple-boot-front/src/com/simple/boot/service/view/View";
 
 @Sim()
 export class Index extends Module {

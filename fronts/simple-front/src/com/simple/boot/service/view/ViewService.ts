@@ -1,5 +1,5 @@
 import {Sim} from '../../decorators/SimDecorator'
-import {View} from "@src/com/simple/boot/service/view/View";
+import {View} from "../../service/view/View";
 
 @Sim()
 export class ViewService {

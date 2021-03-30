@@ -1,6 +1,6 @@
 import {Module} from '../../../../com/simple/boot/module/Module'
 import {simstanceManager} from '../../../../com/simple/boot/simstance/SimstanceManager'
-import {ConstructorType} from '@src/com/simple/boot/types/Types'
+import {ConstructorType} from '../types/Types'
 
 export class SimProxyMethodHandler implements ProxyHandler<any> {
     public get(target: any, name: string): any {

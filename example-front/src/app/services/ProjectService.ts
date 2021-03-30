@@ -1,4 +1,4 @@
-import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
+import {Sim} from 'simple-boot-front/src/com/simple/boot/decorators/SimDecorator'
 
 @Sim()
 export class ProjectService {

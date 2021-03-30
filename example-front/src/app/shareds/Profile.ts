@@ -1,5 +1,4 @@
-import {Module} from '../../../src/com/simple/boot/module/Module'
-// import {Sim} from '@src/com/simple/boot/decorators/SimDecorator'
+import {Module} from 'simple-boot-front/src/com/simple/boot/module/Module'
 import {User} from '@src/app/models/UserResponse'
 import html from './profile.html'
 

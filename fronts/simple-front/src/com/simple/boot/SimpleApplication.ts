@@ -6,16 +6,10 @@ import {Renderer} from './render/Renderer'
 import {Module} from './module/Module'
 
 export class SimpleApplication {
-    // private routers: Router[] = []
-    // constructor(public sims: ConstructorType<any>[]) {
     constructor(public rootRouter: ConstructorType<Router>) {
     }
 
     public async run(): Promise<SimpleApplication> {
-        // const sims = simstanceManager.getOrNewSims(Router);
-        // this.routers = sims
-        //     .map(it => it as Router)
-        //     .sort((a, b) => a.path.length < b.path.length ? -1 : 1)
         this.startRouting()
         return this
     }
@@ -44,14 +38,6 @@ export class SimpleApplication {
         } else {
             Renderer.render('404 not found')
         }
-        // console.log('executeRouter-->', this.routers)
-        // for (const router of this.routers) {
-        //     if (router.hashchange([''])) {
-        //         return router
-        //     } else {
-        //         Renderer.render('404 not found')
-        //     }
-        // }
     }
 
     public renderRouterModule(module: Module | undefined, targetSelector = 'app'): boolean {
@@ -75,7 +61,4 @@ export class SimpleApplication {
             return false
         }
     }
-    // public getSim<T>(key: ConstructorType<T>): T {
-    //     return simstanceManager.getOrNewSim(key)
-    // }
 }
