@@ -34,8 +34,7 @@ export class HelloWord extends Module {
 
     onChangedRendered() {
         this.v.eI('refresh')?.click<Event>().subscribe(it => {
-            console.log('click this->', this, this.data)
-            this.loadData()
+            this.loadData();
         })
     }
 }
