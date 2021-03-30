@@ -41,7 +41,7 @@ export class Module implements LifeCycle {
             this.router_outlet_selector = `___Module___router-outlet_${this.selector}_${uuidv4()}`
             this.template = this.template.replace('[router-outlet]', ` id='${this.router_outlet_selector}' `)
         }
-        console.log('module constructor, ', 'selector', selector, 'isProxy' in this)
+        // console.log('module constructor, ', 'selector', selector, 'isProxy' in this)
     }
 
     public renderString(): string {
@@ -49,7 +49,7 @@ export class Module implements LifeCycle {
     }
 
     public privateInit() {
-        Renderer.renderTo(this.selector, '')
+        // Renderer.renderTo(this.selector, '')
         this.onInit()
     }
 
@@ -94,7 +94,6 @@ export class Module implements LifeCycle {
             const regExp = new RegExp('\\/\\*\\[module\\-selector\\]\\*\\/', 'gi') // 생성자
             return it.replace(regExp, '#' + selector + ' ');
         }).join(' ');
-        console.log('---transStyle->', selector)
         Renderer.prependStyle(selector, join);
     }
 

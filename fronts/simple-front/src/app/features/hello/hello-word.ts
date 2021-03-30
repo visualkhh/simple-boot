@@ -6,14 +6,16 @@ import html from './hello-world.html'
 import css from 'raw-loader!./hello-word.css'
 import {Profile} from '../../shareds/Profile'
 import {UserResponse} from '@src/app/models/UserResponse'
-
+import {ProjectService} from '@src/app/services/ProjectService'
 @Sim()
 export class HelloWord extends Module {
     template = html
     styleImports = [css]
+    public i = 1;
     public data: UserResponse | undefined
     public profile: Profile | undefined;
-    constructor(public v: ViewService, public ajax: AjaxService) {
+    private uuid: any
+    constructor(public projectService: ProjectService, public v: ViewService, public ajax: AjaxService) {
         super('hello-world')
     }
 
@@ -24,14 +26,15 @@ export class HelloWord extends Module {
     }
 
     loadData() {
-        this.ajax.getJson<UserResponse>('https://randomuser.me/api/', {name: this.v.eI('name')?.value}).subscribe(it => {
+        this.ajax.getJson<UserResponse>('https://randomuser.me/api/').subscribe(it => {
             this.data = it;
             this.profile?.setUser(this.data.results[0])
         })
     }
 
     onChangedRendered() {
-        this.v.eI('save')?.click<Event>().subscribe(it => {
+        this.v.eI('refresh')?.click<Event>().subscribe(it => {
+            console.log('click this->', this, this.data)
             this.loadData()
         })
     }

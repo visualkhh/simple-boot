@@ -9,13 +9,8 @@ export class View<T extends Element> {
         return fromEvent<T>(this.e, eventName)
     }
 
-    // click<T>(o: Observable<T>[] = []): Observable<T> {
-    // click<T>(...agument: Observable<T>[]): Observable<T> {
-    // click<T>(_observable?: OperatorFunction<unknown, T>): Observable<T> {
-    // click<E, R>(_observable?: OperatorFunction<E, R>): Observable<E|R> {
     click<E>(e: T = this.e): Observable<E> {
-        console.log('element-->', e)
-        return fromEvent<E>(e, 'click')
+        return fromEvent<E>(e, 'click');
     }
 
     get value() {

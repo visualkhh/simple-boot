@@ -15,7 +15,7 @@ export class Router implements Routers {
         const path = LocationUtils.hash();
         const routerStrings = parentRouters.map(it => it.path || '')
         const isRoot = this.isRootUrl(routerStrings, path)
-        console.log('getExecuteModule -> ', isRoot, parentRouters, routerStrings, path, this.path);
+        // console.log('getExecuteModule -> ', isRoot, parentRouters, routerStrings, path, this.path);
         if (isRoot) {
             parentRouters.push(this);
             const fieldModule = this.routing(routerStrings, path)
@@ -45,13 +45,13 @@ export class Router implements Routers {
 
     // my field find
     public routing(parentRoots: string[], path: string): Module | undefined {
-        console.log('--routing-->', parentRoots, path)
+        // console.log('--routing-->', parentRoots, path)
         const routers = this as Routers
         const urlRoot = parentRoots.join('') + this.path
         const regex = new RegExp('^' + urlRoot, 'i')
         path = path.replace(regex, '')
         const fieldModule = (routers[path] as ConstructorType<any>)
-        console.log('routing path ', this.path, path, fieldModule)
+        // console.log('routing path ', this.path, path, fieldModule)
         if (fieldModule) {
             return simstanceManager.getOrNewSim(fieldModule)
         }
