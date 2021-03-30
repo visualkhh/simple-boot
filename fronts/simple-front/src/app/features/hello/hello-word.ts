@@ -11,7 +11,6 @@ import {ProjectService} from '@src/app/services/ProjectService'
 export class HelloWord extends Module {
     template = html
     styleImports = [css]
-    public i = 1;
     public data: UserResponse | undefined
     public profile: Profile | undefined;
     private uuid: any
