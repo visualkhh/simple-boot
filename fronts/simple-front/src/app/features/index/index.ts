@@ -1,14 +1,20 @@
 import {Sim} from '../../../com/simple/boot/decorators/SimDecorator'
 import {Module} from '../../../com/simple/boot/module/Module'
 import html from './index.html'
-import {ViewService} from '@src/com/simple/boot/service/ViewService'
+import {ViewService} from '@src/com/simple/boot/service/view/ViewService'
 import {RandomUtils} from '@src/com/simple/boot/util/random/RandomUtils'
+import {View} from "@src/com/simple/boot/service/view/View";
 
 @Sim()
 export class Index extends Module {
-    public datas = [1, 2, 3, 4, 5, 6, 7];
     template = html;
-
+    public title = new class extends Module {
+        public data = '';
+    }
+    public numbers = new class extends Module {
+        public datas = [1, 2, 3];
+        template = '<ul>{{#each datas as |data i|}}<li>{{data}}</li>{{/each}}</ul>'
+    }
     constructor(public v: ViewService) {
         super('index')
     }
@@ -16,9 +22,10 @@ export class Index extends Module {
     onInit() {
     }
 
-    onChangedRendered() {
-        this.v.eI('change')?.click().subscribe(it => {
-            this.datas = [RandomUtils.random(1, 400), RandomUtils.random(1, 400), RandomUtils.random(1, 400)];
-        })
+    changeText($event: KeyboardEvent, view: View<Element>) {
+        this.title.data = view.value;
+    }
+    changeData() {
+        this.numbers.datas = [Math.floor(RandomUtils.random(1, 400)), Math.floor(RandomUtils.random(1, 400)), Math.floor(RandomUtils.random(1, 400))];
     }
 }

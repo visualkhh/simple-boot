@@ -1,59 +1,55 @@
 import Handlebars from 'handlebars'
 import {Renderer} from '../../../../com/simple/boot/render/Renderer'
 import {LifeCycle} from '@src/com/simple/boot/module/LifeCycle'
-
+import {fromEvent} from "rxjs";
+import {View} from "@src/com/simple/boot/service/view/View";
 const {v4: uuidv4} = require('uuid')
 
-// export type StyleType = [[string, string, string, any]];
-// export enum ImportMode {
-//     src,
-//     raw
-// }
-// export enum ImportTriggerMode {
-//     init,
-//     changedRendered,
-//     initedChiled,
-//     finish,
-// }
-// export class Import {
-//     constructor(public source: string, public triggerMode = ImportTriggerMode.init) {
-//     }
-//
-//     // public getSource(): Promise<string> {
-//     //     if (this.source instanceof Promise) {
-//     //         return this.source;
-//     //     } else {
-//     //         return new Promise((resolve, reject) => {
-//     //             resolve(this.source);
-//     //         });
-//     //     }
-//     // }
-// }
-
 export class Module implements LifeCycle {
-    // constructor(public selector?: string | undefined, public template?: string | undefined) {
     public router_outlet_selector: string | undefined
     public styleImports: string[] | undefined
+    public originalSelector: string;
 
-    constructor(public selector = '', public template = '', public wrapElement = 'div') {
+    constructor(public selector = '', public template = '{{data}}', public wrapElement = 'div') {
+        this.originalSelector = selector;
         this.selector = `___Module___${this.selector}_${uuidv4()}`
         if (this.template.search('\\[router-outlet\\]')) {
             this.router_outlet_selector = `___Module___router-outlet_${this.selector}_${uuidv4()}`
             this.template = this.template.replace('[router-outlet]', ` id='${this.router_outlet_selector}' `)
         }
-        // console.log('module constructor, ', 'selector', selector, 'isProxy' in this)
     }
 
     public renderString(): string {
         return Handlebars.compile(this.template)(this)
     }
 
+    private setEvent(endFix: string) {
+        const selectors = 'module-event-' + endFix;
+        document.querySelectorAll('[' + selectors + ']').forEach(it => {
+            if (!it.id) {
+                it.id = `___Module___${this.originalSelector}_child-element_${uuidv4()}`
+            }
+            const attribute = it.getAttribute(selectors);
+            const newVar = this as any;
+            if (attribute && newVar[attribute]) {
+                fromEvent<MouseEvent>(it, endFix).subscribe(it => {
+                    const view = new View(it.target! as Element);
+                    newVar[attribute](it, view);
+                })
+            }
+        })
+
+    }
     public privateInit() {
         // Renderer.renderTo(this.selector, '')
         this.onInit()
     }
 
     public privateChangedRendered() {
+        this.setEvent('click');
+        this.setEvent('change');
+        this.setEvent('keyup');
+        this.setEvent('keydown');
         this.onChangedRendered()
     }
 
