@@ -30,10 +30,4 @@ export class HelloWord extends Module {
             this.profile?.setUser(this.data.results[0])
         })
     }
-
-    onChangedRendered() {
-        this.v.eI('refresh')?.click<Event>().subscribe(it => {
-            this.loadData();
-        })
-    }
 }
