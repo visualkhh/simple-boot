@@ -6,9 +6,8 @@ String[] others = []
 String[] dbs = ['simple-db', 'simple-db-h2', 'simple-db-hibernate']
 
 String[] webs = ['simple-web', 'simple-web-thymeleaf', 'simple-web-netty']
-String[] fronts = ['simple-front']
 
-String[] projects = ['example', 'example-front']
+String[] projects = ['example']
 
 cores.each {
     include it
@@ -40,14 +39,6 @@ dbs.each {
 webs.each {
     include it
     def projectDir = new File("webs", it)
-    project(":${it}").projectDir = projectDir
-    if (!projectDir.exists()) {
-        projectDir.mkdirs()
-    }
-}
-fronts.each {
-    include it
-    def projectDir = new File("fronts", it)
     project(":${it}").projectDir = projectDir
     if (!projectDir.exists()) {
         projectDir.mkdirs()
