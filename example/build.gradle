@@ -1,10 +1,21 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
+}
 plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java'
 }
+
 group 'com.exemple'
 version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
+
 }
 
 //configurations {
@@ -49,9 +60,16 @@ test {
     useJUnitPlatform()
 }
 
-jar{
+jar {
+    finalizedBy shadowJar
     manifest{
         attributes 'Main-Class':'com.example.ExampleApplication'
     }
 }
 
+shadowJar {
+    baseName('all-in-one-example')
+    manifest {
+        attributes 'Main-Class':'com.example.ExampleApplication'
+    }
+}

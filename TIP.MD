@@ -2,6 +2,8 @@ tip
 ===
 
 ## link
+- gradle
+  - make jar include dependency jar: shadow -> https://imperceptiblethoughts.com/shadow/configuration/#configuring-the-jar-manifest
 - java
   - yaml parser
     - https://www.baeldung.com/java-snake-yaml
