@@ -73,3 +73,9 @@ shadowJar {
         attributes 'Main-Class':'com.example.ExampleApplication'
     }
 }
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
